@@ -65,8 +65,12 @@ WSGI_APPLICATION = 'hamayeshProject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Hamayesh',
+        'USER': 'mvp_coders',
+        'PASSWORD': 'Ho@Qnb129st1938!',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
 
