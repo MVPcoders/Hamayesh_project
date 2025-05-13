@@ -1,0 +1,35 @@
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE-specific files
+.vscode/
+.idea/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Local settings and sensitive data
+settings/local.py
+.env
+.env.local
+
+# Database files
+db.sqlite3
+
+# Static and media files
+staticfiles/
+media/
+
+# macOS system files
+.DS_Store
+
+# Log files
+*.log
+
+# Pytest cache
+.pytest_cache/
