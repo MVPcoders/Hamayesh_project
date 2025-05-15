@@ -1,18 +1,21 @@
 from django.shortcuts import render
 
+from site_setting.models import SiteSetting
+
+from hamayesh_module.models import Hamayesh_topics,Hamayesh_prices
 
 
 def site_header_component(request):
-    # setting : SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
+    setting : SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
     context = {
-        # 'site_setting': setting,
+        'site_setting': setting,
     }
     return render(request,'shared/site_header_component.html',context)
 
 def site_footer_component(request):
-    # setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
+    setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
     context = {
-        # 'site_setting': setting,
+        'site_setting': setting,
     }
     return render(request,'shared/site_footer_component.html',context)
 
@@ -25,9 +28,13 @@ def site_footer_component(request):
     # return render(request,'shared/404_page.html', context)
 
 def index(request):
-    # setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
+    setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
+    hamayesh_topics = Hamayesh_topics.objects.all()
+    hamayesh_prices = Hamayesh_prices.objects.all()
     context = {
-        # 'site_setting': setting,
+        'site_setting': setting,
+        'hamayesh_topics': hamayesh_topics,
+        'hamayesh_prices': hamayesh_prices,
     }
     return render(request, 'index_module/index.html', context)
 

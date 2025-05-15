@@ -3,10 +3,15 @@ venv/
 .venv/
 env/
 
+
 # IDE-specific files
 .vscode/
 .idea/
-
+index_module/migrations/
+hamayesh_module/migrations/
+hamayeshProject/migrations/
+site_setting/migrations/
+uploads/
 # Python cache files
 __pycache__/
 *.pyc

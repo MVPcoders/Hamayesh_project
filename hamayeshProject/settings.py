@@ -26,7 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_render_partial',
-    'index_module'
+    'index_module',
+    'site_setting',
+    'hamayesh_module'
 ]
 
 MIDDLEWARE = [

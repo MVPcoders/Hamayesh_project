@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
+    <!-- about section -->
   <section class="about_section ">
     <div class="container">
       <div class="row">
@@ -18,108 +18,60 @@
           <div class="detail-box">
             <div class="heading_container">
               <h2>
-                About Us
+                درباره ما
               </h2>
             </div>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-              dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                {{ site_setting.about_us_text }}
             </p>
             <a href="">
-              Read More
+              ارتباط با ما
             </a>
           </div>
         </div>
       </div>
     </div>
   </section>
-
   <!-- end about section -->
 
 
   <!-- service section -->
   <section class="service_section layout_padding">
+
+
     <div class="container-fluid">
       <div class="heading_container">
         <h2>
-          Our Services
+          محورهای کنفرانس
         </h2>
         <p>
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            محور های  {{ site_setting.hamayesh_detail }}
         </p>
       </div>
+    <div class="service_container">
+        {% for topic in hamayesh_topics %}
 
-      <div class="service_container">
-        <div class="box">
-          <div class="img-box">
-            <img src="/static/images/s-1.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Brand Promotion
-            </h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            </p>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="/static/images/s-2.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Video Marketing
+                <div class="box">
+                  <div class="img-box">
+                    <img src="/static/images/s-1.png" alt="">
+                  </div>
+                  <div class="detail-box">
+                    <h5>
+                      {{ topic.name }}
+                    </h5>
+                    <details>
+                        <summary>شامل</summary>
+                        <p>{{ topic.details }}</p>
 
-            </h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            </p>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="/static/images/s-3.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Site Analysis
-            </h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            </p>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="/static/images/s-4.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              Social Media Marketing
-            </h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            </p>
-          </div>
-        </div>
-        <div class="box">
-          <div class="img-box">
-            <img src="/static/images/s-5.png" alt="">
-          </div>
-          <div class="detail-box">
-            <h5>
-              SEO Optimization
-            </h5>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-            </p>
-          </div>
-        </div>
-      </div>
+                  </details>
+                  </div>
+                </div>
+
+        {% endfor %}
+    </div>
       <div class="btn-box">
         <a href="">
-          Read More
+          لیست کامل
         </a>
       </div>
     </div>
@@ -132,47 +84,32 @@
     <div class="container">
       <div class="heading_container">
         <h2>
-          How We Work!
+          تعرفه های همایش
         </h2>
         <p>
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+            ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد
         </p>
       </div>
       <div class="row">
         <div class="col-md-6">
           <div class="detail_container">
-            <div class="box b-1">
+              {% for ham in hamayesh_prices %}
+              	<div class="box b-1">
               <div class="top-box">
                 <div class="icon-box">
                   <img src="/static/images/work-i1.png" alt="">
                 </div>
                 <h5>
-                  We Generate A Good Idea First
+                  {{ ham.name }}
                 </h5>
               </div>
               <div class="bottom-box">
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua. Ut enim ad minim veniam
+                    {{ ham.price }}
                 </p>
               </div>
             </div>
-            <div class="box b-1">
-              <div class="top-box">
-                <div class="icon-box">
-                  <img src="/static/images/work-i2.png" alt="">
-                </div>
-                <h5>
-                  Then We Start Applying Ideas
-                </h5>
-              </div>
-              <div class="bottom-box">
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-                  dolore magna aliqua. Ut enim ad minim veniam
-                </p>
-              </div>
-            </div>
+              {% endfor %}
           </div>
         </div>
         <div class="col-md-6">
@@ -184,7 +121,7 @@
 
       <div class="btn-box">
         <a href="">
-          Read More
+          نمایش همه
         </a>
       </div>
     </div>
