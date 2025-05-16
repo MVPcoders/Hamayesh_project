@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Hamayesh_prices(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.IntegerField()
+    name = models.CharField(max_length=100,verbose_name='عنوان')
+    price = models.IntegerField(verbose_name='هزینه')
 
     class Meta:
         verbose_name_plural = 'تعرفه های همایش'
@@ -13,8 +13,8 @@ class Hamayesh_prices(models.Model):
         return self.name
 
 class Hamayesh_topics(models.Model):
-    name = models.CharField(max_length=100)
-    details = models.TextField()
+    name = models.CharField(max_length=100, verbose_name='عنوان محور')
+    details = models.TextField(verbose_name='جزئیات محور')
 
     class Meta:
         verbose_name_plural = 'محور های همایش'
