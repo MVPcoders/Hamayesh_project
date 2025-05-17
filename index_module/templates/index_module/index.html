@@ -1,10 +1,11 @@
 {% extends 'shared/layout.html' %}
-
+{% load tool_extras %}
 {% block title %}
 	صفحه اصلی
 {% endblock %}
 
 {% block content %}
+    <link rel="stylesheet" href="/static/css/customcss.css">
     <!-- about section -->
   <section class="about_section ">
     <div class="container">
@@ -78,25 +79,25 @@
   </section>
   <!-- end service section -->
 
-  <!-- work section -->
+<!-- work section -->
 
-  <section class="work_section layout_padding">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          تعرفه های همایش
-        </h2>
-        <p>
-            ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد
-        </p>
-      </div>
-      <div class="row">
-        <div class="col-md-6">
-          <div class="detail_container">
-              {% for ham in hamayesh_prices %}
-              	<div class="box b-1">
-              <div class="top-box">
-                <div class="icon-box">
+<section class="work_section layout_padding">
+  <div class="container">
+    <div class="heading_container" style="direction: rtl">
+      <h2>
+        تعرفه های همایش
+      </h2>
+      <p>
+          ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد
+      </p>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="detail_container">
+          {% for ham in hamayesh_prices|slice:":4" %}
+            <div class="box b-1">
+              <div class="top-box" style="direction: rtl">
+                <div class="icon-box" style="padding-left: 10px">
                   <img src="/static/images/work-i1.png" alt="">
                 </div>
                 <h5>
@@ -104,29 +105,33 @@
                 </h5>
               </div>
               <div class="bottom-box">
-                <p>
-                    {{ ham.price }}
+                <p style="font-weight: bold; color: #1c7430; font-size: 24px">
+                 تومان  {{ ham.price|three_digits_currency }}
                 </p>
+                <button>
+                    <span>خرید</span>
+                </button>
               </div>
             </div>
-              {% endfor %}
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="img-box">
-            <img src="/static/images/work-img.png" alt="">
-          </div>
+          {% endfor %}
         </div>
       </div>
-
-      <div class="btn-box">
-        <a href="">
-          نمایش همه
-        </a>
+      <div class="col-md-6">
+        <div class="img-box">
+          <img src="/static/images/work-img.png" alt="">
+        </div>
       </div>
     </div>
-  </section>
-  <!-- end work section -->
+
+    <div class="btn-box">
+      <a href="/path/to/all/hamayesh">
+        نمایش همه
+      </a>
+    </div>
+  </div>
+</section>
+<!-- end work section -->
+
 
   <!-- team section -->
 
@@ -323,5 +328,4 @@
   </section>
 
   <!-- end client section -->
-
 {% endblock %}

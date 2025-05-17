@@ -28,7 +28,8 @@ INSTALLED_APPS = [
     'django_render_partial',
     'index_module',
     'site_setting',
-    'hamayesh_module'
+    'hamayesh_module',
+    'tools'
 ]
 
 MIDDLEWARE = [
