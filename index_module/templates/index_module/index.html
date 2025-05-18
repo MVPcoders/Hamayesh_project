@@ -34,7 +34,77 @@
     </div>
   </section>
   <!-- end about section -->
+  <!-- news section -->
+  <section class="client_section layout_padding-bottom">
+    <div class="container">
+      <div class="heading_container" style="direction: rtl">
+        <h2>
+          اخبار
+        </h2>
+        <p>
+          اخبار سایت و اطلاعات جدید درمورد مقالات را در اینجا دنبال کنید
+        </p>
+      </div>
+    </div>
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+      <div class="carousel-inner" style="text-align: center">
+        <div class="carousel-item active">
+          <div class="container">
+            <div class="box">
+              <div class="img-box">
+                  
+                <img class="styled-image" src="{{ site_setting.poster.url }}" alt="">
+              </div>
+              <div class="detail-box">
+                <h6 style="direction: rtl">
+                  برای اطلاع از جدید ترین اخبار در کانال وبسایت عضو شوید
+                </h6>
+                <p>
+                    ایتا :
+                    تلگرام :
+                    واتساپ :
 
+                </p>
+                <img src="/static/images/quote.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+          {% for news in news_module %}
+          	<div class="carousel-item">
+          <div class="container">
+            <div class="box">
+              <div class="img-box">
+                  {% if news.image %}
+                  	<img class="styled-image" src="{{ news.image.url }}" alt="بدون عکس">
+                  {% endif %}
+              </div>
+              <div class="detail-box">
+                <h6>
+                  {{ news.title }}
+                </h6>
+                <p>
+                    {{ news.content }}
+                </p>
+                <img src="/static/images/quote.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+          {% endfor %}
+      </div>
+      <div class="carousel_btn-container">
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+
+  </section>
+  <!-- end news section -->
 
   <!-- service section -->
   <section class="service_section layout_padding">
@@ -51,7 +121,6 @@
       </div>
     <div class="service_container">
         {% for topic in hamayesh_topics %}
-
                 <div class="box">
                   <div class="img-box">
                     <img src="/static/images/s-1.png" alt="">
@@ -61,7 +130,7 @@
                       {{ topic.name }}
                     </h5>
                     <details>
-                        <summary>شامل</summary>
+                        <summary>توضیحات</summary>
                         <p>{{ topic.details }}</p>
 
                   </details>
@@ -78,12 +147,10 @@
     </div>
   </section>
   <!-- end service section -->
-
 <!-- work section -->
-
 <section class="work_section layout_padding">
   <div class="container">
-    <div class="heading_container" style="direction: rtl">
+    <div class="heading_container" style="direction: rtl;">
       <h2>
         تعرفه های همایش
       </h2>
@@ -108,9 +175,12 @@
                 <p style="font-weight: bold; color: #1c7430; font-size: 24px">
                  تومان  {{ ham.price|three_digits_currency }}
                 </p>
-                <button>
-                    <span>خرید</span>
-                </button>
+                <div class="custom-button">
+                    <button>
+                        <span>خرید</span>
+                    </button>
+                </div>
+
               </div>
             </div>
           {% endfor %}
@@ -132,200 +202,4 @@
 </section>
 <!-- end work section -->
 
-
-  <!-- team section -->
-
-  <section class="team_section layout_padding2-bottom">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          Meet The Team
-        </h2>
-        <p>
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-    </div>
-    <div class="team_container">
-      <div class="box b-1">
-        <div class="img-box">
-          <img src="/static/images/t-1.png" alt="">
-        </div>
-        <div class="detail-box">
-          <h5>
-            Yokit Den
-          </h5>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore
-          </p>
-          <div class="social_box">
-            <a href="">
-              <img src="/static/images/fb.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/twitter.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/linkedin.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/insta.png" alt="">
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="box b-2">
-        <div class="img-box">
-          <img src="/static/images/t-2.png" alt="">
-        </div>
-        <div class="detail-box">
-          <h5>
-            Morde Den
-          </h5>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore
-          </p>
-          <div class="social_box">
-            <a href="">
-              <img src="/static/images/fb.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/twitter.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/linkedin.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/insta.png" alt="">
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="box b-3">
-        <div class="img-box">
-          <img src="/static/images/t-3.png" alt="">
-        </div>
-        <div class="detail-box">
-          <h5>
-            Marry Doki
-          </h5>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-            dolore
-          </p>
-          <div class="social_box">
-            <a href="">
-              <img src="/static/images/fb.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/twitter.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/linkedin.png" alt="">
-            </a>
-            <a href="">
-              <img src="/static/images/insta.png" alt="">
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- end team section -->
-
-  <!-- client section -->
-
-  <section class="client_section layout_padding-bottom">
-    <div class="container">
-      <div class="heading_container">
-        <h2>
-          Testimonial
-        </h2>
-        <p>
-          consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </p>
-      </div>
-    </div>
-    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <div class="container">
-            <div class="box">
-              <div class="img-box">
-                <img src="/static/images/client.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Normal distribution
-                </h6>
-                <p>
-                  It is a long established fact that a reader will be distracted by the readable content of a page when
-                  looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
-                  distribution of
-                  letters, as opposed to using 'Content here, content here', making it look
-                </p>
-                <img src="/static/images/quote.png" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <div class="box">
-              <div class="img-box">
-                <img src="/static/images/client.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Normal distribution
-                </h6>
-                <p>
-                  It is a long established fact that a reader will be distracted by the readable content of a page when
-                  looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
-                  distribution of
-                  letters, as opposed to using 'Content here, content here', making it look
-                </p>
-                <img src="/static/images/quote.png" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item">
-          <div class="container">
-            <div class="box">
-              <div class="img-box">
-                <img src="/static/images/client.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h6>
-                  Normal distribution
-                </h6>
-                <p>
-                  It is a long established fact that a reader will be distracted by the readable content of a page when
-                  looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal
-                  distribution of
-                  letters, as opposed to using 'Content here, content here', making it look
-                </p>
-                <img src="/static/images/quote.png" alt="">
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="carousel_btn-container">
-        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-    </div>
-
-  </section>
-
-  <!-- end client section -->
 {% endblock %}

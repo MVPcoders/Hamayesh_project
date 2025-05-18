@@ -4,6 +4,8 @@ from site_setting.models import SiteSetting
 
 from hamayesh_module.models import Hamayesh_topics,Hamayesh_prices
 
+from news_module.models import News
+
 
 def site_header_component(request):
     setting : SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
@@ -31,10 +33,12 @@ def index(request):
     setting: SiteSetting = SiteSetting.objects.filter(is_main_setting=True).first()
     hamayesh_topics = Hamayesh_topics.objects.all()
     hamayesh_prices = Hamayesh_prices.objects.all()
+    news_module = News.objects.all()
     context = {
         'site_setting': setting,
         'hamayesh_topics': hamayesh_topics,
         'hamayesh_prices': hamayesh_prices,
+        'news_module': news_module,
     }
     return render(request, 'index_module/index.html', context)
 

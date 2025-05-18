@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'index_module',
     'site_setting',
     'hamayesh_module',
-    'tools'
+    'tools',
+    'news_module'
 ]
 
 MIDDLEWARE = [

@@ -1,61 +1,134 @@
-button {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  background: #183153;
-  font-family: "Montserrat", sans-serif;
-  box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
-  overflow: hidden;
-  cursor: pointer;
-  border: none;
+.custom-button button {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    background: #183153;
+    font-family: "Montserrat", sans-serif;
+    box-shadow: 0px 6px 24px 0px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
 }
 
-button:after {
-  content: " ";
-  width: 0%;
-  height: 100%;
-  background: #ffd401;
-  position: absolute;
-  transition: all 0.4s ease-in-out;
-  right: 0;
+.custom-button button:after {
+    content: " ";
+    width: 0%;
+    height: 100%;
+    background: #ffd401;
+    position: absolute;
+    transition: all 0.4s ease-in-out;
+    right: 0;
 }
 
-button:hover::after {
-  right: auto;
-  left: 0;
-  width: 100%;
+.custom-button button:hover::after {
+    right: auto;
+    left: 0;
+    width: 100%;
 }
 
-button span {
-  text-align: center;
-  text-decoration: none;
-  width: 100%;
-  padding: 18px 25px;
-  color: #fff;
-  font-size: 1.125em;
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  z-index: 20;
-  transition: all 0.3s ease-in-out;
+.custom-button button span {
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    padding: 18px 25px;
+    color: #fff;
+    font-size: 1.125em;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    z-index: 20;
+    transition: all 0.3s ease-in-out;
 }
 
-button:hover span {
-  color: #183153;
-  animation: scaleUp 0.3s ease-in-out;
+.custom-button button:hover span {
+    color: #183153;
+    animation: scaleUp 0.3s ease-in-out;
 }
 
 @keyframes scaleUp {
-  0% {
-    transform: scale(1);
-  }
+    0% {
+        transform: scale(1);
+    }
 
-  50% {
-    transform: scale(0.95);
-  }
+    50% {
+        transform: scale(0.95);
+    }
 
-  100% {
-    transform: scale(1);
-  }
+    100% {
+        transform: scale(1);
+    }
 }
+  .styled-image {
+    max-width: 250px;
+    max-height: 250px;
+    width: auto;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.25);
+    object-fit: cover;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  .styled-image:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  }
+    details {
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    padding: 0.5em 1em 0.5em 1em;
+    background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 1em auto;
+  }
+
+  /* Summary style */
+  summary {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: #1a1a1a;
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 30px;
+    user-select: none;
+    transition: color 0.3s ease;
+  }
+  summary:hover {
+    color: #004d40;
+  }
+
+  /* Remove default marker */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  /* Custom arrow icon */
+  summary::after {
+    content: "▶";
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    transition: transform 0.3s ease;
+    color: #004d40;
+  }
+
+  /* Rotate arrow when open */
+  details[open] > summary::after {
+    transform: translateY(-50%) rotate(90deg);
+  }
+
+  /* Paragraph inside details */
+  details > p {
+    margin: 0.75em 0 0 0;
+    color: #333;
+    font-size: 1em;
+    line-height: 1.6;
+    border-top: 1px solid #ddd;
+    padding-top: 0.75em;
+  }
