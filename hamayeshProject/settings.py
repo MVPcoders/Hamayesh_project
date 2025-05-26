@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'news_module',
     'tools',
     'jalali_date',
+    'article_module',
+    'panel_module'
 ]
 
 MIDDLEWARE = [

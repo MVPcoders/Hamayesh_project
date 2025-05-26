@@ -5,35 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    <link rel="stylesheet" href="/static/css/customcss.css">
-    <!-- about section -->
-  <section class="about_section ">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="img-box">
-            <img src="/static/images/about-img2.png" alt="">
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="detail-box">
-            <div class="heading_container">
-              <h2>
-                درباره ما
-              </h2>
-            </div>
-            <p>
-                {{ site_setting.about_us_text }}
-            </p>
-            <a href="">
-              ارتباط با ما
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  <!-- end about section -->
   <!-- news section -->
   <section class="client_section layout_padding-bottom">
     <div class="container">
@@ -201,5 +172,32 @@
   </div>
 </section>
 <!-- end work section -->
-
+    <!-- about section -->
+  <section class="about_section ">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="img-box">
+            <img src="/static/images/about-img2.png" alt="">
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2>
+                درباره ما
+              </h2>
+            </div>
+            <p>
+                {{ site_setting.about_us_text }}
+            </p>
+            <a href="">
+              ارتباط با ما
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- end about section -->
 {% endblock %}
