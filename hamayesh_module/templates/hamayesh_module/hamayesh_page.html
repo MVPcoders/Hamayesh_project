@@ -1,0 +1,38 @@
+{% extends 'shared/layout.html' %}
+{% load tool_extras %}
+{% block title %}
+	اطلاعات همایش
+{% endblock %}
+
+{% block content %}
+
+<section class="work_section layout_padding">
+  <div class="container">
+    <div class="heading_container" style="direction: rtl; text-align: right">
+      <h2>
+        تعرفه های همایش
+      </h2>
+      <p>
+          ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد
+      </p>
+    </div>
+        <div class="card-container">
+            {% for ham_price in hamayesh_prices %}
+                <div class="card">
+                    <div class="content">
+                        <div class="title">{{ ham_price.name }}</div>
+                        <div class="price" >{{ ham_price.price|three_digits_currency }}</div>
+                        <div class="description">تومان</div>
+                    </div>
+                    <button>
+                        اضافه کردن به سبد خرید
+                    </button>
+                </div>
+            {% endfor %}
+        </div>
+  </div>
+
+</section>
+
+
+{% endblock %}
