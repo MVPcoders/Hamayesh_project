@@ -1,1 +1,196 @@
 {% extends 'shared/layout.html' %}
+
+
+{% block title %}
+	ثبت نام
+{% endblock %}
+
+{% block content %}
+    <div  id="signup_container1" class="signup_container1">
+        <div id="signup_container2" class="signup_container2">
+            <section class="contact_section layout_padding" id="contactLink">
+                  <div class="container">
+                    <div class="heading_container">
+                      <h2>
+                        فرم ثبت نام
+                      </h2>
+                    </div>
+                  </div>
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-8 mx-auto">
+                        <form method="post" action="{% url 'signup' %}">
+                            {% csrf_token %}
+                            {# نام و نام خانوادگی#}
+                          <div class="form-row" >
+                            <div class="form-group col-md-6">
+                              {{ form.first_name }}
+                                {% if form.first_name.errors %}
+                                	{% for error in form.first_name.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                              {{ form.last_name }}
+                                {% if form.last_name.errors %}
+                                	{% for error in form.last_name.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# کد ملی و تلفن همراه#}
+                            <div class="form-row" >
+                            <div class="form-group col-md-6">
+                              {{ form.code_meli }}
+                                {% if form.code_meli.errors %}
+                                	{% for error in form.code_meli.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                              {{ form.mobile }}
+                                {% if form.mobile.errors %}
+                                	{% for error in form.mobile.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# ایمیل #}
+                          <div class="form-row">
+                            <div class="form-group col">
+                              {{ form.email }}
+                                {% if form.email.errors %}
+                                	{% for error in form.email.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# استان و شهر #}
+                            <div class="form-row" >
+                            <div class="form-group col-md-6">
+                                {{ form.province }}
+                                {% if form.province.errors %}
+                                	{% for error in form.province.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                              {{ form.city }}
+                                {% if form.city.errors %}
+                                	{% for error in form.city.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# آدرس #}
+                          <div class="form-row">
+                            <div class="form-group col">
+                              {{ form.address }}
+                                {% if form.address.errors %}
+                                	{% for error in form.address.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# تلفن ثابت و کد پستی #}
+                            <div class="form-row" >
+                            <div class="form-group col-md-6">
+                              {{ form.land_line }}
+                                {% if form.land_line.errors %}
+                                	{% for error in form.land_line.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                              {{ form.postal_code }}
+                                {% if form.postal_code.errors %}
+                                	{% for error in form.postal_code.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# مدرک تحصیلی و رشته تحصیلی #}
+                            <div class="form-row" >
+                            <div class="form-group col-md-6">
+                                {{ form.degree }}
+                                {% if form.degree.errors %}
+                                	{% for error in form.degree.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                                {{ form.field_of_study }}
+                                {% if form.field_of_study.errors %}
+                                	{% for error in form.field_of_study.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# نوع ثبت نام و شرکت / سازمان #}
+                            <div class="form-row" >
+                            <div class="form-group col-md-6">
+                              {{ form.kind_of_signup }}
+                                {% if form.kind_of_signup.errors %}
+                                	{% for error in form.kind_of_signup.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                            <div class="form-group col-md-6">
+                                {{ form.company }}
+                                {% if form.company.errors %}
+                                	{% for error in form.company.errors %}
+                                		<p style="color: red;font-weight: bold">*{{ error }}</p>
+                                	{% endfor %}
+                                {% endif %}
+                            </div>
+                          </div>
+                            {# رمز عبور و تکرار رمز عبور #}
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <div class="password-wrapper">
+                                        {{ form.password }}
+                                        <i class="fas fa-eye toggle-password"></i>
+                                    </div>
+                                    {% if form.password.errors %}
+                                        {% for error in form.password.errors %}
+                                            <p style="color: red;font-weight: bold">*{{ error }}</p>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <div class="password-wrapper">
+                                        {{ form.confirm_password }}
+                                        <i class="fas fa-eye toggle-password"></i>
+                                    </div>
+                                    {% if form.confirm_password.errors %}
+                                        {% for error in form.confirm_password.errors %}
+                                            <p style="color: red;font-weight: bold">*{{ error }}</p>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                          <div class="d-flex justify-content-center">
+                            <button type="submit" class="">ثبت نام</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+            </section>
+        </div>
+    </div>
+
+{% endblock %}

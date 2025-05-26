@@ -132,3 +132,44 @@
     border-top: 1px solid #ddd;
     padding-top: 0.75em;
   }
+
+/* signup containers */
+
+.signup_container1 {
+    display: flex;
+    justify-content: center;
+}
+
+.signup_container2 {
+    width: 1000px;
+    position: relative;
+    padding: 20px;
+    background-color: #041858;
+    border-radius: 20px;
+    direction: rtl;
+    text-align: right;
+}
+
+
+/* استایل آشکار و پنهان کردن رمز عبور */
+
+.password-wrapper {
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 35px; /* فضای کافی برای آیکون چشم */
+}
+
+.password-wrapper .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #6c757d; /* رنگ خاکستری */
+}
+
+.password-wrapper .toggle-password:hover {
+    color: #495057; /* رنگ تیره‌تر هنگام هاور */
+}

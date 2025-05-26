@@ -7,7 +7,7 @@ class User(AbstractUser):
     mobile = models.CharField(max_length=11, unique=True, verbose_name='موبایل')
     land_line = models.CharField(max_length=11,unique=True, verbose_name='تلفن ثابت', blank=True, null=True)
     degree = models.CharField(max_length=300, verbose_name='مدرک تحصیلی')
-    Field_of_Study = models.CharField(max_length=200, verbose_name='رشته ی تحصیلی', blank=True, null=True)
+    field_of_study = models.CharField(max_length=200, verbose_name='رشته ی تحصیلی', blank=True, null=True)
     company = models.CharField(max_length=200, verbose_name='شرکت / سازمان', blank=True, null=True)
     province = models.CharField(max_length=200, verbose_name='استان')
     city = models.CharField(max_length=200, verbose_name='شهر')
