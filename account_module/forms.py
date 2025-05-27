@@ -18,14 +18,14 @@ class SignupModelForm(forms.ModelForm):
             'mobile': forms.TextInput (attrs={'placeholder': 'تلفن همراه','class': "form-control"}),
             'land_line': forms.TextInput(attrs={'placeholder': 'تلفن ثابت','class': "form-control"}),
             'email': forms.TextInput(attrs={'placeholder': 'ایمیل','class': "form-control"}),
-            'degree': forms.TextInput(attrs={'placeholder': 'مدرک تحصیلی','class': "form-control"}),
+            'degree': forms.Select(attrs={'class': "form-control"}),
             'field_of_study': forms.TextInput(attrs={'placeholder': 'رشته تحصیلی','class': "form-control"}),
             'company': forms.TextInput(attrs={'placeholder': 'شرکت/سازمان','class': "form-control"}),
             'province': forms.TextInput(attrs={'placeholder': 'استان','class': "form-control"}),
             'city': forms.TextInput(attrs={'placeholder': 'شهر','class': "form-control"}),
             'address': forms.TextInput(attrs={'placeholder': 'آدرس','class': "form-control"}),
             'postal_code': forms.TextInput(attrs={'placeholder': 'کد پستی','class': "form-control"}),
-            'kind_of_signup': forms.TextInput(attrs={'placeholder': 'نوع ثبت نام','class': "form-control"}),
+            'kind_of_signup': forms.Select(attrs={'class': "form-control"}),
             'password': forms.PasswordInput(attrs={'placeholder': 'رمز عبور','class': "form-control"}),
         }
 
@@ -134,6 +134,18 @@ class SignupModelForm(forms.ModelForm):
         if not last_name:
             raise ValidationError('نام خانوادگی خود را وارد کنید')
         return last_name
+
+    def clean_degree(self):
+        degree = self.cleaned_data.get('degree')
+        if degree is None:
+            raise ValidationError('مدرک تحصیلی خود را انتخاب کنید')
+        return degree
+
+    def clean_kind_of_signup(self):
+        kind_of_signup = self.cleaned_data.get('kind_of_signup')
+        if kind_of_signup is None:
+            raise ValidationError('نوع ثبت نام را انتخاب کنید')
+        return kind_of_signup
 
 
 

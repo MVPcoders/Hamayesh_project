@@ -11,6 +11,7 @@ index_module/migrations/
 hamayesh_module/migrations/
 hamayeshProject/migrations/
 site_setting/migrations/
+account_module/migrations/
 uploads/
 # Python cache files
 __pycache__/

@@ -200,7 +200,7 @@ button {
   text-shadow: 0px 4px 18px #2c3442;
 }
 
-/* signup containers */
+/* کانتینر های ثبت نام */
 
 .signup_container1 {
     display: flex;
@@ -239,6 +239,13 @@ button {
 
 .password-wrapper .toggle-password:hover {
     color: #495057; /* رنگ تیره‌تر هنگام هاور */
+}
+
+/* استایل ارورها */
+
+.form-row p {
+    color: red;
+    font-weight: bold
 }
 
 
