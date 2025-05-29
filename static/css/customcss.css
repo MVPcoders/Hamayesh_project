@@ -249,4 +249,20 @@ button {
 }
 
 
+/* لاگین  لینک */
+.login-link {
+  color: #e0a800;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.login-link_wrapper {
+    text-align: center;
+    padding-top: 20px;
+}
+
+.login-link:hover {
+  color: blue;
+  text-decoration: underline;
+}
 

@@ -103,12 +103,16 @@ class SignupModelForm(forms.ModelForm):
                     raise ValidationError('تلفن ثابت قبلاً استفاده شده ')
             return land_line
 
+
+    ### رمز عبور ##
     def clean_password(self):
         password = self.cleaned_data.get('password')
         if len(password) < 8:
             raise ValidationError('رمز عبور باید حداقل 8 کاراکتر باشد')
         return password
 
+
+    #### تکرار رمز عبور ##
     def clean_confirm_password(self):
         password = self.cleaned_data.get('password')
         confirm_password = self.cleaned_data.get('confirm_password')
@@ -116,12 +120,16 @@ class SignupModelForm(forms.ModelForm):
             raise ValidationError('عدم مطابقت با رمز عبور')
         return confirm_password
 
+
+    ### ایمیل ##
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if not email:
             raise ValidationError('لطفاً ایمیل خود را وارد کنید')
         return email
 
+
+    ### نام ##
     def clean_first_name(self):
         first_name = self.cleaned_data.get('first_name')
         if not first_name:
@@ -129,18 +137,23 @@ class SignupModelForm(forms.ModelForm):
         return first_name
 
 
+    ### نام خانوادگی #
     def clean_last_name(self):
         last_name = self.cleaned_data.get('last_name')
         if not last_name:
             raise ValidationError('نام خانوادگی خود را وارد کنید')
         return last_name
 
+
+    ### مدرک تحصیلی#
     def clean_degree(self):
         degree = self.cleaned_data.get('degree')
         if degree is None:
             raise ValidationError('مدرک تحصیلی خود را انتخاب کنید')
         return degree
 
+
+    ### نوع ثبت نام ##
     def clean_kind_of_signup(self):
         kind_of_signup = self.cleaned_data.get('kind_of_signup')
         if kind_of_signup is None:
@@ -149,12 +162,40 @@ class SignupModelForm(forms.ModelForm):
 
 
 
-#### فرم ورود##
-class LoginModelForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('mobile', 'password')
-        widgets = {
-            'mobile': forms.TextInput
-        }
 
+#### فرم ورود##
+class LoginForm(forms.Form):
+    mobile = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder':'تلفن همراه'
+        }),
+        error_messages={
+            'required':'تلفن همراه خود را وارد کنید'
+        }
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder':'رمز عبور'
+        }),
+        error_messages={
+            'required':'رمز عبور خود را وارد کنید'
+        }
+    )
+
+    def clean_mobile(self):
+        mobile = self.cleaned_data.get('mobile')
+        if not mobile.isdigit():
+            raise ValidationError('فقط عدد وارد کنید')
+        elif len(mobile) != 11:
+            raise ValidationError('باید 11 رقم باشد')
+        return mobile
+
+
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if password is None:
+            raise ValidationError("رمز عبور خود را وارد نمایید")
+        return password
