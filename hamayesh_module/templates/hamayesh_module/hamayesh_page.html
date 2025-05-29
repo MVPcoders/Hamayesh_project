@@ -6,33 +6,148 @@
 
 {% block content %}
 
-<section class="work_section layout_padding">
-  <div class="container">
-    <div class="heading_container" style="direction: rtl; text-align: right">
-      <h2>
-        تعرفه های همایش
-      </h2>
-      <p>
-          ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد
-      </p>
+<div class="parent">
+<div class="div1">
+<h3>نوع ثبت نام کاربر در سایت همایش</h3>
+    <div class="radio-group">
+        {% for ham in hamayesh_signup_category %}
+             <label class="quantum-radio">
+                <input name="quantum" type="radio" value="{{ ham.price }}" onchange="updateReceipt()" />
+                <span class="radio-control"></span>
+                <span class="radio-label">{{ ham.name }} ** {{ ham.price|three_digits_currency }} تومان </span>
+            </label>
+        {% endfor %}
     </div>
-        <div class="card-container">
-            {% for ham_price in hamayesh_prices %}
-                <div class="card">
-                    <div class="content">
-                        <div class="title">{{ ham_price.name }}</div>
-                        <div class="price" >{{ ham_price.price|three_digits_currency }}</div>
-                        <div class="description">تومان</div>
-                    </div>
-                    <button>
-                        اضافه کردن به سبد خرید
-                    </button>
-                </div>
-            {% endfor %}
+</div>
+<div class="div2">
+<h3>خدمات ویژه</h3>
+    {% for hamayesh_price in hamayesh_prices %}
+        <label class="cyberpunk-checkbox-label">
+            <input type="checkbox" class="cyberpunk-checkbox" value="{{ hamayesh_price.price }}" onchange="updateReceipt()">
+            {{ hamayesh_price.name }} ** {{ hamayesh_price.price|three_digits_currency }} تومان
+        </label>
+    {% endfor %}
+</div>
+<div class="div3">
+    <div class="receipt">
+        <p class="shop-name">همایش ملی</p>
+        <p class="info">
+            Date: 12/27/2025<br />
+            Time: 03:15 PM
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>محصول</th>
+                    <th>قیمت</th>
+                </tr>
+            </thead>
+            <tbody id="receipt-items">
+                <!-- Items will be added here -->
+            </tbody>
+        </table>
+
+        <div class="total">
+            <p>قیمت کل:</p>
+            <p id="total-price">0 تومان</p>
         </div>
+
+        <p class="thanks">ممنون از اینکه مارا انتخاب کردید</p>
+
+        <button class="pay-btn">
+  <span class="btn-text">پرداخت</span>
+  <div class="icon-container">
+    <svg viewBox="0 0 24 24" class="icon card-icon">
+      <path
+        d="M20,8H4V6H20M20,18H4V12H20M20,4H4C2.89,4 2,4.89 2,6V18C2,19.11 2.89,20 4,20H20C21.11,20 22,19.11 22,18V6C22,4.89 21.11,4 20,4Z"
+        fill="currentColor"
+      ></path>
+    </svg>
+    <svg viewBox="0 0 24 24" class="icon payment-icon">
+      <path
+        d="M2,17H22V21H2V17M6.25,7H9V6H6V3H18V6H15V7H17.75L19,17H5L6.25,7M9,10H15V8H9V10M9,13H15V11H9V13Z"
+        fill="currentColor"
+      ></path>
+    </svg>
+    <svg viewBox="0 0 24 24" class="icon dollar-icon">
+      <path
+        d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"
+        fill="currentColor"
+      ></path>
+    </svg>
+
+    <svg viewBox="0 0 24 24" class="icon wallet-icon default-icon">
+      <path
+        d="M21,18V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V6H12C10.89,6 10,6.9 10,8V16A2,2 0 0,0 12,18M12,16H22V8H12M16,13.5A1.5,1.5 0 0,1 14.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,12A1.5,1.5 0 0,1 16,13.5Z"
+        fill="currentColor"
+      ></path>
+    </svg>
+
+    <svg viewBox="0 0 24 24" class="icon check-icon">
+      <path
+        d="M9,16.17L4.83,12L3.41,13.41L9,19L21,7L19.59,5.59L9,16.17Z"
+        fill="currentColor"
+      ></path>
+    </svg>
   </div>
+</button>
 
-</section>
 
 
+    </div>
+</div>
+<script>
+    function updateReceipt() {
+        let total = 0;
+        const receiptItems = document.getElementById('receipt-items');
+        receiptItems.innerHTML = ''; // Clear previous items
+
+        // Get selected radio button
+        const selectedRadio = document.querySelector('input[name="quantum"]:checked');
+        if (selectedRadio) {
+            const radioPrice = parseFloat(selectedRadio.value) || 0;
+            total += radioPrice;
+
+            // Get label: the span with class "radio-label" inside the parent label element
+            const radioLabelSpan = selectedRadio.closest('label').querySelector('.radio-label');
+            const radioLabel = radioLabelSpan ? radioLabelSpan.innerText : "محصول رادیو";
+
+            const radioRow = `<tr><td>${radioLabel}</td><td>${radioPrice.toLocaleString()} تومان</td></tr>`;
+            receiptItems.innerHTML += radioRow;
+        }
+
+        // Get checked checkboxes
+        const checkboxes = document.querySelectorAll('.cyberpunk-checkbox:checked');
+        checkboxes.forEach(checkbox => {
+            const checkboxPrice = parseFloat(checkbox.value) || 0;
+            total += checkboxPrice;
+
+            // Get label text: the text content of the label, excluding the input element
+            const labelElement = checkbox.closest('label');
+            let labelText = "";
+            if (labelElement) {
+                // Clone to manipulate without altering DOM
+                const clonedLabel = labelElement.cloneNode(true);
+                // Remove input element from clone
+                const inputElement = clonedLabel.querySelector('input');
+                if (inputElement) clonedLabel.removeChild(inputElement);
+                labelText = clonedLabel.textContent.trim() || "محصول چک باکس";
+            } else {
+                labelText = "محصول چک باکس";
+            }
+
+            const checkboxRow = `<tr><td>${labelText}</td><td>${checkboxPrice.toLocaleString()} تومان</td></tr>`;
+            receiptItems.innerHTML += checkboxRow;
+        });
+
+        // Update total price
+        document.getElementById('total-price').innerText = total.toLocaleString() + ' تومان';
+    }
+</script>
+
+
+
+
+</div>
 {% endblock %}

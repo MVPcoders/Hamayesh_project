@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include("index_module.urls")),
     path('',include('account_module.urls')),
-    path('hamayesh/',include('hamayesh_module.urls'))
+    path('hamayesh/',include('hamayesh_module.urls')),
+    path('management/', include('panel_module.urls')),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

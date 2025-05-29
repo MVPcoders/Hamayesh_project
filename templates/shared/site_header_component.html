@@ -16,25 +16,28 @@
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
-              <ul class="navbar-nav  ">
-                <li class="nav-item active">
-                  <a class="nav-link" href="">خانه<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'hamayesh-page' %}">تعرفه ها</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="">ثبت مقاله جدید</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href=""> ثبت نام / ورود </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="http://localhost:8000/admin/">حساب کاربری</a>
-                </li>
-              </ul>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <div class="d-flex mx-auto flex-column flex-lg-row align-items-center">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/" id="home-link">خانه<span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'hamayesh-page' %}" id="tariffs-link">تعرفه ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/hamayesh/" id="new-article-link">ثبت مقاله جدید</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="" id="register-link">ثبت نام / ورود</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="http://localhost:8000/admin/" id="account-link">حساب کاربری</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
+
             <div class="quote_btn-container ">
               <a href="">
                 <img src="/static/images/call.png" alt="">
@@ -97,3 +100,4 @@
     </header>
     <!-- end header section -->
     </div>
+  
