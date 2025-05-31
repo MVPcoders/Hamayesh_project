@@ -1,6 +1,7 @@
-from django.contrib.auth import login
-from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.contrib.auth import login, logout
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import CreateView, FormView
 from account_module.forms import SignupModelForm, LoginForm
 from .models import User
@@ -51,3 +52,11 @@ class LoginView(FormView):
 
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
+
+
+class LogoutView(View):
+    def get(self, request):
+        logout(request)
+        return redirect(reverse('index'))
+
+

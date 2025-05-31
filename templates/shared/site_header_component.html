@@ -28,12 +28,19 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/hamayesh/" id="new-article-link">ثبت مقاله جدید</a>
                         </li>
+                        {% if not request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link" href="" id="register-link">ثبت نام / ورود</a>
+                            <a class="nav-link" href="{% url 'login' %}" id="register-link">ثبت نام / ورود</a>
                         </li>
+                        {% endif %} 
+                        {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="http://localhost:8000/admin/" id="account-link">حساب کاربری</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}" id="account-link">خروج</a>
+                        </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
