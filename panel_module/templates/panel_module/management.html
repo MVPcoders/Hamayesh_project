@@ -446,3 +446,51 @@
     </script>
 </body>
 </html>
+{#<!DOCTYPE html>#}
+{#<html lang="fa">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <title>لیست کاربران</title>#}
+{#</head>#}
+{#<body>#}
+{#    <h1>لیست کاربران ثبت‌نام شده</h1>#}
+{#    <table border="1">#}
+{#        <thead>#}
+{#            <tr>#}
+{#                <th>نام و نام خانوادگی</th>#}
+{#                <th>موبایل</th>#}
+{#                <th>تلفن ثابت</th>#}
+{#                <th>مدرک تحصیلی</th>#}
+{#                <th>رشته تحصیلی</th>#}
+{#                <th>شرکت / سازمان</th>#}
+{#                <th>استان</th>#}
+{#                <th>شهر</th>#}
+{#                <th>آدرس</th>#}
+{#                <th>کد پستی</th>#}
+{#                <th>نوع ثبت نام</th>#}
+{#                <th>کد ملی</th>#}
+{#                <th>آخرین ورود</th>#}
+{#            </tr>#}
+{#        </thead>#}
+{#        <tbody>#}
+{#            {% for user in users %}#}
+{#                <tr>#}
+{#                    <td>{{ user.get_full_name }}</td>#}
+{#                    <td>{{ user.mobile }}</td>#}
+{#                    <td>{{ user.land_line }}</td>#}
+{#                    <td>{{ user.degree }}</td>#}
+{#                    <td>{{ user.field_of_study }}</td>#}
+{#                    <td>{{ user.company }}</td>#}
+{#                    <td>{{ user.province }}</td>#}
+{#                    <td>{{ user.city }}</td>#}
+{#                    <td>{{ user.address }}</td>#}
+{#                    <td>{{ user.postal_code }}</td>#}
+{#                    <td>{{ user.kind_of_signup }}</td>#}
+{#                    <td>{{ user.code_meli }}</td>#}
+{#                    <td>{{ user.last_login_to_jalali }}</td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#        </tbody>#}
+{#    </table>#}
+{#</body>#}
+{#</html>#}
