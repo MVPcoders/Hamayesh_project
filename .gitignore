@@ -7,6 +7,7 @@ env/
 # IDE-specific files
 .vscode/
 .idea/
+article_module/migrations/
 index_module/migrations/
 hamayesh_module/migrations/
 hamayeshProject/migrations/
