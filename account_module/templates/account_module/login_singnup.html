@@ -2,7 +2,12 @@
 
 
 {% block title %}
-	ثبت نام
+	{% if request.path == '/login' %}
+		ورود
+	{% endif %}
+    {% if request.path == '/signup' %}
+		ثبت نام
+	{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -45,7 +50,12 @@
                             <!-- کد ملی و موبایل -->
                             <div class="form-row" >
                             <div class="form-group col-md-6">
-                              {{ form.code_meli }}
+                                <div class="position-relative">
+                                    {{ form.code_meli}}
+                                    <span class="position-absolute icon-style">
+                                        <i class="fas fa-id-card text-muted"></i>
+                                    </span>
+                                </div>
                                 {% if form.code_meli.errors %}
                                 	{% for error in form.code_meli.errors %}
                                 		<p>*{{ error }}</p>
@@ -53,18 +63,28 @@
                                 {% endif %}
                             </div>
                             <div class="form-group col-md-6">
-                              {{ form.mobile }}
+                                <div class="position-relative">
+                                    {{ form.mobile}}
+                                    <span class="position-absolute icon-style">
+                                        <i class="fas fa-mobile-alt text-muted"></i>
+                                    </span>
+                                </div>
                                 {% if form.mobile.errors %}
-                                	{% for error in form.mobile.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
+                                    {% for error in form.mobile.errors %}
+                                        <p class="text-danger">*{{ error }}</p>
+                                    {% endfor %}
                                 {% endif %}
                             </div>
                           </div>
                             <!-- ایمیل -->
                           <div class="form-row">
                             <div class="form-group col">
-                              {{ form.email }}
+                              <div class="position-relative">
+                                    {{ form.email}}
+                                    <span class="position-absolute icon-style">
+                                        <i class="fas fa-envelope text-muted"></i>
+                                    </span>
+                                </div>
                                 {% if form.email.errors %}
                                 	{% for error in form.email.errors %}
                                 		<p>*{{ error }}</p>
@@ -94,7 +114,12 @@
                             <!-- آدرس -->
                           <div class="form-row">
                             <div class="form-group col">
-                              {{ form.address }}
+                              <div class="position-relative">
+                                    {{ form.address}}
+                                    <span class="position-absolute icon-style">
+                                        <i class="fas fa-map-marker-alt text-muted"></i>
+                                    </span>
+                                </div>
                                 {% if form.address.errors %}
                                 	{% for error in form.address.errors %}
                                 		<p>*{{ error }}</p>
@@ -105,7 +130,12 @@
                             <!-- تلفن ثابت و کد پستی -->
                             <div class="form-row" >
                             <div class="form-group col-md-6">
-                              {{ form.land_line }}
+                              <div class="position-relative">
+                                    {{ form.land_line}}
+                                    <span class="position-absolute icon-style">
+                                        <i class="fas fa-phone-alt text-muted"></i>
+                                    </span>
+                                </div>
                                 {% if form.land_line.errors %}
                                 	{% for error in form.land_line.errors %}
                                 		<p>*{{ error }}</p>
@@ -113,7 +143,12 @@
                                 {% endif %}
                             </div>
                             <div class="form-group col-md-6">
-                              {{ form.postal_code }}
+                              <div class="position-relative">
+                                    {{ form.postal_code}}
+                                    <span class="position-absolute icon-style">
+                                        <i class="fas fa-mail-bulk text-muted"></i>
+                                    </span>
+                                </div>
                                 {% if form.postal_code.errors %}
                                 	{% for error in form.postal_code.errors %}
                                 		<p>*{{ error }}</p>
@@ -217,7 +252,12 @@
                               <!-- تلفن همراه -->
                                 <div class="form-row">
                                     <div class="form-group col">
-                                      {{ form.mobile }}
+                                       <div class="position-relative">
+                                            {{ form.mobile}}
+                                            <span class="position-absolute icon-style">
+                                                <i class="fas fa-mobile-alt text-muted"></i>
+                                            </span>
+                                       </div>
                                         {% if form.mobile.errors %}
                                             {% for error in form.mobile.errors %}
                                                 <p>*{{ error }}</p>

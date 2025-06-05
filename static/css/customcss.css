@@ -617,3 +617,16 @@
   }
 }
 
+
+/*  استایل آیکون موبایل  */
+
+.icon-distance {
+    padding-right: 35px !important;
+}
+
+.icon-style {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}

@@ -14,17 +14,17 @@ class SignupModelForm(forms.ModelForm):
         widgets = {
             'first_name': forms.TextInput(attrs={'placeholder': 'نام','class': "form-control"}),
             'last_name': forms.TextInput(attrs={'placeholder': 'نام خانوادگی','class': "form-control"}),
-            'code_meli': forms.TextInput(attrs={'placeholder': 'کد ملی','class': "form-control"}),
-            'mobile': forms.TextInput (attrs={'placeholder': 'تلفن همراه','class': "form-control"}),
-            'land_line': forms.TextInput(attrs={'placeholder': 'تلفن ثابت','class': "form-control"}),
-            'email': forms.TextInput(attrs={'placeholder': 'ایمیل','class': "form-control"}),
+            'code_meli': forms.TextInput(attrs={'placeholder': 'کد ملی','class': "form-control icon-distance"}),
+            'mobile': forms.TextInput (attrs={'placeholder': 'تلفن همراه','class': "form-control icon-distance"}),
+            'land_line': forms.TextInput(attrs={'placeholder': 'تلفن ثابت','class': "form-control icon-distance"}),
+            'email': forms.TextInput(attrs={'placeholder': 'ایمیل','class': "form-control icon-distance"}),
             'degree': forms.Select(attrs={'class': "form-control"}),
             'field_of_study': forms.TextInput(attrs={'placeholder': 'رشته تحصیلی','class': "form-control"}),
             'company': forms.TextInput(attrs={'placeholder': 'شرکت/سازمان','class': "form-control"}),
             'province': forms.TextInput(attrs={'placeholder': 'استان','class': "form-control"}),
             'city': forms.TextInput(attrs={'placeholder': 'شهر','class': "form-control"}),
-            'address': forms.TextInput(attrs={'placeholder': 'آدرس','class': "form-control"}),
-            'postal_code': forms.TextInput(attrs={'placeholder': 'کد پستی','class': "form-control"}),
+            'address': forms.TextInput(attrs={'placeholder': 'آدرس','class': "form-control icon-distance"}),
+            'postal_code': forms.TextInput(attrs={'placeholder': 'کد پستی','class': "form-control icon-distance"}),
             'kind_of_signup': forms.Select(attrs={'class': "form-control"}),
             'password': forms.PasswordInput(attrs={'placeholder': 'رمز عبور','class': "form-control"}),
         }
@@ -167,7 +167,7 @@ class SignupModelForm(forms.ModelForm):
 class LoginForm(forms.Form):
     mobile = forms.CharField(
         widget=forms.TextInput(attrs={
-            'class': 'form-control',
+            'class': 'form-control icon-distance',
             'placeholder':'تلفن همراه'
         }),
         error_messages={

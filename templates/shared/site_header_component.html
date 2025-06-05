@@ -26,7 +26,7 @@
                             <a class="nav-link" href="{% url 'hamayesh-page' %}" id="tariffs-link">تعرفه ها</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/hamayesh/" id="new-article-link">ثبت مقاله جدید</a>
+                            <a class="nav-link" href="{% url 'new_article' %}" id="new-article-link">ثبت مقاله جدید</a>
                         </li>
                         {% if not request.user.is_authenticated %}
                         <li class="nav-item">
@@ -34,8 +34,13 @@
                         </li>
                         {% endif %} 
                         {% if request.user.is_authenticated %}
+                            {% if request.user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="http://localhost:8000/admin/" id="account-link">پنل ادمین</a>
+                                </li>
+                            {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="http://localhost:8000/admin/" id="account-link">حساب کاربری</a>
+                            <a class="nav-link" href="" id="account-link">حساب کاربری</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}" id="account-link">خروج</a>
@@ -74,14 +79,16 @@
                     <p>
                       {{ site_setting.hamayesh_detail }}
                     </p>
-                    <div class="btn-box">
-                      <a href="{% url 'signup' %}" class="btn-1">
-                        ثبت نام
-                      </a>
-                      <a href="" class="btn-2">
-                        ورود
-                      </a>
-                    </div>
+                    {% if not request.user.is_authenticated %}
+                    	<div class="btn-box">
+                          <a href="{% url 'signup' %}" class="btn-1">
+                            ثبت نام
+                          </a>
+                          <a href="{% url 'login' %}" class="btn-2">
+                            ورود
+                          </a>
+                        </div>
+                    {% endif %} 
                   </div>
                 </div>
                 <div class="col-md-6">
