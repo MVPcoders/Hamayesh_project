@@ -70,11 +70,12 @@ function updateReceipt() {
     });
 
     // Update total price
+
     document.getElementById('total-price').innerText = total.toLocaleString() + ' تومان';
 }
 
 
     // اسکرول خودکار
-    window.addEventListener('load', () => {
-    window.scrollTo({top: 500, behavior: 'smooth'});
-});
+    // window.addEventListener('load', () => {
+    // window.scrollTo({top: 500, behavior: 'smooth'});
+    // });
