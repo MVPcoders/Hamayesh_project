@@ -9,14 +9,13 @@ from django.http import HttpRequest, JsonResponse, HttpResponse
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
-from panel_module.models import TotalSales
 from django.db import models
 
 
 merchant_id = "7fed38ae-39b5-49f5-8019-d5912ffea009"
-ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
-ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
-ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/{authority}"
+ZP_API_REQUEST = "https://payment.zarinpal.com/pg/v4/payment/request.json"
+ZP_API_VERIFY = "https://payment.zarinpal.com/pg/v4/payment/verify.json"
+ZP_API_STARTPAY = "https://payment.zarinpal.com/pg/StartPay/{authority}"
 callback_url = "self.callbackURL"
 description = "نهایی کردن خرید شما از سایت ما"
 mobile = "mobile"  # اختیاری
@@ -63,10 +62,6 @@ def verify(request: HttpRequest):
             t_status = req.json()['data']['code']
             req_id = req.json()["data"]["ref_id"]
             if t_status == '100':
-                # افزایش مبلغ فروش کل
-                total_sales, created = TotalSales.objects.get_or_create(id=1)  # فرض بر این است که فقط یک رکورد داریم
-                total_sales.total_amount += price
-                total_sales.save()
 
                 return render(request, 'order_module/payment_result.html', {
                     'success': f"تراکنش با کد پیگیری {req_id} با موفقیت انجام شد ",
@@ -80,18 +75,10 @@ def verify(request: HttpRequest):
         else:
             e_code = req.json()['errors']['code']
             e_message = req.json()['errors']['message']
-            # افزایش مبلغ فروش کل
-            total_sales, created = TotalSales.objects.get_or_create(id=1)  # فرض بر این است که فقط یک رکورد داریم
-            total_sales.total_amount += price
-            total_sales.save()
             return render(request, 'order_module/payment_result.html', {
                 'info': f"{e_message}",
             })
     else:
-        # افزایش مبلغ فروش کل
-        total_sales, created = TotalSales.objects.get_or_create(id=1)  # فرض بر این است که فقط یک رکورد داریم
-        total_sales.total_amount += price
-        total_sales.save()
         return redirect('home_page')
 
 # Create your views here.

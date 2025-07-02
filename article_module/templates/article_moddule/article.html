@@ -1,187 +1,65 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فرم چند مرحله‌ای</title>
+{% extends 'shared/layout.html' %}
+{% block title %}
+    ارسال مقاله
+{% endblock %}
+{% block content %}
     <style>
-        :root {
-            --primary-color: #4a90e2;
-            --secondary-color: #7b8d93;
-            --background-color: #f6f8fa;
-            --text-color: #2c3e50;
-            --button-bg: var(--primary-color);
-            --button-color: white;
-            --border-radius: 8px;
-            --font-family: "Vazir", Tahoma, sans-serif;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--background-color);
-            font-family: var(--font-family);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        .custom-body {
+            font-family: 'Vazir', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
             padding: 20px;
+            direction: rtl;
+            text-align: right;
         }
-
-        .form-container {
-            background: white;
-            width: 100%;
-            max-width: 600px;
-            border-radius: var(--border-radius);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            transition: all 0.3s ease;
+        .custom-form-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            direction: rtl;
         }
-
-        h2 {
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
-
-        .form-step {
-            display: none;
-            flex-direction: column;
-            animation: fadeIn 0.5s ease forwards;
-        }
-
-        .form-step.active {
-            display: flex;
-        }
-
-        h3 {
+        .custom-form-group {
             margin-bottom: 15px;
-            font-weight: 600;
-            color: var(--secondary-color);
         }
-
-        label {
+        .custom-form-group label {
+            display: block;
             margin-bottom: 5px;
-            font-weight: 600;
         }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="tel"],
-        input[type="file"],
-        select {
+        .custom-form-group input,
+        .custom-form-group select,
+        .custom-form-group textarea {
+            width: 100%;
             padding: 10px;
-            border-radius: var(--border-radius);
-            border: 1.5px solid #ccc;
-            font-size: 1rem;
-            margin-bottom: 20px;
-            transition: border-color 0.3s ease;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="tel"]:focus,
-        select:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 5px var(--primary-color);
-        }
-
-        .button-group {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        button {
-            background-color: var(--button-bg);
+        .custom-submit-button {
+            background-color: #6f42c1; /* رنگ آبی مایل به بنفش */
+            color: white;
             border: none;
-            border-radius: var(--border-radius);
-            color: var(--button-color);
+            padding: 10px 15px;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1rem;
-            padding: 10px 20px;
-            transition: background-color 0.3s ease;
-            font-weight: 700;
         }
-
-        button:disabled {
-            background-color: #a0bedf;
-            cursor: not-allowed;
-        }
-
-        button:hover:not(:disabled) {
-            background-color: #357abd;
-        }
-
-        @keyframes fadeIn {
-            from {opacity: 0; transform: translateY(10px);}
-            to {opacity: 1; transform: translateY(0);}
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .form-container {
-                padding: 20px;
-            }
-            button {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-            }
+        .custom-submit-button:hover {
+            background-color: #5a32a1; /* رنگ تیره‌تر برای حالت هاور */
         }
     </style>
-</head>
-<body>
-    <div class="form-container">
-        <h2>فرم ثبت مقاله</h2>
-        <form id="multiStepForm" method="post" enctype="multipart/form-data">
+<body class="custom-body">
+    <div class="custom-form-container">
+        <h2>فرم ارسال مقاله</h2>
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <div class="form-step active">
-                <h3>مرحله ۱: اطلاعات مقاله</h3>
+            <div class="custom-form-group">
                 {{ article_form.as_p }}
             </div>
-            <div class="form-step">
-                <h3>مرحله ۲: اطلاعات نویسنده</h3>
+            <div class="custom-form-group">
                 {{ author_form.as_p }}
             </div>
-            <div class="button-group">
-                <button type="button" id="prevBtn" disabled>مرحله قبل</button>
-                <button type="button" id="nextBtn">مرحله بعد</button>
-                <button type="submit" id="submitBtn" style="display:none;">ارسال</button>
-            </div>
+            <button type="submit" class="custom-submit-button">ارسال مقاله</button>
         </form>
     </div>
-
-    <script>
-        (function() {
-            const steps = document.querySelectorAll('.form-step');
-            const nextBtn = document.getElementById('nextBtn');
-            const prevBtn = document.getElementById('prevBtn');
-            const submitBtn = document.getElementById('submitBtn');
-            let currentStep = 0;
-
-            function showStep(index) {
-                steps.forEach((step, idx) => {
-                    step.classList.toggle('active', idx === index);
-                });
-                prevBtn.disabled = index === 0;
-                nextBtn.style.display = index === steps.length - 1 ? 'none' : 'inline-block';
-                submitBtn.style.display = index === steps.length - 1 ? 'inline-block' : 'none';
-            }
-
-            nextBtn.addEventListener('click', () => {
-                currentStep++;
-                showStep(currentStep);
-            });
-
-            prevBtn.addEventListener('click', () => {
-                currentStep--;
-                showStep(currentStep);
-            });
-
-            showStep(currentStep);
-        })();
-    </script>
 </body>
-</html>
+{% endblock %}

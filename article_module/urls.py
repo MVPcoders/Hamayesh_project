@@ -1,7 +1,12 @@
+# from django.urls import path
+# from .views import aricle
+#
+# urlpatterns = [
+#     path('new-article/', aricle, name='new_article'),
+# ]
 from django.urls import path
-from .views import multi_step_form
+from .views import submit_article
 
 urlpatterns = [
-    path('new-article/', multi_step_form, name='new_article'),
-    # other paths...
+    path('new-article/', submit_article, name='new_article'),
 ]

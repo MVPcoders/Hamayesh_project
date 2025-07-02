@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import ArticleForm, ArticleAuthorForm
 
-def multi_step_form(request):
+
+def submit_article(request):
     if request.method == 'POST':
         article_form = ArticleForm(request.POST, request.FILES)
         author_form = ArticleAuthorForm(request.POST)
@@ -11,7 +12,7 @@ def multi_step_form(request):
             author = author_form.save(commit=False)
             author.article = article
             author.save()
-            return redirect('success')  # Redirect to a success page
+            return redirect('success_page')  # به صفحه موفقیت هدایت کنید
 
     else:
         article_form = ArticleForm()
