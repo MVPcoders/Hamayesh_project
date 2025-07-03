@@ -2,7 +2,7 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, FormView
+from django.views.generic import CreateView, FormView, TemplateView
 from account_module.forms import SignupModelForm, LoginForm
 from .models import User
 
@@ -58,5 +58,6 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect(reverse('index'))
+
 
 

@@ -12,7 +12,7 @@ def submit_article(request):
             author = author_form.save(commit=False)
             author.article = article
             author.save()
-            return redirect('success_page')  # به صفحه موفقیت هدایت کنید
+            return redirect('index')  # به صفحه موفقیت هدایت کنید
 
     else:
         article_form = ArticleForm()

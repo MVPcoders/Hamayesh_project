@@ -1,5 +1,3 @@
-from tabnanny import verbose
-
 from django.db import models
 
 
@@ -31,14 +29,12 @@ class Article(models.Model):
     is_accepted = models.BooleanField(verbose_name='پذیرفته شده توسط داور', default=False)
     is_paid = models.BooleanField(verbose_name='هزینه داوری', default=False)
 
-    def __str__(self):
-        if self.authors_numbers:
-            return self.persian_subject
-
     class Meta:
         verbose_name = 'مقاله'
         verbose_name_plural = 'مقالات'
 
+    def __str__(self):
+        return self.persian_subject
 
 class ArticleAuthor(models.Model):
     article = models.ForeignKey(to='Article', on_delete=models.CASCADE, verbose_name='مقاله')
@@ -51,7 +47,7 @@ class ArticleAuthor(models.Model):
 
     def __str__(self):
         if self.main_author:
-            return f'{self.first_name} {self.last_name}  - {self.article}'
+            return f'{self.first_name} {self.last_name}'
 
     class Meta:
         verbose_name = 'نویسنده'

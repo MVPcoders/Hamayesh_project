@@ -62,7 +62,6 @@ def verify(request: HttpRequest):
             t_status = req.json()['data']['code']
             req_id = req.json()["data"]["ref_id"]
             if t_status == '100':
-
                 return render(request, 'order_module/payment_result.html', {
                     'success': f"تراکنش با کد پیگیری {req_id} با موفقیت انجام شد ",
                 })
