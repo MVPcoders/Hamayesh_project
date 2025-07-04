@@ -1,6 +1,4 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.shortcuts import render
 from account_module.models import User
 from article_module.models import Article
 from django.core.paginator import Paginator

@@ -26,6 +26,7 @@
         <option value="$MODULE_DIR$/templates" />
         <option value="$MODULE_DIR$/index_module/templates" />
         <option value="$MODULE_DIR$/hamayesh_module/templates" />
+        <option value="$MODULE_DIR$/order_module/templates" />
       </list>
     </option>
   </component>

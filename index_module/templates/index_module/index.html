@@ -5,6 +5,7 @@
 {% endblock %}
 
 {% block content %}
+    <a href="{% url 'request' %}">پرداخت</a>
   <!-- news section -->
   <section class="client_section layout_padding-bottom">
     <div class="container">
@@ -77,101 +78,99 @@
   </section>
   <!-- end news section -->
 
-  <!-- service section -->
-  <section class="service_section layout_padding">
-
-
-    <div class="container-fluid">
-      <div class="heading_container">
-        <h2>
-          محورهای کنفرانس
-        </h2>
-        <p>
-            محور های  {{ site_setting.hamayesh_detail }}
-        </p>
-      </div>
-    <div class="service_container">
-        {% for topic in hamayesh_topics %}
-                <div class="box">
-                  <div class="img-box">
-                    <img src="/static/images/s-1.png" alt="">
-                  </div>
-                  <div class="detail-box">
-                    <h5>
-                      {{ topic.name }}
-                    </h5>
-                    <details>
-                        <summary>توضیحات</summary>
-                        <p>{{ topic.details }}</p>
-
-                  </details>
-                  </div>
-                </div>
-
-        {% endfor %}
-    </div>
-      <div class="btn-box">
-        <a href="">
-          لیست کامل
-        </a>
-      </div>
-    </div>
-  </section>
-  <!-- end service section -->
-<!-- work section -->
-<section class="work_section layout_padding">
-  <div class="container">
-    <div class="heading_container" style="direction: rtl;">
-      <h2>
-        تعرفه های همایش
-      </h2>
-      <p>
-          ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد
-      </p>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="detail_container">
-          {% for ham in hamayesh_prices|slice:":4" %}
-            <div class="box b-1">
-              <div class="top-box" style="direction: rtl">
-                <div class="icon-box" style="padding-left: 10px">
-                  <img src="/static/images/work-i1.png" alt="">
-                </div>
-                <h5>
-                  {{ ham.name }}
-                </h5>
-              </div>
-              <div class="bottom-box">
-                <p style="font-weight: bold; color: #1c7430; font-size: 24px">
-                 تومان  {{ ham.price|three_digits_currency }}
-                </p>
-                <div class="custom-button">
-                    <button>
-                        <span>خرید</span>
-                    </button>
-                </div>
-
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="img-box">
-          <img src="/static/images/work-img.png" alt="">
-        </div>
-      </div>
-    </div>
-
-    <div class="btn-box">
-      <a href="/path/to/all/hamayesh">
-        نمایش همه
-      </a>
-    </div>
-  </div>
-</section>
-<!-- end work section -->
+{#  <!-- service section -->#}
+{#  <section class="service_section layout_padding">#}
+{#    <div class="container-fluid">#}
+{#      <div class="heading_container">#}
+{#        <h2>#}
+{#          محورهای کنفرانس#}
+{#        </h2>#}
+{#        <p>#}
+{#            محور های  {{ site_setting.hamayesh_detail }}#}
+{#        </p>#}
+{#      </div>#}
+{#    <div class="service_container">#}
+{#        {% for topic in hamayesh_topics %}#}
+{#                <div class="box">#}
+{#                  <div class="img-box">#}
+{#                    <img src="/static/images/s-1.png" alt="">#}
+{#                  </div>#}
+{#                  <div class="detail-box">#}
+{#                    <h5>#}
+{#                      {{ topic.name }}#}
+{#                    </h5>#}
+{#                    <details>#}
+{#                        <summary>توضیحات</summary>#}
+{#                        <p>{{ topic.details }}</p>#}
+{##}
+{#                  </details>#}
+{#                  </div>#}
+{#                </div>#}
+{##}
+{#        {% endfor %}#}
+{#    </div>#}
+{#      <div class="btn-box">#}
+{#        <a href="">#}
+{#          لیست کامل#}
+{#        </a>#}
+{#      </div>#}
+{#    </div>#}
+{#  </section>#}
+{#  <!-- end service section -->#}
+{#    <!-- work section -->#}
+{#    <section class="work_section layout_padding">#}
+{#      <div class="container">#}
+{#        <div class="heading_container" style="direction: rtl;">#}
+{#          <h2>#}
+{#            تعرفه های همایش#}
+{#          </h2>#}
+{#          <p>#}
+{#              ثبت نام اولیه و ارسال مقاله به همایش جهت داوری رایگان می باشد#}
+{#          </p>#}
+{#        </div>#}
+{#        <div class="row">#}
+{#          <div class="col-md-6">#}
+{#            <div class="detail_container">#}
+{#              {% for ham in hamayesh_prices|slice:":4" %}#}
+{#                <div class="box b-1">#}
+{#                  <div class="top-box" style="direction: rtl">#}
+{#                    <div class="icon-box" style="padding-left: 10px">#}
+{#                      <img src="/static/images/work-i1.png" alt="">#}
+{#                    </div>#}
+{#                    <h5>#}
+{#                      {{ ham.name }}#}
+{#                    </h5>#}
+{#                  </div>#}
+{#                  <div class="bottom-box">#}
+{#                    <p style="font-weight: bold; color: #1c7430; font-size: 24px">#}
+{#                     تومان  {{ ham.price|three_digits_currency }}#}
+{#                    </p>#}
+{#                    <div class="custom-button">#}
+{#                        <button>#}
+{#                            <span>خرید</span>#}
+{#                        </button>#}
+{#                    </div>#}
+{#    #}
+{#                  </div>#}
+{#                </div>#}
+{#              {% endfor %}#}
+{#            </div>#}
+{#          </div>#}
+{#          <div class="col-md-6">#}
+{#            <div class="img-box">#}
+{#              <img src="/static/images/work-img.png" alt="">#}
+{#            </div>#}
+{#          </div>#}
+{#        </div>#}
+{#    #}
+{#        <div class="btn-box">#}
+{#          <a href="/path/to/all/hamayesh">#}
+{#            نمایش همه#}
+{#          </a>#}
+{#        </div>#}
+{#      </div>#}
+{#    </section>#}
+{#    <!-- end work section -->#}
     <!-- about section -->
   <section class="about_section">
     <div class="container">
