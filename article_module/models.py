@@ -36,6 +36,7 @@ class Article(models.Model):
     def __str__(self):
         return self.persian_subject
 
+
 class ArticleAuthor(models.Model):
     article = models.ForeignKey(to='Article', on_delete=models.CASCADE, verbose_name='مقاله')
     first_name = models.CharField(max_length=200, verbose_name='نام نویسنده')

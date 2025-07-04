@@ -25,7 +25,6 @@ class SignUpView(CreateView):
         return super().form_valid(form)
 
 
-
 class LoginView(FormView):
     form_class = LoginForm
     template_name = 'account_module/login_singnup.html'
@@ -60,4 +59,5 @@ class LogoutView(View):
         return redirect(reverse('index'))
 
 
-
+class UserProfileView(TemplateView):
+    template_name = 'account_module/user_profile.html'

@@ -34,7 +34,8 @@ INSTALLED_APPS = [
     'tools',
     'jalali_date',
     'article_module',
-    'panel_module'
+    'panel_module',
+    'order_module'
 ]
 
 MIDDLEWARE = [

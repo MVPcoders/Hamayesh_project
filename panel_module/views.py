@@ -2,6 +2,7 @@ from django.shortcuts import render
 from account_module.models import User
 from article_module.models import Article
 from django.core.paginator import Paginator
+from order_module.models import Sale
 
 
 def user_list(request):
@@ -16,9 +17,11 @@ def management(request):
     users = User.objects.all()
     article_count = Article.objects.count()
     user_count = User.objects.count()
+    total_sell = sum(sale.total_price for sale in Sale.objects.all())
     context = {
         'users': users,
         'user_count': user_count,
-        'article_count': article_count
+        'article_count': article_count,
+        'total_sell': total_sell
     }
     return render(request, 'panel_module/management.html', context)

@@ -1,10 +1,13 @@
 from django import forms
 from .models import Article, ArticleAuthor
 
+
 class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
-        fields = ['authors_numbers', 'main_goal', 'language', 'persian_subject', 'english_subject', 'persian_Abstract', 'file']
+        fields = ['authors_numbers', 'main_goal', 'language', 'persian_subject', 'english_subject', 'persian_Abstract',
+                  'file']
+
 
 class ArticleAuthorForm(forms.ModelForm):
     class Meta:

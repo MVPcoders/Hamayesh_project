@@ -234,17 +234,10 @@
 {#        <h1>سیستم ارسال مقاله علمی</h1>#}
 {#    </div>#}
 {##}
-{#    <div class="form-card animate-fade-in">#}
-{#        <div class="form-group">#}
-{#            <label for="authorCount" class="form-label">تعداد نویسندگان مقاله</label>#}
-{#            <input type="number" id="authorCount" class="form-input" min="1" max="20" value="1" onchange="updateAuthorForms()">#}
-{#            <p class="text-gray-500 text-sm mt-1">لطفاً تعداد نویسندگان مقاله را وارد نمایید (حداکثر 20 نویسنده)</p>#}
-{#        </div>#}
-{#    </div>#}
-{##}
 {#    <form id="articleForm" method="post" enctype="multipart/form-data" class="form-card animate-fade-in">#}
 {#        <div class="form-group">#}
 {#            <label for="articleTitle" class="form-label">عنوان مقاله</label>#}
+{#            {{ article_form.persian_subject }}#}
 {#            <input type="text" id="articleTitle" class="form-input" required>#}
 {#        </div>#}
 {##}
@@ -258,7 +251,13 @@
 {#            <input type="file" id="articleFile" class="form-input" accept=".pdf,.doc,.docx" required>#}
 {#            <p class="text-gray-500 text-sm mt-1">فرمت‌های قابل قبول: PDF, Word (حداکثر 5MB)</p>#}
 {#        </div>#}
-{##}
+{#        <div class="form-card animate-fade-in">#}
+{#        <div class="form-group">#}
+{#            <label for="authorCount" class="form-label">تعداد نویسندگان مقاله</label>#}
+{#            <input type="number" id="authorCount" class="form-input" min="1" max="20" value="1" onchange="updateAuthorForms()">#}
+{#            <p class="text-gray-500 text-sm mt-1">لطفاً تعداد نویسندگان مقاله را وارد نمایید (حداکثر 4 نویسنده)</p>#}
+{#        </div>#}
+{#    </div>#}
 {#        <h3 class="font-bold text-lg mb-4 text-gray-800">اطلاعات نویسندگان</h3>#}
 {##}
 {#        <div id="authorsContainer" class="authors-container">#}
@@ -276,8 +275,8 @@
 {#            const authorsContainer = document.getElementById('authorsContainer');#}
 {##}
 {#            // Limit the maximum number of authors#}
-{#            if (authorCount > 20) {#}
-{#                alert('حداکثر تعداد نویسندگان 20 نفر می‌باشد');#}
+{#            if (authorCount > 4) {#}
+{#                alert('حداکثر تعداد نویسندگان 4 نفر می‌باشد');#}
 {#                return;#}
 {#            }#}
 {##}

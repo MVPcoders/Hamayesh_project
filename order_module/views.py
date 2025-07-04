@@ -10,6 +10,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.db import models
+from .models import Sale
 
 
 
