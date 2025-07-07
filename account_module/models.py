@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from jalali_date import datetime2jalali
 
-
 class User(AbstractUser):
     mobile = models.CharField(max_length=11, unique=True, verbose_name='موبایل')
     land_line = models.CharField(max_length=11,unique=True, verbose_name='تلفن ثابت', blank=True, null=True)
@@ -20,12 +19,6 @@ class User(AbstractUser):
     city = models.CharField(max_length=200, verbose_name='شهر')
     address = models.CharField(max_length=500, verbose_name='آدرس')
     postal_code = models.CharField(max_length=200, verbose_name='کد پستی')
-    KIND_OF_SIGNUP_CHOICES = [
-        ('','--نوع ثبت نام--'),
-        ('دانشجویی','دانشجویی'),
-        ('استاد دانشگاه','استاد دانشگاه'),
-    ]
-    kind_of_signup = models.CharField(max_length=300,choices=KIND_OF_SIGNUP_CHOICES, verbose_name='نوع ثبت نام')
     is_online = models.BooleanField(default=False)
     code_meli = models.CharField(max_length=10, unique=True, verbose_name='کد ملی')
 

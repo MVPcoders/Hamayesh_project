@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from article_module.models import Article, ArticleAuthor
+from article_module.models import Article
 
-admin.site.register(Article)
-admin.site.register(ArticleAuthor)
+
+class ArticleAdmin(admin.ModelAdmin):
+    readonly_fields = ['submit_date']
+admin.site.register(Article, ArticleAdmin)
 # Register your models here.

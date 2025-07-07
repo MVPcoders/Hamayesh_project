@@ -26,7 +26,7 @@
 {#                            <a class="nav-link" href="{% url 'hamayesh-page' %}" id="tariffs-link">تعرفه ها</a>#}
 {#                        </li>#}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'new_article' %}" id="new-article-link">ثبت مقاله جدید</a>
+{#                            <a class="nav-link" href="{% url 'new_article' %}" id="new-article-link">ثبت مقاله جدید</a>#}
                         </li>
                         {% if not request.user.is_authenticated %}
                         <li class="nav-item">
@@ -41,6 +41,9 @@
                             {% endif %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'profile' %}" id="account-link">حساب کاربری</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'new_article' %}" id="account-link">ثبت مقاله جدید</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}" id="account-link">خروج</a>
