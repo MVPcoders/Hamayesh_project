@@ -5,140 +5,577 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ارسال مقاله</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="/static/css/article.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4f1fe 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin: 0 120px;
+        }
+
+        .header-buttons {
+            position: absolute;
+            left: 1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: white;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .header-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .header-btn i {
+            margin-left: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .form-card {
+            background: white;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-top: 5px solid #3b82f6;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #4b5563;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        select.form-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: left 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-left: 2.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(90deg, #1d4ed8 0%, #3b82f6 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .author-form {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #3b82f6;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .author-form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px dashed #e5e7eb;
+        }
+
+        .author-form-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1e40af;
+        }
+
+        .remove-author {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .remove-author:hover {
+            background-color: #dc2626;
+            transform: translateY(-1px);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        input[type="radio"] {
+            appearance: none;
+            width: 1.2rem;
+            height: 1.2rem;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        input[type="radio"]:checked {
+            border-color: #3b82f6;
+        }
+
+        input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0.7rem;
+            height: 0.7rem;
+            background-color: #3b82f6;
+            border-radius: 50%;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .authors-container {
+            background-color: #f8fafc;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 2px dashed #e2e8f0;
+        }
+
+        /* استایل‌های جدید برای آپلود فایل */
+        .upload-container {
+            position: relative;
+            margin-top: 1rem;
+        }
+
+        .upload-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 2px dashed #3b82f6;
+            border-radius: 0.5rem;
+            background-color: #f8fafc;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .upload-content:hover {
+            background-color: #f0f7ff;
+            border-color: #1d4ed8;
+        }
+
+        .upload-icon {
+            font-size: 2.5rem;
+            color: #3b82f6;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .upload-text {
+            text-align: center;
+            color: #4b5563;
+        }
+
+        .upload-text h4 {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #1e40af;
+        }
+
+        .upload-text p {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            background-color: #3b82f6;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .file-info {
+            display: none;
+            margin-top: 1rem;
+            padding: 0.75rem;
+            background-color: #e6f0fd;
+            border-radius: 0.375rem;
+            color: #1e40af;
+            font-size: 0.875rem;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .file-info i {
+            margin-left: 0.5rem;
+        }
+
+        .upload-success {
+            display: none;
+            color: #10b981;
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            animation: bounceIn 0.5s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .upload-content.dragover {
+            background-color: #e0f2fe;
+            border-color: #1d4ed8;
+        }
+    </style>
 </head>
-<body class="container">
-    <div class="header">
+<body class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="header animate__animated animate__fadeInDown">
+        <div class="header-buttons">
+            <a href="/" class="header-btn">
+                <i class="fas fa-home"></i>
+                صفحه اصلی
+            </a>
+            <a href="/dashboard" class="header-btn">
+                <i class="fas fa-user-circle"></i>
+                حساب کاربری
+            </a>
+        </div>
         <h1>ثبت مقاله جدید</h1>
     </div>
 
     <form id="articleForm" method="post" action="{% url 'new_article' %}" enctype="multipart/form-data" class="form-card animate-fade-in">
         {% csrf_token %}
-        <div class="form-group">
-            <label for="articleLang" class="form-label">زبان مقاله</label>
-            <select name="articleLang" id="articleLang">
-                <option value="فارسی"> فارسی </option>
-                <option value="انگلیسی"> انگلیسی </option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="articleMainGoal" class="form-label">محور اصلی مقاله</label>
-            <input type="text" id="articleMainGoal" name="articleMainGoal" class="form-input" required>
-        </div>
-        <div class="form-group">
-            <label for="articlePersianTitle" class="form-label">عنوان فارسی مقاله</label>
-            <input type="text" id="articlePersianTitle" name="articlePersianTitle" class="form-input" required>
-        </div>
-        <div class="form-group">
-            <label for="articleEnglishTitle" class="form-label">عنوان انگلیسی مقاله</label>
-            <input type="text" id="articleEnglishTitle" name="articleEnglishTitle" class="form-input" required>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="form-group">
+                <label for="articleLang" class="form-label">زبان مقاله</label>
+                <select name="articleLang" id="articleLang" class="form-input">
+                    <option value="فارسی"> فارسی </option>
+                    <option value="انگلیسی"> انگلیسی </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="articleMainGoal" class="form-label">محور اصلی مقاله</label>
+                <input type="text" id="articleMainGoal" name="articleMainGoal" class="form-input" required>
+            </div>
         </div>
 
-        <div class="form-group">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            <div class="form-group">
+                <label for="articlePersianTitle" class="form-label">عنوان فارسی مقاله</label>
+                <input type="text" id="articlePersianTitle" name="articlePersianTitle" class="form-input" required>
+            </div>
+            <div class="form-group">
+                <label for="articleEnglishTitle" class="form-label">عنوان انگلیسی مقاله</label>
+                <input type="text" id="articleEnglishTitle" name="articleEnglishTitle" class="form-input" required>
+            </div>
+        </div>
+
+        <div class="form-group mt-6">
             <label for="articleAbstract" class="form-label">چکیده مقاله</label>
             <textarea id="articleAbstract" name="articleAbstract" class="form-input" rows="5" required></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="articleFile" class="form-label">فایل مقاله</label>
-            <input type="file" id="articleFile" name="articleFile" class="form-input" accept=".pdf,.doc,.docx" required>
-            <p class="text-gray-500 text-sm mt-1">فرمت‌های قابل قبول: PDF, Word (حداکثر 5MB)</p>
-        </div>
-        <div class="form-card animate-fade-in">
-            <div class="form-group">
-                <label for="authorCount" class="form-label">تعداد نویسندگان مقاله</label>
-                <input type="number" id="authorCount" name="authorCount" class="form-input" min="1" max="4" value="1" onchange="updateAuthorForms()">
-                <p class="text-gray-500 text-sm mt-1">لطفاً تعداد نویسندگان مقاله را وارد نمایید (حداکثر 4 نویسنده)</p>
+        <div class="form-group mt-6">
+            <label class="form-label">فایل مقاله</label>
+            <div class="upload-container">
+                <input type="file" id="articleFile" name="articleFile" class="upload-input" accept=".pdf,.doc,.docx" required>
+                <div class="upload-content" id="uploadArea">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <div class="upload-text">
+                        <h4>فایل مقاله را اینجا رها کنید یا کلیک کنید</h4>
+                        <p>فرمت‌های قابل قبول: PDF, Word (حداکثر 5MB)</p>
+                    </div>
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                <div class="file-info" id="fileInfo">
+                    <i class="fas fa-file-alt"></i>
+                    <span id="fileName"></span>
+                </div>
+                <div class="upload-success" id="uploadSuccess">
+                    <i class="fas fa-check-circle"></i> فایل با موفقیت آپلود شد
+                </div>
             </div>
         </div>
-        <h3 class="font-bold text-lg mb-4 text-gray-800">اطلاعات نویسندگان</h3>
 
-        <div id="authorsContainer" class="authors-container">
+        <div class="form-card animate-fade-in mt-6 bg-blue-50 border-blue-200">
+            <div class="form-group">
+                <label for="authorCount" class="form-label text-blue-700">تعداد نویسندگان مقاله</label>
+                <input type="number" id="authorCount" name="authorCount" class="form-input bg-white" min="1" max="4" value="1" onchange="updateAuthorForms()">
+                <p class="text-blue-600 text-sm mt-2">لطفاً تعداد نویسندگان مقاله را وارد نمایید (حداکثر 4 نویسنده)</p>
+            </div>
+        </div>
+
+        <h3 class="font-bold text-lg mb-4 text-blue-800 mt-8 flex items-center">
+            <i class="fas fa-users ml-2"></i>
+            اطلاعات نویسندگان
+        </h3>
+
+        <div id="authorsContainer" class="authors-container animate-fade-in">
             <!-- Author forms will be dynamically added here -->
         </div>
-        <div class="flex justify-end mt-6">
-            <button type="submit" class="btn btn-primary">ارسال مقاله</button>
+
+        <div class="flex justify-end mt-8">
+            <button type="submit" class="btn btn-primary flex items-center">
+                <i class="fas fa-paper-plane ml-2"></i>
+                ارسال مقاله
+            </button>
         </div>
     </form>
+
     <script>
-            function updateAuthorForms() {
-                const authorCount = parseInt(document.getElementById('authorCount').value);
-                const authorsContainer = document.getElementById('authorsContainer');
+        function updateAuthorForms() {
+            const authorCount = parseInt(document.getElementById('authorCount').value);
+            const authorsContainer = document.getElementById('authorsContainer');
 
-                // Limit the maximum number of authors
-                if (authorCount > 4) {
-                    alert('حداکثر تعداد نویسندگان 4 نفر می‌باشد');
-                    return;
-                }
-
-                // Clear existing author forms
-                authorsContainer.innerHTML = '';
-
-                // Create new author forms
-                for (let i = 0; i < authorCount; i++) {
-                    const authorForm = document.createElement('div');
-                    authorForm.className = 'author-form animate-fade-in';
-
-                    authorForm.innerHTML = `
-                        <div class="author-form-header">
-                            <h4 class="author-form-title">نویسنده ${i + 1}</h4>
-                            ${i > 0 ? '<button type="button" class="remove-author" onclick="removeAuthorForm(this)">حذف نویسنده</button>' : ''}
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="form-group">
-                                <label for="authorFirstName${i}" class="form-label">نام</label>
-                                <input type="text" id="authorFirstName${i}" name="authorFirstName${i}" s="form-input" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="authorLastName${i}" class="form-label">نام خانوادگی</label>
-                                <input type="text" id="authorLastName${i}" name="authorLastName${i}" s="form-input" required>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="form-group">
-                                <label for="authorEmail${i}" class="form-label">ایمیل</label>
-                                <input type="email" id="authorEmail${i}" name="authorEmail${i}" s="form-input" required>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="form-group">
-                                <label class="form-label">نویسنده مسئول</label>
-                                <div class="flex items-center mt-2">
-                                    <input type="radio" id="correspondingAuthor${i}" name="correspondingAuthor" value="${i}" ${i === 0 ? 'checked' : ''}>
-                                    <label for="correspondingAuthor${i}" class="mr-2">این نویسنده مسئول مکاتبات است</label>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-
-                    authorsContainer.appendChild(authorForm);
-                }
+            // Limit the maximum number of authors
+            if (authorCount > 4) {
+                alert('حداکثر تعداد نویسندگان 4 نفر می‌باشد');
+                document.getElementById('authorCount').value = 4;
+                return;
             }
 
-            function removeAuthorForm(button) {
-                const authorForm = button.closest('.author-form');
-                const authorsContainer = document.getElementById('authorsContainer');
-                const authorForms = authorsContainer.querySelectorAll('.author-form');
+            // Clear existing author forms
+            authorsContainer.innerHTML = '';
 
-                // Don't allow removing if only one author remains
-                if (authorForms.length <= 1) {
-                    alert('مقاله باید حداقل یک نویسنده داشته باشد');
-                    return;
-                }
+            // Create new author forms with different colors
+            const colors = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
 
+            for (let i = 0; i < authorCount; i++) {
+                const authorForm = document.createElement('div');
+                authorForm.className = 'author-form animate-fade-in';
+                authorForm.style.borderLeftColor = colors[i];
+
+                authorForm.innerHTML = `
+                    <div class="author-form-header">
+                        <h4 class="author-form-title" style="color: ${colors[i]}">نویسنده ${i + 1}</h4>
+                        ${i > 0 ? `<button type="button" class="remove-author" style="background-color: ${colors[i]}" onclick="removeAuthorForm(this)">حذف نویسنده</button>` : ''}
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="authorFirstName${i}" class="form-label">نام</label>
+                            <input type="text" id="authorFirstName${i}" name="authorFirstName${i}" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="authorLastName${i}" class="form-label">نام خانوادگی</label>
+                            <input type="text" id="authorLastName${i}" name="authorLastName${i}" class="form-input" required>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-group">
+                            <label for="authorEmail${i}" class="form-label">ایمیل</label>
+                            <input type="email" id="authorEmail${i}" name="authorEmail${i}" class="form-input" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="authorAffiliation${i}" class="form-label">وابستگی سازمانی</label>
+                            <input type="text" id="authorAffiliation${i}" name="authorAffiliation${i}" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <div class="form-group">
+                            <label class="form-label">نویسنده مسئول</label>
+                            <div class="flex items-center mt-2">
+                                <input type="radio" id="correspondingAuthor${i}" name="correspondingAuthor" value="${i}" ${i === 0 ? 'checked' : ''}>
+                                <label for="correspondingAuthor${i}" class="mr-2">این نویسنده مسئول مکاتبات است</label>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                authorsContainer.appendChild(authorForm);
+            }
+        }
+
+        function removeAuthorForm(button) {
+            const authorForm = button.closest('.author-form');
+            const authorsContainer = document.getElementById('authorsContainer');
+            const authorForms = authorsContainer.querySelectorAll('.author-form');
+
+            // Don't allow removing if only one author remains
+            if (authorForms.length <= 1) {
+                alert('مقاله باید حداقل یک نویسنده داشته باشد');
+                return;
+            }
+
+            authorForm.classList.add('animate__animated', 'animate__fadeOut');
+
+            setTimeout(() => {
                 authorForm.remove();
-
                 // Update count input
                 document.getElementById('authorCount').value = authorForms.length - 1;
+            }, 500);
+        }
+
+        // Initialize with one author form
+        document.addEventListener('DOMContentLoaded', updateAuthorForms);
+
+        // Upload file functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('articleFile');
+        const fileInfo = document.getElementById('fileInfo');
+        const fileName = document.getElementById('fileName');
+        const uploadSuccess = document.getElementById('uploadSuccess');
+        const progressBar = document.getElementById('progressBar');
+
+        // Drag and drop events
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFileUpload();
             }
+        });
 
-            // Initialize with one author form
-            document.addEventListener('DOMContentLoaded', updateAuthorForms);
+        // Click event
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
 
-        </script>
+        // File input change event
+        fileInput.addEventListener('change', handleFileUpload);
+
+        function handleFileUpload() {
+            const file = fileInput.files[0];
+            if (file) {
+                // Check file size (5MB max)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('حجم فایل باید کمتر از 5MB باشد');
+                    return;
+                }
+
+                // Check file type
+                const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                if (!validTypes.includes(file.type)) {
+                    alert('فقط فایل‌های PDF و Word قابل قبول هستند');
+                    return;
+                }
+
+                // Show file info
+                fileName.textContent = file.name;
+                fileInfo.style.display = 'flex';
+                uploadSuccess.style.display = 'none';
+
+                // Simulate upload progress
+                simulateUploadProgress();
+            }
+        }
+
+        function simulateUploadProgress() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 10;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    uploadSuccess.style.display = 'block';
+                }
+                progressBar.style.width = `${progress}%`;
+            }, 200);
+        }
+    </script>
 </body>
 </html>

@@ -10,6 +10,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
         body {
             font-family: 'Vazirmatn', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4f0fb 100%);
         }
 
         .article-card:hover {
@@ -20,24 +21,47 @@
         .payment-btn:hover {
             background-position: right center;
         }
+
+        .gradient-header {
+            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
+        }
+
+        .status-badge {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .floating-btn {
+            box-shadow: 0 4px 15px rgba(37, 117, 252, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .floating-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 117, 252, 0.5);
+        }
+
+        .article-card {
+            border-left: 4px solid;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="min-h-screen">
     <div class="container mx-auto px-4 py-8">
         <!-- هدر پروفایل -->
-        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 bg-white rounded-xl shadow-md p-6">
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 rounded-xl p-6 gradient-header text-white">
             <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
-                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d4f2625-c953-4a99-8693-532e0dfc0034.png" alt="تصویر پروفایل کاربر با پس زمینه آبی و طرح چهره خندان" class="w-full h-full object-cover">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d4f2625-c953-4a99-8693-532e0dfc0034.png" alt="تصویر پروفایل کاربر" class="w-full h-full object-cover">
             </div>
             <div class="text-center md:text-right flex-1">
-                <h1 class="text-2xl font-bold text-gray-800">{{ request.user.first_name }}  {{ request.user.last_name }}</h1>
-                <p class="text-gray-600 mt-2">تعداد مقالات ارسال شده: {{ articles.count }} مقاله</p>
+                <h1 class="text-2xl font-bold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+                <p class="text-blue-100 mt-2">تعداد مقالات ارسال شده: {{ articles.count }} مقاله</p>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{% url 'index' %}" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                <a href="{% url 'index' %}" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full text-sm font-medium transition-all">
                     صفحه اصلی
                 </a>
-                <button class="p-2 text-gray-500 hover:text-gray-700">
+                <button class="p-2 text-blue-100 hover:text-white">
                     <i class="fas fa-cog"></i>
                 </button>
             </div>
@@ -45,50 +69,56 @@
 
         <!-- لیست مقالات -->
         <div class="mb-6">
-            <h2 class="text-xl font-bold text-gray-800 mb-4">مقالات ارسال شده</h2>
+            <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-file-alt ml-2 text-purple-600"></i>
+                مقالات ارسال شده
+            </h2>
+
            {% for article in articles %}
-                <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">
+                <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 border-l-4 {% if article.is_accepted %}border-green-500{% else %}border-yellow-500{% endif %}">
                     <div class="p-6">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                             <div class="flex-1">
                                 <h3 class="text-lg font-bold text-gray-800 mb-2">{{ article.persian_subject }}</h3>
                                 <div class="flex flex-wrap gap-2 mb-4">
                                     {% if article.is_accepted == True %}
-                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">تایید اولیه</span>
+                                        <span class="status-badge px-3 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">تایید اولیه</span>
                                     {% endif %}
                                     {% if article.is_coached == False %}
-                                        <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">در انتظار داوری</span>
-                                        {% else %}
-                                        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">داوری شده</span>
+                                        <span class="status-badge px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">در انتظار داوری</span>
+                                    {% else %}
+                                        <span class="status-badge px-3 py-1 bg-purple-100 text-purple-800 rounded-full text-xs font-medium">داوری شده</span>
                                     {% endif %}
-
                                 </div>
-                                <p class="text-gray-600 text-sm mb-4">ارسال شده در  {{ article.submit_date }}</p>
+                                <p class="text-gray-500 text-sm mb-4 flex items-center">
+                                    <i class="fas fa-calendar-alt ml-2 text-blue-400"></i>
+                                    ارسال شده در {{ article.submit_date }}
+                                </p>
                             </div>
-                        {% if article.is_paid == False %}
-                            <div class="flex flex-col sm:flex-row gap-3">
-                                <a href="{% url 'request' article.id  %}" class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium text-sm transition-all duration-300 bg-size-200 hover:bg-right">
-                                    پرداخت هزینه داوری
-                                    <i class="fas fa-credit-card mr-2"></i>
-                                </a>
-                                  <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">
-                                    مشاهده جزئیات
-                                    <i class="fas fa-eye mr-2"></i>
-                                </button>
+
+                            {% if article.is_paid == False %}
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <a href="{% url 'request' article.id %}" class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium text-sm transition-all duration-300 shadow-md">
+                                        <i class="fas fa-credit-card ml-2"></i>
+                                        پرداخت هزینه داوری
+                                    </a>
+                                    <button class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all">
+                                        <i class="fas fa-eye ml-2"></i>
+                                        مشاهده جزئیات
+                                    </button>
+                                </div>
                             {% else %}
                                 <div class="flex flex-col sm:flex-row gap-3">
-                                    <button class="px-6 py-2 bg-gray-200 text-gray-500 rounded-lg font-medium text-sm cursor-not-allowed" disabled>
+                                    <button class="px-6 py-2 bg-green-100 text-green-700 rounded-lg font-medium text-sm shadow-inner cursor-default flex items-center">
+                                        <i class="fas fa-check-circle ml-2"></i>
                                         پرداخت شده
-                                        <i class="fas fa-check-circle mr-2"></i>
                                     </button>
-                                    <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">
+                                    <button class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all">
+                                        <i class="fas fa-eye ml-2"></i>
                                         مشاهده جزئیات
-                                        <i class="fas fa-eye mr-2"></i>
                                     </button>
                                 </div>
-                        {% endif %}
-
-                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -96,31 +126,31 @@
         </div>
 
         <!-- دکمه آپلود مقاله جدید -->
-        <div class="fixed bottom-6 left-6">
-            <a href="{% url "new_article" %}" class="flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all">
+        <div class="fixed bottom-6 left-6 flex flex-col items-center">
+            <a href="{% url 'new_article' %}" class="floating-btn flex items-center justify-center w-14 h-14 bg-gradient-to-br from-purple-500 to-blue-500 text-white rounded-full mb-2">
                 <i class="fas fa-plus text-xl"></i>
             </a>
-            مقاله جدید
+            <span class="text-xs font-medium text-gray-600 bg-white px-2 py-1 rounded-full shadow">مقاله جدید</span>
         </div>
     </div>
 
     <script>
-        // ریسپانسیو کردن جدول در دستگاه‌های موبایل
-        function checkMobileView() {
-            const articleCards = document.querySelectorAll('.article-card');
-            if (window.innerWidth < 768) {
-                articleCards.forEach(card => {
-                    card.querySelector('.flex-col').classList.add('items-start');
-                });
-            } else {
-                articleCards.forEach(card => {
-                    card.querySelector('.flex-col').classList.remove('items-start');
-                });
-            }
-        }
+        // Add animation to article cards when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
 
-        window.addEventListener('resize', checkMobileView);
-        checkMobileView();
+        document.querySelectorAll('.article-card').forEach(card => {
+            card.style.opacity = 0;
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
     </script>
 </body>
 </html>
