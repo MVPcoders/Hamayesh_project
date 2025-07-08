@@ -30,13 +30,13 @@
                 <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d4f2625-c953-4a99-8693-532e0dfc0034.png" alt="تصویر پروفایل کاربر با پس زمینه آبی و طرح چهره خندان" class="w-full h-full object-cover">
             </div>
             <div class="text-center md:text-right flex-1">
-                <h1 class="text-2xl font-bold text-gray-800">{{ request.user.mobile }}</h1>
-                <p class="text-gray-600 mt-2">تعداد مقالات ارسال شده: ۵ مقاله</p>
+                <h1 class="text-2xl font-bold text-gray-800">{{ request.user.first_name }}  {{ request.user.last_name }}</h1>
+                <p class="text-gray-600 mt-2">تعداد مقالات ارسال شده: {{ articles.count }} مقاله</p>
             </div>
             <div class="flex items-center gap-2">
-                <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
-                    حساب عادی
-                </span>
+                <a href="{% url 'index' %}" class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                    صفحه اصلی
+                </a>
                 <button class="p-2 text-gray-500 hover:text-gray-700">
                     <i class="fas fa-cog"></i>
                 </button>
@@ -58,7 +58,10 @@
                                     {% endif %}
                                     {% if article.is_coached == False %}
                                         <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">در انتظار داوری</span>
+                                        {% else %}
+                                        <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">داوری شده</span>
                                     {% endif %}
+
                                 </div>
                                 <p class="text-gray-600 text-sm mb-4">ارسال شده در  {{ article.submit_date }}</p>
                             </div>
@@ -90,81 +93,6 @@
                     </div>
                 </div>
             {% endfor %}
-{#            <!-- مقاله ۱ -->#}
-{#            <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">#}
-{#                <div class="p-6">#}
-{#                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">#}
-{#                        <div class="flex-1">#}
-{#                            <h3 class="text-lg font-bold text-gray-800 mb-2">بررسی تأثیر هوش مصنوعی بر صنعت نشر</h3>#}
-{#                            <div class="flex flex-wrap gap-2 mb-4">#}
-{#                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">تایید اولیه</span>#}
-{#                                <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">در انتظار داوری</span>#}
-{#                            </div>#}
-{#                            <p class="text-gray-600 text-sm mb-4">ارسال شده در ۱۴۰۲/۰۵/۱۲ - آخرین ویرایش: ۱۴۰۲/۰۵/۱۵</p>#}
-{#                        </div>#}
-{#                        <div class="flex flex-col sm:flex-row gap-3">#}
-{#                            <button class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium text-sm transition-all duration-300 bg-size-200 hover:bg-right">#}
-{#                                پرداخت هزینه داوری#}
-{#                                <i class="fas fa-credit-card mr-2"></i>#}
-{#                            </button>#}
-{#                            <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">#}
-{#                                مشاهده جزئیات#}
-{#                                <i class="fas fa-eye mr-2"></i>#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-{##}
-{#            <!-- مقاله ۲ -->#}
-{#            <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">#}
-{#                <div class="p-6">#}
-{#                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">#}
-{#                        <div class="flex-1">#}
-{#                            <h3 class="text-lg font-bold text-gray-800 mb-2">روش های نوین در یادگیری ماشین</h3>#}
-{#                            <div class="flex flex-wrap gap-2 mb-4">#}
-{#                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs">نیاز به اصلاح</span>#}
-{#                            </div>#}
-{#                            <p class="text-gray-600 text-sm mb-4">ارسال شده در ۱۴۰۲/۰۴/۲۸ - آخرین ویرایش: ۱۴۰۲/۰۵/۰۳</p>#}
-{#                        </div>#}
-{#                        <div class="flex flex-col sm:flex-row gap-3">#}
-{#                            <button class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium text-sm transition-all duration-300 bg-size-200 hover:bg-right">#}
-{#                                پرداخت هزینه داوری#}
-{#                                <i class="fas fa-credit-card mr-2"></i>#}
-{#                            </button>#}
-{#                            <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">#}
-{#                                مشاهده جزئیات#}
-{#                                <i class="fas fa-eye mr-2"></i>#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
-
-{#            <!-- مقاله ۳ -->#}
-{#            <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">#}
-{#                <div class="p-6">#}
-{#                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">#}
-{#                        <div class="flex-1">#}
-{#                            <h3 class="text-lg font-bold text-gray-800 mb-2">چالش های امنیتی در اینترنت اشیا</h3>#}
-{#                            <div class="flex flex-wrap gap-2 mb-4">#}
-{#                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">داوری شده</span>#}
-{#                            </div>#}
-{#                            <p class="text-gray-600 text-sm mb-4">ارسال شده در ۱۴۰۲/۰۳/۱۵ - آخرین ویرایش: ۱۴۰۲/۰۴/۰۱</p>#}
-{#                        </div>#}
-{#                        <div class="flex flex-col sm:flex-row gap-3">#}
-{#                            <button class="px-6 py-2 bg-gray-200 text-gray-500 rounded-lg font-medium text-sm cursor-not-allowed" disabled>#}
-{#                                پرداخت شده#}
-{#                                <i class="fas fa-check-circle mr-2"></i>#}
-{#                            </button>#}
-{#                            <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">#}
-{#                                مشاهده جزئیات#}
-{#                                <i class="fas fa-eye mr-2"></i>#}
-{#                            </button>#}
-{#                        </div>#}
-{#                    </div>#}
-{#                </div>#}
-{#            </div>#}
         </div>
 
         <!-- دکمه آپلود مقاله جدید -->
@@ -172,21 +100,11 @@
             <a href="{% url "new_article" %}" class="flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all">
                 <i class="fas fa-plus text-xl"></i>
             </a>
+            مقاله جدید
         </div>
     </div>
 
     <script>
-        {#// مدیریت رویدادهای پرداخت#}
-        {#document.querySelectorAll('.payment-btn').forEach(btn => {#}
-        {#    btn.addEventListener('click', function() {#}
-        {#        const articleTitle = this.closest('.article-card').querySelector('h3').textContent;#}
-        {##}
-        {#        // نمایش مودال پرداخت#}
-                {#alert(`در حال انتقال به درگاه پرداخت برای مقاله:\n"${articleTitle}"\n\nمبلغ قابل پرداخت: ۲۵۰,۰۰۰ تومان`);#}
-        {##}
-        {#    });#}
-        //});
-
         // ریسپانسیو کردن جدول در دستگاه‌های موبایل
         function checkMobileView() {
             const articleCards = document.querySelectorAll('.article-card');

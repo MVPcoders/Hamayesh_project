@@ -10,7 +10,6 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.db import models
-from .models import Sale
 from article_module.models import Article
 from hamayesh_module.models import Hamayesh_prices
 

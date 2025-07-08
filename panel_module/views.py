@@ -2,7 +2,7 @@ from django.shortcuts import render
 from account_module.models import User
 from article_module.models import Article
 from django.core.paginator import Paginator
-from order_module.models import Sale
+
 
 
 
