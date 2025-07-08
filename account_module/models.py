@@ -2,17 +2,18 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from jalali_date import datetime2jalali
 
+
 class User(AbstractUser):
     mobile = models.CharField(max_length=11, unique=True, verbose_name='موبایل')
-    land_line = models.CharField(max_length=11,unique=True, verbose_name='تلفن ثابت', blank=True, null=True)
+    land_line = models.CharField(max_length=11, unique=True, verbose_name='تلفن ثابت', blank=True, null=True)
     DEGREE_CHOICES = [
-        ('',' -- مدرک تحصیلی  --'),
-        ('دیپلم','دیپلم'),
-        ('کارشناسی','کارشناسی'),
-        ('کارشناسی ارشد','کارشناسی ارشد'),
-        ('دکتری','دکتری')
+        ('', ' -- مدرک تحصیلی  --'),
+        ('دیپلم', 'دیپلم'),
+        ('کارشناسی', 'کارشناسی'),
+        ('کارشناسی ارشد', 'کارشناسی ارشد'),
+        ('دکتری', 'دکتری')
     ]
-    degree = models.CharField(max_length=200,choices=DEGREE_CHOICES ,verbose_name='مدرک تحصیلی')
+    degree = models.CharField(max_length=200, choices=DEGREE_CHOICES, verbose_name='مدرک تحصیلی')
     field_of_study = models.CharField(max_length=200, verbose_name='رشته ی تحصیلی', blank=True, null=True)
     company = models.CharField(max_length=200, verbose_name='شرکت / سازمان', blank=True, null=True)
     province = models.CharField(max_length=200, verbose_name='استان')
@@ -29,7 +30,6 @@ class User(AbstractUser):
             return jalali_last_login
         else:
             return 'تاکنون وارد نشده'
-
 
     def __str__(self):
         return self.get_full_name()

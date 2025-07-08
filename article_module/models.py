@@ -7,8 +7,7 @@ from account_module.models import User
 
 
 class Article(models.Model):
-
-    user = models.ForeignKey(to = User, on_delete=models.CASCADE, verbose_name='کاربر',blank=True, null=True)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, verbose_name='کاربر', blank=True, null=True)
     authors_numbers = models.CharField(max_length=20, verbose_name='تعداد نویسندگان')
     authors_info = models.JSONField(null=True, blank=True, verbose_name='نویسندگان')
     main_goal = models.CharField(max_length=200, verbose_name='محور اصلی مقاله')
@@ -22,6 +21,7 @@ class Article(models.Model):
     is_coached = models.BooleanField(verbose_name='داوری شده', default=False)
     is_accepted = models.BooleanField(verbose_name='پذیرفته شده توسط داور', default=False)
     is_paid = models.BooleanField(verbose_name='هزینه داوری', default=False)
+    send_to_pay = models.CharField(max_length=200, blank=True, null=True)
 
     class Meta:
         verbose_name = 'مقاله'
@@ -29,7 +29,6 @@ class Article(models.Model):
 
     def __str__(self):
         return self.persian_subject
-
 
 
 class ArticleCertificate(models.Model):
@@ -46,10 +45,6 @@ class ArticleCertificate(models.Model):
     class Meta:
         verbose_name = 'گواهی مقاله'
         verbose_name_plural = 'گواهی های مقالات'
-
-
-
-
 
 ##  کد های کامنت شده
 

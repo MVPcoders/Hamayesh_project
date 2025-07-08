@@ -3,313 +3,206 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حساب کاربری</title>
+    <title>پنل کاربری - مقالات من</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#4F46E5',
-                        secondary: '#818CF8',
-                        dark: '#1E293B',
-                        'dark-primary': '#2D3748',
-                        'dark-secondary': '#1A202C',
-                        'dark-accent': '#4A5568',
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
         body {
             font-family: 'Vazirmatn', sans-serif;
         }
-        .dropdown-content {
-            display: none;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease;
+
+        .article-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
-        .dropdown-content.show {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .submenu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .submenu.show {
-            max-height: 500px;
-            transition: max-height 0.5s ease-in;
-        }
-        .gradient-text {
-            background: linear-gradient(45deg, #4F46E5, #818CF8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .dark .gradient-text {
-            background: linear-gradient(45deg, #818CF8, #4F46E5);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                right: -100%;
-                top: 0;
-                height: 100vh;
-                z-index: 50;
-                transition: right 0.3s ease;
-            }
-            .sidebar.show {
-                right: 0;
-            }
-            .overlay {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 40;
-            }
-            .overlay.show {
-                display: block;
-            }
+
+        .payment-btn:hover {
+            background-position: right center;
         }
     </style>
 </head>
-<body class="bg-gray-50 dark:bg-dark-secondary transition-colors duration-200">
-    <!-- Mobile Menu Button -->
-    <button onclick="toggleSidebar()" class="fixed top-4 right-4 z-50 md:hidden bg-white dark:bg-dark-primary p-2 rounded-lg shadow-lg">
-        <i class="fas fa-bars text-gray-600 dark:text-gray-300"></i>
-    </button>
-
-    <!-- Overlay -->
-    <div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
-
-    <div class="flex h-screen">
-        <!-- Sidebar -->
-        <div id="sidebar" class="sidebar w-64 bg-gradient-to-b from-primary to-secondary text-white p-4">
-            <div class="flex items-center space-x-reverse space-x-3 mb-8">
-                <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center">
-                    <i class="fas fa-cube text-primary text-xl"></i>
-                </div>
-                <h1 class="text-xl font-bold">حساب کاربری</h1>
+<body class="bg-gray-50">
+    <div class="container mx-auto px-4 py-8">
+        <!-- هدر پروفایل -->
+        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 bg-white rounded-xl shadow-md p-6">
+            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d4f2625-c953-4a99-8693-532e0dfc0034.png" alt="تصویر پروفایل کاربر با پس زمینه آبی و طرح چهره خندان" class="w-full h-full object-cover">
             </div>
+            <div class="text-center md:text-right flex-1">
+                <h1 class="text-2xl font-bold text-gray-800">{{ request.user.mobile }}</h1>
+                <p class="text-gray-600 mt-2">تعداد مقالات ارسال شده: ۵ مقاله</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium">
+                    حساب عادی
+                </span>
+                <button class="p-2 text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
 
-            <nav class="space-y-2">
-                <a href="#" class="flex items-center space-x-reverse space-x-3 p-3 rounded-lg bg-white/10 hover:bg-white/20 transition">
-                    <i class="fas fa-home"></i>
-                    <span>داشبورد</span>
-                </a>
-                <!-- Dropdown Menu -->
-{#                <div class="relative">#}
-{#                    <button onclick="toggleSubmenu('usersSubmenu')" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-white/10 transition">#}
-{#                        <div class="flex items-center space-x-reverse space-x-3">#}
-{#                            <i class="fas fa-users"></i>#}
-{#                            <span>مدیریت کاربران</span>#}
+        <!-- لیست مقالات -->
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">مقالات ارسال شده</h2>
+           {% for article in articles %}
+                <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-gray-800 mb-2">{{ article.persian_subject }}</h3>
+                                <div class="flex flex-wrap gap-2 mb-4">
+                                    {% if article.is_accepted == True %}
+                                        <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">تایید اولیه</span>
+                                    {% endif %}
+                                    {% if article.is_coached == False %}
+                                        <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">در انتظار داوری</span>
+                                    {% endif %}
+                                </div>
+                                <p class="text-gray-600 text-sm mb-4">ارسال شده در  {{ article.submit_date }}</p>
+                            </div>
+                        {% if article.is_paid == False %}
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <a href="{% url 'request' article.id  %}" class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium text-sm transition-all duration-300 bg-size-200 hover:bg-right">
+                                    پرداخت هزینه داوری
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                </a>
+                                  <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">
+                                    مشاهده جزئیات
+                                    <i class="fas fa-eye mr-2"></i>
+                                </button>
+                            {% else %}
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <button class="px-6 py-2 bg-gray-200 text-gray-500 rounded-lg font-medium text-sm cursor-not-allowed" disabled>
+                                        پرداخت شده
+                                        <i class="fas fa-check-circle mr-2"></i>
+                                    </button>
+                                    <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">
+                                        مشاهده جزئیات
+                                        <i class="fas fa-eye mr-2"></i>
+                                    </button>
+                                </div>
+                        {% endif %}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+{#            <!-- مقاله ۱ -->#}
+{#            <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">#}
+{#                <div class="p-6">#}
+{#                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">#}
+{#                        <div class="flex-1">#}
+{#                            <h3 class="text-lg font-bold text-gray-800 mb-2">بررسی تأثیر هوش مصنوعی بر صنعت نشر</h3>#}
+{#                            <div class="flex flex-wrap gap-2 mb-4">#}
+{#                                <span class="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs">تایید اولیه</span>#}
+{#                                <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs">در انتظار داوری</span>#}
+{#                            </div>#}
+{#                            <p class="text-gray-600 text-sm mb-4">ارسال شده در ۱۴۰۲/۰۵/۱۲ - آخرین ویرایش: ۱۴۰۲/۰۵/۱۵</p>#}
 {#                        </div>#}
-{#                        <i class="fas fa-chevron-down transition-transform duration-300" id="usersArrow"></i>#}
-{#                    </button>#}
-{#                    <div id="usersSubmenu" class="submenu pr-8">#}
-{#                        <a href="#" class="block p-3 hover:bg-white/10 rounded-lg transition">لیست کاربران</a>#}
-{#                        <a href="#" class="block p-3 hover:bg-white/10 rounded-lg transition">افزودن کاربر</a>#}
-{#                        <a href="#" class="block p-3 hover:bg-white/10 rounded-lg transition">گزارش‌ها</a>#}
+{#                        <div class="flex flex-col sm:flex-row gap-3">#}
+{#                            <button class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium text-sm transition-all duration-300 bg-size-200 hover:bg-right">#}
+{#                                پرداخت هزینه داوری#}
+{#                                <i class="fas fa-credit-card mr-2"></i>#}
+{#                            </button>#}
+{#                            <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">#}
+{#                                مشاهده جزئیات#}
+{#                                <i class="fas fa-eye mr-2"></i>#}
+{#                            </button>#}
+{#                        </div>#}
 {#                    </div>#}
 {#                </div>#}
-{#                <a href="#" class="flex items-center space-x-reverse space-x-3 p-3 rounded-lg hover:bg-white/10 transition">#}
-{#                    <i class="fas fa-chart-bar"></i>#}
-{#                    <span>مقالات</span>#}
-{#                </a>#}
-                <a href="{% url 'index' %}" class="flex items-center space-x-reverse space-x-3 p-3 rounded-lg hover:bg-white/10 transition">
-                    <i class="fas fa-cog"></i>
-                    <span>صفحه اصلی</span>
-                </a>
-            </nav>
+{#            </div>#}
+{##}
+{#            <!-- مقاله ۲ -->#}
+{#            <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">#}
+{#                <div class="p-6">#}
+{#                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">#}
+{#                        <div class="flex-1">#}
+{#                            <h3 class="text-lg font-bold text-gray-800 mb-2">روش های نوین در یادگیری ماشین</h3>#}
+{#                            <div class="flex flex-wrap gap-2 mb-4">#}
+{#                                <span class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-xs">نیاز به اصلاح</span>#}
+{#                            </div>#}
+{#                            <p class="text-gray-600 text-sm mb-4">ارسال شده در ۱۴۰۲/۰۴/۲۸ - آخرین ویرایش: ۱۴۰۲/۰۵/۰۳</p>#}
+{#                        </div>#}
+{#                        <div class="flex flex-col sm:flex-row gap-3">#}
+{#                            <button class="payment-btn px-6 py-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg font-medium text-sm transition-all duration-300 bg-size-200 hover:bg-right">#}
+{#                                پرداخت هزینه داوری#}
+{#                                <i class="fas fa-credit-card mr-2"></i>#}
+{#                            </button>#}
+{#                            <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">#}
+{#                                مشاهده جزئیات#}
+{#                                <i class="fas fa-eye mr-2"></i>#}
+{#                            </button>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+
+{#            <!-- مقاله ۳ -->#}
+{#            <div class="article-card bg-white rounded-xl shadow-md overflow-hidden mb-6 transition-all duration-300">#}
+{#                <div class="p-6">#}
+{#                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">#}
+{#                        <div class="flex-1">#}
+{#                            <h3 class="text-lg font-bold text-gray-800 mb-2">چالش های امنیتی در اینترنت اشیا</h3>#}
+{#                            <div class="flex flex-wrap gap-2 mb-4">#}
+{#                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs">داوری شده</span>#}
+{#                            </div>#}
+{#                            <p class="text-gray-600 text-sm mb-4">ارسال شده در ۱۴۰۲/۰۳/۱۵ - آخرین ویرایش: ۱۴۰۲/۰۴/۰۱</p>#}
+{#                        </div>#}
+{#                        <div class="flex flex-col sm:flex-row gap-3">#}
+{#                            <button class="px-6 py-2 bg-gray-200 text-gray-500 rounded-lg font-medium text-sm cursor-not-allowed" disabled>#}
+{#                                پرداخت شده#}
+{#                                <i class="fas fa-check-circle mr-2"></i>#}
+{#                            </button>#}
+{#                            <button class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg font-medium text-sm hover:bg-gray-50">#}
+{#                                مشاهده جزئیات#}
+{#                                <i class="fas fa-eye mr-2"></i>#}
+{#                            </button>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
         </div>
 
-        <!-- Main Content -->
-        <div class="flex-1 p-4 md:p-8 overflow-auto">
-            <!-- Welcome Section -->
-            <div class="bg-gradient-to-r from-primary to-secondary rounded-xl p-4 md:p-6 mb-8 text-white">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-xl md:text-2xl font-bold mb-2">خوش آمدید، کاربر عزیز!</h2>
-                        <p class="text-white/80 text-sm md:text-base">روز عالی پرتقالی</p>
-                    </div>
-                    <div class="hidden md:block">
-                        <i class="fas fa-rocket text-6xl text-white/20"></i>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Header -->
-            <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 space-y-4 md:space-y-0">
-                <h2 class="text-xl md:text-2xl font-bold text-dark dark:text-white">نمای کلی داشبورد</h2>
-                <div class="flex items-center space-x-reverse space-x-4">
-                    <!-- Dark Mode Toggle -->
-                    <button onclick="toggleDarkMode()" class="p-2 hover:bg-gray-100 dark:hover:bg-dark-primary rounded-lg">
-                        <i class="fas fa-moon dark:hidden text-gray-600"></i>
-                        <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
-                    </button>
-
-                    <button class="p-2 hover:bg-gray-100 dark:hover:bg-dark-primary rounded-lg">
-                        <i class="fas fa-bell text-gray-600 dark:text-gray-300"></i>
-                    </button>
-
-                    <!-- Profile Dropdown -->
-                    <div class="relative">
-                        <button onclick="toggleDropdown('profileDropdown')" class="flex items-center space-x-reverse space-x-3 hover:bg-gray-100 dark:hover:bg-dark-primary p-2 rounded-lg transition">
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=4F46E5&color=fff" alt="Profile" class="w-10 h-10 rounded-full">
-                            <span class="font-medium dark:text-white">مدیر</span>
-                            <i class="fas fa-chevron-down text-gray-600 dark:text-gray-300"></i>
-                        </button>
-                        <div id="profileDropdown" class="dropdown-content absolute right-0 mt-2 w-48 bg-white dark:bg-dark-primary rounded-lg shadow-lg py-2 z-50">
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-dark-accent dark:text-white">پروفایل</a>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-dark-accent dark:text-white">تنظیمات</a>
-                            <hr class="my-2 border-gray-200 dark:border-gray-700">
-                            <a href="#" class="block px-4 py-2 text-red-500 hover:bg-gray-100 dark:hover:bg-dark-accent">خروج</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                <div class="bg-white dark:bg-dark-primary p-6 rounded-xl shadow-sm hover:shadow-md transition">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 dark:text-gray-400">کل کاربران</p>
-                            <h3 class="text-2xl font-bold mt-2 dark:text-white">{{ user_count }}</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/50 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-users text-primary text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-dark-primary p-6 rounded-xl shadow-sm hover:shadow-md transition">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 dark:text-gray-400">درآمد</p>
-                            <h3 class="text-2xl font-bold mt-2 dark:text-white"> تومان</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-green-100 dark:bg-green-900/50 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-dollar-sign text-green-500 text-xl"></i>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center text-green-500">
-                        <i class="fas fa-arrow-up"></i>
-                        <span class="mr-2">۸٪ افزایش</span>
-                    </div>
-                </div>
-
-                <div class="bg-white dark:bg-dark-primary p-6 rounded-xl shadow-sm hover:shadow-md transition">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-gray-500 dark:text-gray-400">پروژه‌های فعال</p>
-                            <h3 class="text-2xl font-bold mt-2 dark:text-white">{{ article_count }}</h3>
-                        </div>
-                        <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/50 rounded-lg flex items-center justify-center">
-                            <i class="fas fa-project-diagram text-purple-500 text-xl"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a href="{% url 'request' %}" class="inline-block mt-4 px-6 py-3 text-white bg-primary rounded-lg shadow-lg hover:bg-secondary transition duration-300 dark:bg-dark-primary dark:hover:bg-dark-secondary">
-                <i class="fas fa-credit-card mr-2"></i>
-                    پرداخت
+        <!-- دکمه آپلود مقاله جدید -->
+        <div class="fixed bottom-6 left-6">
+            <a href="{% url "new_article" %}" class="flex items-center justify-center w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-all">
+                <i class="fas fa-plus text-xl"></i>
             </a>
-
         </div>
-
     </div>
+
     <script>
-        document.getElementById('userSearch').addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('tbody tr');
+        {#// مدیریت رویدادهای پرداخت#}
+        {#document.querySelectorAll('.payment-btn').forEach(btn => {#}
+        {#    btn.addEventListener('click', function() {#}
+        {#        const articleTitle = this.closest('.article-card').querySelector('h3').textContent;#}
+        {##}
+        {#        // نمایش مودال پرداخت#}
+                {#alert(`در حال انتقال به درگاه پرداخت برای مقاله:\n"${articleTitle}"\n\nمبلغ قابل پرداخت: ۲۵۰,۰۰۰ تومان`);#}
+        {##}
+        {#    });#}
+        //});
 
-            rows.forEach(row => {
-                const rowText = row.textContent.toLowerCase();
-                if (rowText.includes(searchTerm)) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        });
-
-        // Dark mode toggle
-        function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
-        }
-
-        // Mobile sidebar toggle
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            sidebar.classList.toggle('show');
-            overlay.classList.toggle('show');
-        }
-
-        // Dropdown toggle with improved handling
-        function toggleDropdown(id) {
-            const dropdown = document.getElementById(id);
-            const allDropdowns = document.getElementsByClassName('dropdown-content');
-
-            // Close all other dropdowns
-            Array.from(allDropdowns).forEach(d => {
-                if (d.id !== id && d.classList.contains('show')) {
-                    d.classList.remove('show');
-                }
-            });
-
-            // Toggle current dropdown
-            dropdown.classList.toggle('show');
-        }
-
-        // Submenu toggle
-        function toggleSubmenu(id) {
-            const submenu = document.getElementById(id);
-            const arrow = document.getElementById('usersArrow');
-            submenu.classList.toggle('show');
-            arrow.classList.toggle('rotate-180');
-        }
-
-        // Close dropdowns when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdowns = document.getElementsByClassName('dropdown-content');
-            const isDropdownButton = event.target.closest('button[onclick^="toggleDropdown"]');
-            const isSubmenuButton = event.target.closest('button[onclick^="toggleSubmenu"]');
-
-            if (!isDropdownButton && !isSubmenuButton) {
-                Array.from(dropdowns).forEach(dropdown => {
-                    if (dropdown.classList.contains('show')) {
-                        dropdown.classList.remove('show');
-                    }
+        // ریسپانسیو کردن جدول در دستگاه‌های موبایل
+        function checkMobileView() {
+            const articleCards = document.querySelectorAll('.article-card');
+            if (window.innerWidth < 768) {
+                articleCards.forEach(card => {
+                    card.querySelector('.flex-col').classList.add('items-start');
+                });
+            } else {
+                articleCards.forEach(card => {
+                    card.querySelector('.flex-col').classList.remove('items-start');
                 });
             }
-        });
+        }
 
-        // Close sidebar on window resize if open
-        window.addEventListener('resize', function() {
-            if (window.innerWidth >= 768) {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('overlay');
-                sidebar.classList.remove('show');
-                overlay.classList.remove('show');
-            }
-        });
-
+        window.addEventListener('resize', checkMobileView);
+        checkMobileView();
     </script>
 </body>
 </html>
-

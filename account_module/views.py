@@ -5,6 +5,7 @@ from django.views import View
 from django.views.generic import CreateView, FormView, TemplateView
 from account_module.forms import SignupModelForm, LoginForm
 from .models import User
+from article_module.models import Article
 
 
 # Create your views here.
@@ -30,7 +31,6 @@ class LoginView(FormView):
     template_name = 'account_module/login_singnup.html'
     success_url = reverse_lazy('index')
 
-
     def form_valid(self, form):
         mobile = form.cleaned_data.get('mobile')
         password = form.cleaned_data.get('password')
@@ -41,13 +41,11 @@ class LoginView(FormView):
                 login(self.request, user)
                 return super().form_valid(form)
             else:
-                form.add_error('password','تلفن همراه یا رمز عبور اشتباه است')
+                form.add_error('password', 'تلفن همراه یا رمز عبور اشتباه است')
                 return self.form_invalid(form)
         else:
             form.add_error('password', 'تلفن همراه یا رمز عبور اشتباه است')
             return self.form_invalid(form)
-
-
 
     def form_invalid(self, form):
         return self.render_to_response(self.get_context_data(form=form))
@@ -59,5 +57,10 @@ class LogoutView(View):
         return redirect(reverse('index'))
 
 
-class UserProfileView(TemplateView):
-    template_name = 'account_module/user_profile.html'
+def UserProfileView(request):
+    articles = Article.objects.filter(user=request.user).all()
+    context = {
+        'articles': articles
+    }
+    return render(request, 'account_module/user_profile.html', context)
+
