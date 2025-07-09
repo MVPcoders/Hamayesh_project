@@ -6,45 +6,7 @@
     <title>پنل کاربری - مقالات من</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4f0fb 100%);
-        }
-
-        .article-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .payment-btn:hover {
-            background-position: right center;
-        }
-
-        .gradient-header {
-            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
-        }
-
-        .status-badge {
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .floating-btn {
-            box-shadow: 0 4px 15px rgba(37, 117, 252, 0.4);
-            transition: all 0.3s ease;
-        }
-
-        .floating-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(37, 117, 252, 0.5);
-        }
-
-        .article-card {
-            border-left: 4px solid;
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-    </style>
+    <link rel="stylesheet" href="/static/css/user_profile.css">
 </head>
 <body class="min-h-screen">
     <div class="container mx-auto px-4 py-8">
@@ -102,10 +64,10 @@
                                         <i class="fas fa-credit-card ml-2"></i>
                                         پرداخت هزینه داوری
                                     </a>
-                                    <button class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all">
+                                    <a  class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all">
                                         <i class="fas fa-eye ml-2"></i>
                                         مشاهده جزئیات
-                                    </button>
+                                    </a >
                                 </div>
                             {% else %}
                                 <div class="flex flex-col sm:flex-row gap-3">
@@ -117,13 +79,101 @@
                                         <i class="fas fa-eye ml-2"></i>
                                         مشاهده جزئیات
                                     </button>
+                                    <button class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all"
+                                        data-article-id="{{ article.id }}"
+                                        data-persian-title="{{ article.persian_subject }}"
+                                        data-english-title="{{ article.english_subject }}"
+                                        data-authors-count="{{ article.authors_numbers }}"
+                                        data-language="{{ article.language }}"
+                                        data-main-goal="{{ article.main_goal }}"
+                                        data-abstract="{{ article.article_abstract }}"
+                                        data-file-name="{{ article.file.name }}"
+                                        data-file-url="{{ article.file.url }}">
+
+                                        <i class="fas fa-edit"></i>
+                                        ویرایش
+                                    </button>
                                 </div>
                             {% endif %}
                         </div>
                     </div>
                 </div>
-            {% endfor %}
+           {% endfor %}
         </div>
+
+        <!-- پنل ویرایش مقاله -->
+        <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" style="display: none">
+            <div class="modal-content bg-white rounded-lg w-full max-w-3xl p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-gray-800">ویرایش مقاله</h2>
+                    <button id="closeEditModal" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <form id="editArticleForm">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="editPersianTitle" class="block font-medium text-gray-700">عنوان فارسی</label>
+                                <input type="text" id="editPersianTitle" class="mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div>
+                                <label for="editEnglishTitle" class="block font-medium text-gray-700">عنوان انگلیسی</label>
+                                <input type="text" id="editEnglishTitle" class="mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div>
+                                <label for="editAuthorsCount" class="block font-medium text-gray-700">تعداد نویسندگان</label>
+                                <input type="text" id="editAuthorsCount" class="mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <div>
+                                <label for="editLanguage" class="block font-medium text-gray-700">زبان مقاله</label>
+                                <select id="editLanguage" class="mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500">
+                                    <option value="فارسی">فارسی</option>
+                                    <option value="انگلیسی">انگلیسی</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="editMainGoal" class="block font-medium text-gray-700">محور اصلی مقاله</label>
+                            <input type="text" id="editMainGoal" class="mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500">
+                        </div>
+
+                        <div>
+                            <label for="editAbstract" class="block font-medium text-gray-700">خلاصه</label>
+                            <textarea id="editAbstract" rows="4" class="mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500"></textarea>
+                        </div>
+
+                        <div>
+                            <label for="FileName" class="form-label">فایل فعلی مقاله </label>
+                            <p type="text" id="FileName" name="FileName"></p>
+                            <a href="" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="" id="fileUrl">دانلود</a>
+                        </div>
+
+                        <div>
+                            <label for="newFile" class="form-label">بارگذاری فایل جدید</label>
+                            <input type="file" id="newFile" name="newFile" class="form-input" accept=".pdf,.doc,.docx" required>
+                            <p class="text-gray-500 text-sm mt-1">فرمت‌های قابل قبول: PDF, Word (حداکثر 5MB)</p>
+                        </div>
+
+
+                        <div class="flex justify-end space-x-4 pt-6" style="direction:ltr ">
+                            <button type="button" id="cancelEdit" class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100">
+                                انصراف
+                            </button>
+                            <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                ذخیره تغییرات
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
         <!-- دکمه آپلود مقاله جدید -->
         <div class="fixed bottom-6 left-6 flex flex-col items-center">
@@ -134,23 +184,7 @@
         </div>
     </div>
 
-    <script>
-        // Add animation to article cards when they come into view
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.article-card').forEach(card => {
-            card.style.opacity = 0;
-            card.style.transform = 'translateY(20px)';
-            card.style.transition = 'all 0.6s ease';
-            observer.observe(card);
-        });
-    </script>
+    <script type="text/javascript" src="/static/js/user_profile.js"></script>
 </body>
 </html>

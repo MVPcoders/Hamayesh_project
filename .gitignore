@@ -13,7 +13,11 @@ hamayesh_module/migrations/
 hamayeshProject/migrations/
 site_setting/migrations/
 account_module/migrations/
+order_module/migrations/
 uploads/
+node_modules
+package.json
+package-lock.json
 # Python cache files
 __pycache__/
 *.pyc
