@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/static/css/user_profile.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="min-h-screen">
     <div class="container mx-auto px-4 py-8">
@@ -110,7 +111,7 @@
                     </button>
                 </div>
 
-                <form method="post" action="{% url 'edit_article' %}" id="editArticleForm">
+                <form id="articleForm" method="post" action="{% url 'edit_article' %}" id="editArticleForm">
                     {% csrf_token %}
                     <div class="space-y-4">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -179,8 +180,31 @@
             <span class="text-xs font-medium text-gray-600 bg-white px-2 py-1 rounded-full shadow">مقاله جدید</span>
         </div>
     </div>
+    <script>
+        document.getElementById('articleForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
+    // در اینجا می‌توانید اعتبارسنجی فرم را انجام دهید
+    // و اگر همه چیز درست بود، کد زیر اجرا شود
 
+    // شبیه‌سازی ارسال فرم (در حالت واقعی این بخش باید با AJAX یا fetch جایگزین شود)
+    setTimeout(() => {
+        // نمایش نوتیفیکیشن موفقیت‌آمیز
+        Swal.fire({
+            title: 'موفقیت‌آمیز!',
+            text: 'مقاله شما با موفقیت ویرایش  شد.',
+            icon: 'success',
+            confirmButtonText: 'باشه',
+            timer: 3000,
+            timerProgressBar: true,
+            didClose: () => {
+                // انتقال به صفحه حساب کاربری پس از بسته شدن نوتیفیکیشن
+                window.location.href = '/profile';
+            }
+        });
+    }, 1000);
+});
+    </script>
     <script type="text/javascript" src="/static/js/user_profile.js"></script>
 </body>
 </html>

@@ -74,3 +74,4 @@ document.querySelectorAll('.article-card').forEach(card => {
     card.style.transition = 'all 0.6s ease';
     observer.observe(card);
 });
+

@@ -7,13 +7,15 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from .models import Article
 
+
 # دکوریتور ها
 def is_login(func):
-    def wrapper(request:HttpRequest, *args, **kwargs):
-        if  request.user.is_authenticated:
+    def wrapper(request: HttpRequest, *args, **kwargs):
+        if request.user.is_authenticated:
             return func(request, *args, **kwargs)
         else:
             return redirect(reverse('login'))
+
     return wrapper
 
 
@@ -21,8 +23,7 @@ def is_login(func):
 class SubmitArticle(View):
 
     def get(self, request, *args, **kwargs):
-        return render (request,"article_moddule/article.html",context={})
-
+        return render(request, "article_moddule/article.html", context={})
 
     def post(self, request, *args, **kwargs):
         form = request.POST
@@ -48,7 +49,7 @@ class SubmitArticle(View):
             english_subject=form['articleEnglishTitle'],
             article_abstract=form['articleAbstract'],
             file=request.FILES.get('articleFile'),
-            authors_info =authors_info,
+            authors_info=authors_info,
 
         )
         return render(request, "index_module/index.html", context={})
@@ -62,7 +63,7 @@ class UserArticleEdit(View):
     def post(self, request):
         form = request.POST
         print(form.get('articleId'))
-        article:Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
+        article: Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
 
         if request.FILES.get('newFile'):
             article.file = request.FILES.get('newFile')
@@ -75,12 +76,6 @@ class UserArticleEdit(View):
 
         article.save()
         return redirect('index')
-
-
-
-
-
-
 
 # # کد های کامنت شده
 # from .forms import ArticleForm
