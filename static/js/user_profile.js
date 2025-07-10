@@ -11,10 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // برای هر دکمه ویرایش رویداد کلیک اضافه می‌کنیم
     editButtons.forEach(button => {
         button.addEventListener('click', function() {
-           document.getElementById('editPersianTitle').value = this.getAttribute('data-persian-title');
+            document.getElementById('articleId').value = this.getAttribute('data-article-id');
+            document.getElementById('editPersianTitle').value = this.getAttribute('data-persian-title');
            document.getElementById('editEnglishTitle').value = this.getAttribute('data-english-title');
            document.getElementById('editLanguage').value = this.getAttribute('data-language');
-           document.getElementById('editAuthorsCount').value = this.getAttribute('data-authors-count');
            document.getElementById('editMainGoal').value = this.getAttribute('data-main-goal');
            document.getElementById('editAbstract').value = this.getAttribute('data-abstract');
            document.getElementById('FileName').innerText = this.getAttribute('data-file-name');
@@ -43,18 +43,18 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ارسال فرم ویرایش
-    document.getElementById('editArticleForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        // اینجا کدهای ارسال فرم به سرور را اضافه کنید
-        // ...
-
-        // بعد از ارسال موفق، مودال را ببندید
-        editModal.style.display = 'none';
-
-        // پیام موفقیت آمیز نمایش دهید
-        alert('تغییرات با موفقیت ذخیره شدند.');
-    });
+    // document.getElementById('editArticleForm').addEventListener('submit', function(e) {
+    //     e.preventDefault();
+    //
+    //     // اینجا کدهای ارسال فرم به سرور را اضافه کنید
+    //     // ...
+    //
+    //     // بعد از ارسال موفق، مودال را ببندید
+    //     editModal.style.display = 'none';
+    //
+    //     // پیام موفقیت آمیز نمایش دهید
+    //     alert('تغییرات با موفقیت ذخیره شدند.');
+    // });
 });
 
 

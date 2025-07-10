@@ -1,3 +1,5 @@
+from logging import raiseExceptions
+
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -50,6 +52,30 @@ class SubmitArticle(View):
 
         )
         return render(request, "index_module/index.html", context={})
+
+
+class UserArticleEdit(View):
+    def get(self, request):
+        context = {}
+        return render(request, 'account_module/user_profile.html', context)
+
+    def post(self, request):
+        form = request.POST
+        print(form.get('articleId'))
+        article:Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
+
+        if request.FILES.get('newFile'):
+            article.file = request.FILES.get('newFile')
+
+        article.persian_subject = form.get('editPersianTitle')
+        article.english_subject = form.get('editEnglishTitle')
+        article.main_goal = form.get('editMainGoal')
+        article.language = form.get('editLanguage')
+        article.article_abstract = form.get('editAbstract')
+
+        article.save()
+        return redirect('index')
+
 
 
 

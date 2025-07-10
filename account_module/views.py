@@ -64,3 +64,4 @@ def UserProfileView(request):
     }
     return render(request, 'account_module/user_profile.html', context)
 
+
