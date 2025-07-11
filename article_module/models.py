@@ -46,21 +46,5 @@ class ArticleCertificate(models.Model):
         verbose_name = 'گواهی مقاله'
         verbose_name_plural = 'گواهی های مقالات'
 
-##  کد های کامنت شده
 
-# class ArticleAuthor(models.Model):
-#     article = models.ForeignKey(to='Article', on_delete=models.CASCADE, verbose_name='مقاله')
-#     first_name = models.CharField(max_length=200, verbose_name='نام نویسنده')
-#     last_name = models.CharField(max_length=200, verbose_name='نام خانوادگی نویسنده')
-#     english_first_name = models.CharField(max_length=200, verbose_name='نام انگلیسی نویسنده')
-#     english_last_name = models.CharField(max_length=200, verbose_name='نام خانوادگی انگلیسی نویسنده')
-#     email = models.EmailField(verbose_name='ایمیل نویسنده')
-#     main_author = models.BooleanField(default=False, verbose_name='نویسنده مسئول')
-#
-#     def __str__(self):
-#         if self.main_author:
-#             return f'{self.first_name} {self.last_name}'
-#
-#     class Meta:
-#         verbose_name = 'نویسنده'
-#         verbose_name_plural = 'نویسندگان'
+
