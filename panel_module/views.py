@@ -4,8 +4,6 @@ from article_module.models import Article
 from django.core.paginator import Paginator
 
 
-
-
 def user_list(request):
     users = User.objects.all()  # تمام کاربران را استخراج کنید
     paginator = Paginator(users, 10)  # Show 10 users per page

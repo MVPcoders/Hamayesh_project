@@ -1,14 +1,27 @@
 from django.contrib.auth import login, logout
-from django.shortcuts import render, redirect
+from django.http import HttpRequest
 from django.urls import reverse_lazy, reverse
 from django.views import View
-from django.views.generic import CreateView, FormView, TemplateView
+from django.views.generic import CreateView, FormView
 from account_module.forms import SignupModelForm, LoginForm
 from .models import User
 from article_module.models import Article
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .forms import TicketForm
+from .models import Ticket
 
 
-# Create your views here.
+def login_for_ticket(func):
+    def wrapper(request: HttpRequest, *args, **kwargs):
+        if request.user.is_authenticated:
+            return func(request, *args, **kwargs)
+        else:
+            return redirect(reverse('login'))
+
+    return wrapper
+
 
 class SignUpView(CreateView):
     form_class = SignupModelForm
@@ -56,12 +69,24 @@ class LogoutView(View):
         logout(request)
         return redirect(reverse('index'))
 
-
+@login_required(login_url='login')
 def UserProfileView(request):
     articles = Article.objects.filter(user=request.user).all()
+    if request.method == 'POST':
+        form = TicketForm(request.POST, request.FILES)
+        if form.is_valid():
+            ticket = form.save(commit=False)
+            ticket.user = request.user
+            ticket.save()
+            messages.success(request, 'تیکت شما با موفقیت ثبت شد.')
+            return redirect('profile')
+    else:
+        form = TicketForm()
+    tickets = Ticket.objects.filter(user=request.user).order_by('-created_at')
     context = {
-        'articles': articles
+        'articles': articles,
+        'form': form,
+        'tickets': tickets
     }
     return render(request, 'account_module/user_profile.html', context)
-
 

@@ -37,3 +37,44 @@ class User(AbstractUser):
     class Meta:
         verbose_name = 'کاربر'
         verbose_name_plural = 'لیست کاربران'
+
+
+class Ticket(models.Model):
+    STATUS_CHOICES = (
+        ('open', 'باز'),
+        ('pending', 'در حال بررسی'),
+        ('closed', 'بسته شده'),
+    )
+
+    PRIORITY_CHOICES = (
+        ('low', 'کم'),
+        ('medium', 'متوسط'),
+        ('high', 'بالا'),
+        ('urgent', 'فوری'),
+    )
+
+    DEPARTMENT_CHOICES = (
+        ('technical', 'پشتیبانی فنی'),
+        ('financial', 'مالی و پرداخت‌ها'),
+        ('content', 'محتوا و مقالات'),
+        ('other', 'سایر موارد'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tickets')
+    subject = models.CharField(max_length=200, verbose_name='موضوع')
+    department = models.CharField(max_length=20, choices=DEPARTMENT_CHOICES, verbose_name='دپارتمان',null=True,blank=True)
+    priority = models.CharField(max_length=20, choices=PRIORITY_CHOICES, default='medium', verbose_name='اولویت',null=True,blank=True)
+    message = models.TextField(verbose_name='پیام',null=True,blank=True)
+    answer = models.TextField(verbose_name='جواب',null=True,blank=True)
+    attachment = models.FileField(upload_to='tickets/attachments/', null=True, blank=True, verbose_name='پیوست')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='open', verbose_name='وضعیت')
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ایجاد')
+    updated_at = models.DateTimeField(auto_now=True, verbose_name='تاریخ بروزرسانی')
+
+    class Meta:
+        verbose_name = 'تیکت'
+        verbose_name_plural = 'تیکت‌ها'
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.subject} - {self.get_status_display()}"
