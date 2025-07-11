@@ -12,7 +12,9 @@ from django.urls import reverse, reverse_lazy
 from django.db import models
 from article_module.models import Article
 from hamayesh_module.models import Hamayesh_prices
-
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import Payment
 
 
 def pay(request):
@@ -26,7 +28,7 @@ callback_url = "self.callbackURL"
 description = "نهایی کردن خرید شما از سایت ما"
 mobile = "mobile"  # اختیاری
 email = "email"  # اختیاری
-CallbackURL = 'http://localhost:8000/pay/verify/'
+CallbackURL = 'http://127.0.0.1:8000//pay/verify/'
 
 
 @login_required
@@ -70,6 +72,14 @@ def verify(request: HttpRequest):
                 article_payment = Article.objects.get(send_to_pay=t_authority, user=request.user.id)
                 article_payment.is_paid = True
                 article_payment.save()
+                amount = price
+                user = request.user if request.user.is_authenticated else None
+                payment = Payment.objects.create(
+                    user=user,
+                    amount=amount,
+                    is_successful=True,
+                    transaction_id=req_id
+                )
                 return render(request, 'order_module/pay.html', {
                     'success': f"{req_id}",
                     'amount': price,
@@ -89,6 +99,8 @@ def verify(request: HttpRequest):
             })
     else:
         return render(request, 'order_module/pay.html', )
+
+
 
 
 
