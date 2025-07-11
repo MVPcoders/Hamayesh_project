@@ -1,6 +1,6 @@
 from logging import raiseExceptions
 
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -62,41 +62,24 @@ class UserArticleEdit(View):
 
     def post(self, request):
         form = request.POST
-        print(form.get('articleId'))
-        article: Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
+        try:
+            article: Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
+            if request.FILES.get('newFile'):
+                article.file = request.FILES.get('newFile')
 
-        if request.FILES.get('newFile'):
-            article.file = request.FILES.get('newFile')
+            article.persian_subject = form.get('editPersianTitle')
+            article.english_subject = form.get('editEnglishTitle')
+            article.main_goal = form.get('editMainGoal')
+            article.language = form.get('editLanguage')
+            article.article_abstract = form.get('editAbstract')
 
-        article.persian_subject = form.get('editPersianTitle')
-        article.english_subject = form.get('editEnglishTitle')
-        article.main_goal = form.get('editMainGoal')
-        article.language = form.get('editLanguage')
-        article.article_abstract = form.get('editAbstract')
-
-        article.save()
-        return redirect('index')
-
-# # کد های کامنت شده
-# from .forms import ArticleForm
-
-# def submit_article(request):
-#     if request.method == 'POST':
-#         article_form = ArticleForm(request.POST, request.FILES)
-#         author_form = ArticleAuthorForm(request.POST)
-#
-#         if article_form.is_valid() and author_form.is_valid():
-#             article = article_form.save()
-#             author = author_form.save(commit=False)
-#             author.article = article
-#             author.save()
-#             return redirect('index')  # به صفحه موفقیت هدایت کنید
-#
-#     else:
-#         article_form = ArticleForm()
-#         author_form = ArticleAuthorForm()
-#
-#     return render(request, 'article_moddule/article.html', {
-#         'article_form': article_form,
-#         'author_form': author_form,
-#     })
+            article.save()
+            return JsonResponse({
+                'status': 'success',
+                'message': 'مقاله شما با موفقیت ویرایش شد'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'status': 'fail',
+                'message': str(e)
+            })
