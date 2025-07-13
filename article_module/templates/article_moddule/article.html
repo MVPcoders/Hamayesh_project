@@ -464,11 +464,6 @@
                             <label for="authorEmail${i}" class="form-label">ایمیل</label>
                             <input type="email" id="authorEmail${i}" name="authorEmail${i}" class="form-input" required>
                         </div>
-
-                        <div class="form-group">
-                            <label for="authorAffiliation${i}" class="form-label">وابستگی سازمانی</label>
-                            <input type="text" id="authorAffiliation${i}" name="authorAffiliation${i}" class="form-input">
-                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -583,29 +578,54 @@
             }, 200);
         }
 
-        // Handle form submission
+        // کنترل ارسال مقاله
         document.getElementById('articleForm').addEventListener('submit', function(e) {
             e.preventDefault();
-
-            // در اینجا می‌توانید اعتبارسنجی فرم را انجام دهید
-            // و اگر همه چیز درست بود، کد زیر اجرا شود
-
-            // شبیه‌سازی ارسال فرم (در حالت واقعی این بخش باید با AJAX یا fetch جایگزین شود)
-            setTimeout(() => {
-                // نمایش نوتیفیکیشن موفقیت‌آمیز
+            const formData = new FormData(this);
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: 'موفقیت آمیز!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'باشه',
+                        timer: 3000,
+                        timerProgressBar: true,
+                        willClose: () => {
+                            window.location.href = '/profile';
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'خطا!',
+                        text: data.message,
+                        icon: 'error',
+                        confirmButtonText: 'متوجه شدم',
+                        timer: 3000, // 3 ثانیه
+                        timerProgressBar: true
+                    });
+                }
+            })
+            .catch(error => {
+                editModal.style.display = 'none';
                 Swal.fire({
-                    title: 'موفقیت‌آمیز!',
-                    text: 'مقاله شما با موفقیت ارسال شد.',
-                    icon: 'success',
-                    confirmButtonText: 'باشه',
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didClose: () => {
-                        // انتقال به صفحه حساب کاربری پس از بسته شدن نوتیفیکیشن
-                        window.location.href = '{% url 'profile' %}';
-                    }
+                    title: 'خطا!',
+                    text: 'خطایی در ارتباط با سرور رخ داده است.',
+                    icon: 'error',
+                    confirmButtonText: 'متوجه شدم',
+                    timer: 3000, // 3 ثانیه
+                    timerProgressBar: true
                 });
-            }, 1000);
+            });
+
         });
     </script>
 </body>

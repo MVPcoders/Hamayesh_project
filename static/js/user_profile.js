@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 editModal.style.display = 'none';
                 if (data.status === 'success') {
                     Swal.fire({
-                        title: 'موفقیت!',
+                        title: 'موفقیت آمیز!',
                         text: data.message,
                         icon: 'success',
                         confirmButtonText: 'باشه',

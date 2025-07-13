@@ -26,43 +26,52 @@ class SubmitArticle(View):
         return render(request, "article_moddule/article.html", context={})
 
     def post(self, request, *args, **kwargs):
-        form = request.POST
-        authors_info = {}
-        # برای تشخیص نویسنده مسئول
-        corresponding_index = int(form.get('correspondingAuthor', 0))
-        for i in range(int(form['authorCount'])):
-            authour = {
-                "fist_name": form.get(f'authorFirstName{i}'),
-                "last_name": form.get(f'authorLastName{i}'),
-                "email": form.get(f'authorEmail{i}'),
-                # "ORCID": form.get[f'authorORCID${i}', ""],
-                "main_author": (i == corresponding_index),
-            }
-            authors_info[i] = authour
+        try:
+            form = request.POST
+            authors_info = {}
+            # برای تشخیص نویسنده مسئول
+            corresponding_author_index = int(form.get('correspondingAuthor', 0))
+            author_count = int(form['authorCount'])
+            for i in range(author_count):
+                authour = {
+                    "first_name": form.get(f'authorFirstName{i}'),
+                    "last_name": form.get(f'authorLastName{i}'),
+                    "email": form.get(f'authorEmail{i}'),
+                    "main_author": (i == corresponding_author_index),
+                }
+                authors_info[i] = authour
 
-        new_article = Article.objects.create(
-            user=request.user,
-            authors_numbers=form['authorCount'],
-            main_goal=form['articleMainGoal'],
-            language=form['articleLang'],
-            persian_subject=form['articlePersianTitle'],
-            english_subject=form['articleEnglishTitle'],
-            article_abstract=form['articleAbstract'],
-            file=request.FILES.get('articleFile'),
-            authors_info=authors_info,
+            Article.objects.create(
+                user=request.user,
+                authors_numbers=form['authorCount'],
+                main_goal=form['articleMainGoal'],
+                language=form['articleLang'],
+                persian_subject=form['articlePersianTitle'],
+                english_subject=form['articleEnglishTitle'],
+                article_abstract=form['articleAbstract'],
+                file=request.FILES.get('articleFile'),
+                authors_info=authors_info,
+            )
+            return JsonResponse({
+                'status': 'success',
+                'message': 'مقاله با موقیت ثبت گردید'
+            })
+        except Exception as e:
+            return JsonResponse({
+                'status': 'success',
+                'message': str(e)
+            })
 
-        )
-        return render(request, "index_module/index.html", context={})
 
-
+@method_decorator(is_login, name='dispatch')
 class UserArticleEdit(View):
     def get(self, request):
         context = {}
         return render(request, 'account_module/user_profile.html', context)
 
     def post(self, request):
-        form = request.POST
         try:
+            form = request.POST
             article: Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
             if request.FILES.get('newFile'):
                 article.file = request.FILES.get('newFile')
