@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         title: 'موفقیت آمیز!',
                         text: data.message,
                         icon: 'success',
-                        confirmButtonText: 'باشه',
+                        confirmButtonText: 'باشه!',
                         timer: 3000,
                         timerProgressBar: true,
                         willClose: () => {
