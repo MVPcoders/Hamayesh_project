@@ -1,12 +1,69 @@
+
+// فعال کردن تب‌ها
+document.addEventListener('DOMContentLoaded', function() {
+    const tabs = document.querySelectorAll('[data-tabs-toggle] button');
+    const tabContents = document.querySelectorAll('#myTabContent > div');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // حذف کلاس active از همه تب‌ها
+            tabs.forEach(t => {
+                t.classList.remove('active', 'text-purple-600');
+                t.classList.add('text-gray-600');
+            });
+            tabContents.forEach(c => c.classList.add('hidden'));
+
+            // اضافه کردن کلاس active به تب انتخاب شده
+            this.classList.add('active', 'text-purple-600');
+            this.classList.remove('text-gray-600');
+
+            // نمایش محتوای تب مربوطه
+            const targetId = this.getAttribute('data-tabs-target');
+            document.querySelector(targetId).classList.remove('hidden');
+        });
+    });
+
+    // نمایش نام فایل انتخاب شده برای تیکت
+    const ticketFileInput = document.querySelector('#id_attachment');
+    const ticketFileName = document.querySelector('#ticketFileName');
+
+    if (ticketFileInput) {
+        ticketFileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                ticketFileName.textContent = this.files[0].name;
+            } else {
+                ticketFileName.textContent = 'هیچ فایلی انتخاب نشده';
+            }
+        });
+    }
+
+    // نمایش نام فایل انتخاب شده برای مقاله
+    const articleFileInput = document.querySelector('#newFile');
+    const articleFileName = document.querySelector('#fileNameDisplay');
+
+    if (articleFileInput) {
+        articleFileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                articleFileName.textContent = this.files[0].name;
+            } else {
+                articleFileName.textContent = 'هیچ فایلی انتخاب نشده';
+            }
+        });
+    }
+});
+
 // مدیریت مودال ویرایش مقاله
 document.addEventListener('DOMContentLoaded', function () {
     // دکمه‌های ویرایش
-    const editButtons = document.querySelectorAll('button:has(i.fa-edit)');
+    const editButtons = document.querySelectorAll('.edit-article-btn');
 
     // عناصر مودال
     const editModal = document.getElementById('editModal');
     const closeEditModal = document.getElementById('closeEditModal');
     const cancelEdit = document.getElementById('cancelEdit');
+    const submitBtn = document.querySelector('#articleForm button[type="submit"]');
+    const submitText = document.getElementById('submitText');
+    const loadingSpinner = document.getElementById('loadingSpinner');
 
     // برای هر دکمه ویرایش رویداد کلیک اضافه می‌کنیم
     editButtons.forEach(button => {
@@ -19,28 +76,42 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('editAbstract').value = this.getAttribute('data-abstract');
             document.getElementById('FileName').innerText = this.getAttribute('data-file-name');
             document.getElementById('fileUrl').href = this.getAttribute('data-file-url');
+            document.getElementById('fileUrl').setAttribute('download', this.getAttribute('data-file-name'));
+            document.getElementById('fileNameDisplay').textContent = 'هیچ فایلی انتخاب نشده';
+
             // نمایش مودال
             editModal.style.display = 'flex';
-
+            setTimeout(() => {
+                editModal.classList.add('active');
+            }, 10);
         });
     });
 
     // بستن مودال با دکمه بستن
     closeEditModal.addEventListener('click', function () {
-        editModal.style.display = 'none';
+        editModal.classList.remove('active');
+        setTimeout(() => {
+            editModal.style.display = 'none';
+        }, 300);
         document.getElementById('newFile').value = '';
     });
 
     // بستن مودال با دکمه انصراف
     cancelEdit.addEventListener('click', function () {
-        editModal.style.display = 'none';
+        editModal.classList.remove('active');
+        setTimeout(() => {
+            editModal.style.display = 'none';
+        }, 300);
         document.getElementById('newFile').value = '';
     });
 
     // بستن مودال با کلیک خارج از آن
     editModal.addEventListener('click', function (e) {
         if (e.target === editModal) {
-            editModal.style.display = 'none';
+            editModal.classList.remove('active');
+            setTimeout(() => {
+                editModal.style.display = 'none';
+            }, 300);
             document.getElementById('newFile').value = '';
         }
     });
@@ -48,24 +119,38 @@ document.addEventListener('DOMContentLoaded', function () {
     // ارسال فرم ویرایش
     document.getElementById('articleForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        //
+
+        // نمایش اسپینر لودینگ
+        submitText.textContent = 'در حال ذخیره...';
+        loadingSpinner.classList.remove('hidden');
+        submitBtn.disabled = true;
+
         const formData = new FormData(this);
         fetch(this.action, {
             method: 'POST',
             body: formData,
             headers: {
-                'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+                'X-Requested-With': 'XMLHttpRequest',
             },
         })
             .then(response => response.json())
             .then(data => {
-                editModal.style.display = 'none';
+                // مخفی کردن اسپینر لودینگ
+                submitText.textContent = 'ذخیره تغییرات';
+                loadingSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
+
+                editModal.classList.remove('active');
+                setTimeout(() => {
+                    editModal.style.display = 'none';
+                }, 300);
+
                 if (data.status === 'success') {
                     Swal.fire({
                         title: 'موفقیت آمیز!',
                         text: data.message,
                         icon: 'success',
-                        confirmButtonText: 'باشه!',
+                        confirmButtonText: 'باشه',
                         timer: 3000,
                         timerProgressBar: true,
                         willClose: () => {
@@ -79,20 +164,29 @@ document.addEventListener('DOMContentLoaded', function () {
                         text: data.message,
                         icon: 'error',
                         confirmButtonText: 'متوجه شدم',
-                        timer: 3000, // 3 ثانیه
+                        timer: 3000,
                         timerProgressBar: true
                     });
                     document.getElementById('newFile').value = '';
                 }
             })
             .catch(error => {
-                editModal.style.display = 'none';
+                // مخفی کردن اسپینر لودینگ
+                submitText.textContent = 'ذخیره تغییرات';
+                loadingSpinner.classList.add('hidden');
+                submitBtn.disabled = false;
+
+                editModal.classList.remove('active');
+                setTimeout(() => {
+                    editModal.style.display = 'none';
+                }, 300);
+
                 Swal.fire({
                     title: 'خطا!',
                     text: 'خطایی در ارتباط با سرور رخ داده است.',
                     icon: 'error',
                     confirmButtonText: 'متوجه شدم',
-                    timer: 3000, // 3 ثانیه
+                    timer: 3000,
                     timerProgressBar: true
                 });
                 document.getElementById('newFile').value = '';
@@ -100,8 +194,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-
-// Add animation to article cards when they come into view
+// انیمیشن برای کارت‌ها هنگام نمایش
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -111,11 +204,9 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, {threshold: 0.1});
 
-document.querySelectorAll('.article-card').forEach(card => {
+document.querySelectorAll('.article-card').forEach((card, index) => {
     card.style.opacity = 0;
     card.style.transform = 'translateY(20px)';
-    card.style.transition = 'all 0.6s ease';
+    card.style.transition = `all 0.6s ease ${index * 0.1}s`;
     observer.observe(card);
 });
-
-

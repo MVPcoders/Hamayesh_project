@@ -28,7 +28,7 @@ callback_url = "self.callbackURL"
 description = "نهایی کردن خرید شما از سایت ما"
 mobile = "mobile"  # اختیاری
 email = "email"  # اختیاری
-CallbackURL = 'http://127.0.0.1:8000//pay/verify/'
+CallbackURL = 'http://127.0.0.1:8000/pay/verify/'
 
 
 @login_required
