@@ -16,6 +16,7 @@ class Article(models.Model):
     english_subject = models.TextField(verbose_name='عنوان انگلیسی مقاله')
     article_abstract = models.TextField(max_length=250, verbose_name='چکیده مقاله', blank=True, null=True)
     file = models.FileField(verbose_name='فایل مقاله', upload_to='articles/')
+    certificate_file = models.FileField(verbose_name='فایل گواهی', upload_to='articles/certificate/', blank=True, null=True)
     submit_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت مقاله')
     is_visited = models.BooleanField(verbose_name='دیده شده توسط ادمین', default=False)
     is_coached = models.BooleanField(verbose_name='داوری شده', default=False)
@@ -31,20 +32,6 @@ class Article(models.Model):
         return self.persian_subject
 
 
-class ArticleCertificate(models.Model):
-    # دسترسی به کاربر از طریق آرتیکل ممکن است
-    article = models.ForeignKey(to=Article, on_delete=models.SET_NULL, null=True, verbose_name='مقاله')
-    certificate_url = models.CharField(verbose_name='آدرس تقدیر نامه', max_length=300, default="")
-    image = models.ImageField(upload_to='certificates/', verbose_name='عکس تقدیر نامه')
-    cer_id = models.CharField(max_length=16, verbose_name='شماره گواهی ', unique=True)
-    certificate_date = models.DateTimeField(auto_now_add=True, editable=False, verbose_name='تاریخ اعطا')
-
-    def __str__(self):
-        return self.article.persian_subject
-
-    class Meta:
-        verbose_name = 'گواهی مقاله'
-        verbose_name_plural = 'گواهی های مقالات'
 
 
 

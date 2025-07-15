@@ -1,3 +1,4 @@
+
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
@@ -15,7 +16,6 @@ def user_list(request):
     page_number = request.GET.get('page')
     users = paginator.get_page(page_number)
     return render(request, 'panel_module', {'users': users})
-
 
 class ManagementView(TemplateView):
     template_name = 'panel_module/management.html'
