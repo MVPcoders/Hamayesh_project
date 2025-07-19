@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
+
+from hamayesh_module.models import Hamayesh_prices
 from .models import Article
 
 
@@ -26,6 +28,7 @@ class SubmitArticle(View):
         return render(request, "article_moddule/article.html", context={})
 
     def post(self, request, *args, **kwargs):
+        ar_price = int(Hamayesh_prices.objects.get(is_active=True).price)
         try:
             form = request.POST
             authors_info = {}
@@ -51,6 +54,7 @@ class SubmitArticle(View):
                 article_abstract=form['articleAbstract'],
                 file=request.FILES.get('articleFile'),
                 authors_info=authors_info,
+                price= ar_price
             )
             return JsonResponse({
                 'status': 'success',

@@ -125,6 +125,22 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        {% if article.price == hamayesh.price %}
+                                                <form method="post" action="{% url 'apply_discount' article.id %}" >
+                                                    {% csrf_token %}
+                                                    <input type="text" name="code" placeholder="کد تخفیف">
+                                                    <button type="submit">اعمال کد</button>
+                                                </form>
+                                                {% if error %}
+                                                    <p style="color: red;">{{ error }}</p>
+                                                {% endif %}
+
+                                                {% if discount_applied %}
+                                                    <p style="color: green;">تخفیف "{{ code }}" اعمال شد.</p>
+
+                                        {% endif %}
+
+                                                {% endif %}
 
                                             <div class="flex flex-col sm:flex-row gap-3 article-actions">
                                                 {% if article.is_paid == False %}

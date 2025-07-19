@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import TicketForm
 from .models import Ticket
+from hamayesh_module.models import Hamayesh_prices
 
 
 def login_for_ticket(func):
@@ -72,6 +73,7 @@ class LogoutView(View):
 @login_required(login_url='login')
 def UserProfileView(request):
     articles = Article.objects.filter(user=request.user).all()
+    hamayesh = Hamayesh_prices.objects.filter(is_active=True).first()
     if request.method == 'POST':
         form = TicketForm(request.POST, request.FILES)
         if form.is_valid():
@@ -86,7 +88,8 @@ def UserProfileView(request):
     context = {
         'articles': articles,
         'form': form,
-        'tickets': tickets
+        'tickets': tickets,
+        'hamayesh': hamayesh
     }
     return render(request, 'account_module/user_profile.html', context)
 

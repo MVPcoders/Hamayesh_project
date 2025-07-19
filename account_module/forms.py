@@ -187,6 +187,7 @@ class LoginForm(forms.Form):
             raise ValidationError("رمز عبور خود را وارد نمایید")
         return password
 
+
 class TicketForm(forms.ModelForm):
     class Meta:
         model = Ticket
@@ -209,3 +210,7 @@ class TicketForm(forms.ModelForm):
                 'class': 'mt-1 p-2 w-full border rounded focus:ring-2 focus:ring-blue-500'
             }),
         }
+
+
+class DiscountCodeForm(forms.Form):
+    code = forms.CharField(label="کد تخفیف", max_length=50)

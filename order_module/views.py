@@ -14,11 +14,16 @@ from article_module.models import Article
 from hamayesh_module.models import Hamayesh_prices
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from .models import Payment
-
+from .models import Payment, DiscountCode
+from account_module.forms import DiscountCodeForm
+from order_module.utils import apply_discount
 
 def pay(request):
     return render(request, "order_module/pay.html", context={})
+
+
+
+
 
 merchant_id = "3a681e90-59c0-4511-8101-655b26314ae5"
 ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
@@ -28,13 +33,37 @@ callback_url = "self.callbackURL"
 description = "نهایی کردن خرید شما از سایت ما"
 mobile = "mobile"  # اختیاری
 email = "email"  # اختیاری
-CallbackURL = 'http://127.0.0.1:8000/pay/verify/'
+CallbackURL = 'http://localhost:8000/pay/verify/'
 
+def apply_discount_view(request,article_id):
+    if request.method == "POST":
+        article, created = Article.objects.get_or_create(is_paid=False, user=request.user.id, id=article_id)
+        form = DiscountCodeForm(request.POST)
+        if form.is_valid():
+            code = form.cleaned_data['code']
+            try:
+                discount_code = DiscountCode.objects.get(code=code)
+                if discount_code.is_valid(request.user):
+                    price = article.price
+                    new_total = apply_discount(price, discount_code)
+                    article.price = new_total
+                    article.save()
+                    return render(request, 'account_module/user_profile.html', {
+                        'total': new_total,
+                        'discount_applied': True,
+                        'code': code
+                    })
+                else:
+                    error = "این کد تخفیف معتبر نیست."
+            except DiscountCode.DoesNotExist:
+                error = "کد تخفیف وجود ندارد."
+            return render(request, 'account_module/user_profile.html', {'error': error})
+    return redirect('cart')
 
 @login_required
 def send_request(request: HttpRequest, article_id):
     article_payment, created = Article.objects.get_or_create(is_paid=False, user=request.user.id, id=article_id)
-    price = int(Hamayesh_prices.objects.get(is_active=True).price)
+    price = int(article_payment.price)
     req_data = {
         "merchant_id": merchant_id,
         "amount": price,
@@ -57,8 +86,9 @@ def send_request(request: HttpRequest, article_id):
 
 @login_required
 def verify(request: HttpRequest):
-    price = int(Hamayesh_prices.objects.get(is_active=True).price)
     t_authority = request.GET['Authority']
+    article_payment = Article.objects.get(send_to_pay=t_authority, user=request.user.id)
+    price = int(article_payment.price)
     if request.GET.get('Status') == 'OK':
         req_headers = {"accept": "application/json", "content-type": "application/json"}
         req_data = {"merchant_id": merchant_id,
@@ -69,7 +99,7 @@ def verify(request: HttpRequest):
             t_status = req.json()['data']['code']
             req_id = req.json()["data"]["ref_id"]
             if t_status == 100:
-                article_payment = Article.objects.get(send_to_pay=t_authority, user=request.user.id)
+
                 article_payment.is_paid = True
                 article_payment.save()
                 amount = price
