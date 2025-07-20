@@ -49,7 +49,7 @@ def apply_discount_view(request,article_id):
                     new_total = apply_discount(price, discount_code)
                     article.price = new_total
                     article.save()
-                    messages.success(request,"کد تخفیف با موفقیت اعمال شد!")
+                    messages.success(request,f'کد تخفیف {discount_code.discount_percent} درصدی با موفقیت اعمال شد !')
                     return redirect('profile')
             except DiscountCode.DoesNotExist:
                 messages.error(request, "کد تخفیف نامعتبر است!")

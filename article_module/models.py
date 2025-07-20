@@ -23,7 +23,7 @@ class Article(models.Model):
     is_accepted = models.BooleanField(verbose_name='پذیرفته شده توسط داور', default=False)
     is_paid = models.BooleanField(verbose_name='هزینه داوری', default=False)
     send_to_pay = models.CharField(max_length=200, blank=True, null=True)
-    price = models.IntegerField(verbose_name='هزینه',max_length=50, blank=True, null=True)
+    price = models.IntegerField(verbose_name='هزینه',max_length=50, blank=True, null=True,default=0)
 
 
     class Meta:
