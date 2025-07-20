@@ -17,6 +17,7 @@ from django.http import JsonResponse
 from .models import Payment, DiscountCode
 from account_module.forms import DiscountCodeForm
 from order_module.utils import apply_discount
+from django.contrib import messages
 
 def pay(request):
     return render(request, "order_module/pay.html", context={})
@@ -48,17 +49,13 @@ def apply_discount_view(request,article_id):
                     new_total = apply_discount(price, discount_code)
                     article.price = new_total
                     article.save()
-                    return render(request, 'account_module/user_profile.html', {
-                        'total': new_total,
-                        'discount_applied': True,
-                        'code': code
-                    })
-                else:
-                    error = "این کد تخفیف معتبر نیست."
+                    messages.success(request,"کد تخفیف با موفقیت اعمال شد!")
+                    return redirect('profile')
             except DiscountCode.DoesNotExist:
-                error = "کد تخفیف وجود ندارد."
-            return render(request, 'account_module/user_profile.html', {'error': error})
-    return redirect('cart')
+                messages.error(request, "کد تخفیف نامعتبر است!")
+                return redirect('profile')
+    messages.error(request, "خطایی رخ داده است!")
+    return redirect('profile')
 
 @login_required
 def send_request(request: HttpRequest, article_id):
