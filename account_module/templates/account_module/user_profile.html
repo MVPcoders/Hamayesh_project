@@ -169,10 +169,14 @@
                                                     {% if article.certificate_file %}
                                                         <a href="{{ article.certificate_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">دانلود گواهی</a>
                                                     {% endif %}
-
                                                 {% endif %}
                                             </div>
                                         </div>
+                                        {% if not article.is_paid %}
+                                            <div class="price-box">
+                                                <p>هزینه مقاله: <span>{{ article.price }}</span> ریال</p>
+                                            </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             {% endfor %}

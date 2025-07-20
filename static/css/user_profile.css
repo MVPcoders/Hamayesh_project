@@ -337,3 +337,23 @@
     margin-left: 10px;
     font-size: 20px;
 }
+
+
+
+/* باکس هزینه مقاله */
+.price-box {
+  background-color: #047c04;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 10px;
+  display: inline-block;
+  font-family: Arial, sans-serif;
+}
+
+.price-box p {
+  margin: 0;
+}
+
+.price-box span {
+  font-weight: bold;
+}
