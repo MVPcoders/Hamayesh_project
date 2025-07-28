@@ -40,6 +40,7 @@ class SubmitArticle(View):
                     "first_name": form.get(f'authorFirstName{i}'),
                     "last_name": form.get(f'authorLastName{i}'),
                     "email": form.get(f'authorEmail{i}'),
+                    "codemeli": form.get(f'authorCodemeli{i}'),
                     "main_author": (i == corresponding_author_index),
                 }
                 authors_info[i] = authour
