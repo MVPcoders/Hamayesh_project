@@ -1,6 +1,8 @@
+from audioop import reverse
 
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.views.generic import TemplateView, View
 
 from account_module.models import User
 from article_module.models import Article
@@ -64,3 +66,23 @@ class ManagementView(TemplateView):
             'monthly_data': monthly_data,
         })
         return context
+
+
+class ChangePasswordView(View):
+
+    def get (self, request):
+        users = User.objects.all()
+        context = {'users': users}
+        return render(request, 'panel_module/change_password.html', context)
+
+    def post(self, request):
+        try:
+            user = User.objects.get(id = request.POST['user_id'])
+            user.set_password(request.POST['new_password'])
+            user.save()
+            return redirect('management')
+        except Exception as e:
+            return JsonResponse({'error': str(e)})
+
+
+

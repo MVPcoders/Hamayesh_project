@@ -484,7 +484,13 @@
                         </div>
                         <div class="form-group">
                             <label for="authorCodemeli${i}" class="form-label">کدملی</label>
-                            <input type="number" id="authorCodemeli${i}" name="authorCodemeli${i}" class="form-input" required>
+                            <input type="text"
+                               id="authorCodemeli${i}"
+                               name="authorCodemeli${i}"
+                               class="form-input"
+                               required
+                               oninput="validateNationalId(this)">
+                            <div id="nationalIdError${i}" class="text-red-500 text-sm mt-1 hidden">کدملی وارد شده کمتر از 10 رقم است.</div>
                         </div>
                     </div>
 
@@ -664,6 +670,17 @@
                 });
             });
         });
+        // code melli error
+        function validateNationalId(input) {
+          const errorElement = document.getElementById(`nationalIdError${input.id.replace('authorCodemeli', '')}`);
+          input.value = input.value.replace(/[^0-9]/g, '');
+
+          if (input.value.length > 10) {
+            input.value = input.value.slice(0, 10);
+          }
+
+          errorElement.classList.toggle('hidden', input.value.length === 10);
+        }
     </script>
 </body>
 </html>

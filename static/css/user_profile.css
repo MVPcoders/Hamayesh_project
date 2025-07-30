@@ -494,3 +494,15 @@ font-size: 20px;
 .discount-button:active {
     transform: translateY(0);
 }
+
+/* دکمه حذف مقاله*/
+.delete-article-btn {
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+
+.delete-article-btn:hover {
+    transform: scale(1.1);
+}
+
+
