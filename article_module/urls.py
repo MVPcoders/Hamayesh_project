@@ -14,6 +14,7 @@ from . import views
 urlpatterns = [
     path('new-article/', views.SubmitArticle.as_view(), name='new_article'),
     path('edit-article/', views.UserArticleEdit.as_view(), name='edit_article'),
+    path('delete-article/<int:article_id>/', views.user_delete_article, name='delete_article'),
 ]
 
 

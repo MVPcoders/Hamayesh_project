@@ -1,5 +1,5 @@
 from logging import raiseExceptions
-
+import os
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -79,6 +79,9 @@ class UserArticleEdit(View):
             form = request.POST
             article: Article = Article.objects.filter(user_id=request.user.id, id=form.get('articleId')).first()
             if request.FILES.get('newFile'):
+                if article.file:
+                    if os.path.isfile(article.file.path):
+                        os.remove(article.file.path)
                 article.file = request.FILES.get('newFile')
 
             article.persian_subject = form.get('editPersianTitle')
@@ -97,3 +100,28 @@ class UserArticleEdit(View):
                 'status': 'fail',
                 'message': str(e)
             })
+
+@is_login
+def user_delete_article(request, article_id):
+    try:
+        article = Article.objects.get(id=article_id, user=request.user)
+        if article.file:
+            if os.path.isfile(article.file.path):
+                os.remove(article.file.path)
+        article.delete()
+        return JsonResponse({
+            'success': True,
+            'message': 'مقاله با موفقیت حذف شد.'
+        })
+    except Article.DoesNotExist:
+        return JsonResponse({
+            'success': False,
+            'message': 'مقاله مورد نظر یافت نشد یا شما دسترسی ندارید.'
+        }, status=404)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=500)
+
+

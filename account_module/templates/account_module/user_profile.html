@@ -9,6 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="/static/css/user_profile.css">
+    <style>
+        .delete-article-btn {
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .delete-article-btn:hover {
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body class="min-h-screen bg-gray-50">
     {% if messages %}
@@ -81,10 +91,17 @@
                         <div class="space-y-6">
                             {% for article in articles %}
                                 <div class="article-card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 {% if article.is_accepted %}border-green-500{% else %}border-yellow-500{% endif %}">
-                                    <div class="p-6">
+                                    <div class="p-6 relative">
+                                        <button class="absolute top-4 left-4 delete-article-btn text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors"
+                                                data-article-id="{{ article.id }}"
+                                                data-article-title="{{ article.persian_subject }}">
+                                                <i class="fas fa-trash-alt"></i>
+                                        </button>
                                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                             <div class="flex-1">
-                                                <h3 class="text-lg font-bold text-gray-800 mb-2">{{ article.persian_subject }}</h3>
+                                                <div class="flex justify-between items-start">
+                                                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ article.persian_subject }}</h3>
+                                                </div>
                                                 <div class="flex flex-wrap gap-2 mb-4">
                                                     {% if article.is_accepted == True %}
                                                         <span class="status-badge px-3 py-1 bg-green-100 text-green-800 rounded-full">

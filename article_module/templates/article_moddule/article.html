@@ -322,6 +322,20 @@
             background-color: #e0f2fe;
             border-color: #1d4ed8;
         }
+
+        {#پیغام ارسال مقاله#}
+        .hidden {
+            display: none;
+        }
+
+        .fa-spinner {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="container mx-auto px-4 py-8 max-w-4xl">
@@ -411,10 +425,14 @@
         </div>
 
         <div class="flex justify-end mt-8">
-            <button type="submit" class="btn btn-primary flex items-center">
+            <button type="submit" id="submitButton" class="btn btn-primary flex items-center">
                 <i class="fas fa-paper-plane ml-2"></i>
                 ارسال مقاله
             </button>
+            <div id="loadingMessage" class="hidden items-center bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+                <i class="fas fa-spinner fa-spin ml-2"></i>
+                در حال ارسال مقاله...
+            </div>
         </div>
     </form>
 
@@ -581,10 +599,17 @@
                 progressBar.style.width = `${progress}%`;
             }, 200);
         }
-
         // کنترل ارسال مقاله
         document.getElementById('articleForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // مخفی کردن دکمه ارسال و نمایش پیام در حال ارسال
+            const submitButton = document.getElementById('submitButton');
+            const loadingMessage = document.getElementById('loadingMessage');
+            submitButton.classList.add('hidden');
+            loadingMessage.classList.remove('hidden');
+            loadingMessage.classList.add('flex');
+
             const formData = new FormData(this);
             fetch(this.action, {
                 method: 'POST',
@@ -608,28 +633,36 @@
                         }
                     });
                 } else {
+                    // در صورت خطا دکمه ارسال را دوباره نمایش دهید
+                    submitButton.classList.remove('hidden');
+                    loadingMessage.classList.add('hidden');
+                    loadingMessage.classList.remove('flex');
+
                     Swal.fire({
                         title: 'خطا!',
                         text: data.message,
                         icon: 'error',
                         confirmButtonText: 'متوجه شدم',
-                        timer: 3000, // 3 ثانیه
+                        timer: 3000,
                         timerProgressBar: true
                     });
                 }
             })
             .catch(error => {
-                editModal.style.display = 'none';
+                // در صورت خطا دکمه ارسال را دوباره نمایش دهید
+                submitButton.classList.remove('hidden');
+                loadingMessage.classList.add('hidden');
+                loadingMessage.classList.remove('flex');
+
                 Swal.fire({
                     title: 'خطا!',
                     text: 'خطایی در ارتباط با سرور رخ داده است.',
                     icon: 'error',
                     confirmButtonText: 'متوجه شدم',
-                    timer: 3000, // 3 ثانیه
+                    timer: 3000,
                     timerProgressBar: true
                 });
             });
-
         });
     </script>
 </body>

@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
     // ارسال فرم ویرایش
     document.getElementById('articleForm').addEventListener('submit', function (e) {
         e.preventDefault();
-
         // نمایش اسپینر لودینگ
         submitText.textContent = 'در حال ذخیره...';
         loadingSpinner.classList.remove('hidden');
@@ -248,5 +247,68 @@ document.addEventListener('DOMContentLoaded', function() {
             toast.classList.remove('show');
             setTimeout(() => toast.remove(), 400);
         }, 3000);
+    });
+});
+
+
+// حذف مقاله
+document.querySelectorAll('.delete-article-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const articleId = this.getAttribute('data-article-id');
+        const articleTitle = this.getAttribute('data-article-title');
+
+        Swal.fire({
+            title: 'حذف مقاله',
+            text: `آیا از حذف مقاله "${articleTitle}" مطمئن هستید؟`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'بله، حذف شود',
+            cancelButtonText: 'انصراف',
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // ارسال درخواست حذف به سرور با متد GET
+                fetch(`/delete-article/${articleId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('خطا در پاسخ سرور');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title:'حذف شد!',
+                            text:'مقاله با موفقیت حذف شد.',
+                            icon:'success',
+                            confirmButtonText:'باشه'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire(
+                            'خطا!',
+                            data.message || 'خطایی در حذف مقاله رخ داد.',
+                            'error'
+                        );
+                    }
+                })
+                .catch(error => {
+                    Swal.fire(
+                        'خطا!',
+                        'خطایی در ارتباط با سرور رخ داد: ' + error.message,
+                        'error'
+                    );
+                });
+            }
+        });
     });
 });
