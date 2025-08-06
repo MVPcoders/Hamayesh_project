@@ -223,7 +223,7 @@
                             <button type="submit" class="">ثبت نام</button>
                           </div>
                         </form>
-                          <p class="login-link_wrapper">قبلاً ثبت نام کرده اید؟ <a href="{% url 'login' %}" class="login-link">وارد شوید</a></p>
+                          <p class="login-link_wrapper">قبلاً ثبت نام کرده اید؟ <a href="{% url 'login' %}#signin_container1" class="login-link">وارد شوید</a></p>
                       </div>
                     </div>
                   </div>
@@ -234,8 +234,8 @@
 
     <!-- فرم ورود -->
     {% if request.path == '/login' %}
-    <div  id="signup_container1" class="signup_container1">
-        <div id="signup_container2" class="signup_container2">
+    <div  id="signin_container1" class="signup_container1">
+        <div id="signin_container2" class="signup_container2">
             <section class="contact_section layout_padding" id="contactLink">
                  <div class="container">
                     <div class="heading_container">
@@ -283,7 +283,7 @@
                                     <button type="submit" class="">وارد شوید</button>
                                   </div>
                           </form>
-                      <p class="login-link_wrapper"> ثبت نام نکرده اید؟ <a href="{% url 'signup' %}" class="login-link">ثبت نام</a></p>
+                      <p class="login-link_wrapper"> ثبت نام نکرده اید؟ <a href="{% url 'signup' %}#signup_container1" class="login-link">ثبت نام</a></p>
                       </div>
                     </div>
                  </div>

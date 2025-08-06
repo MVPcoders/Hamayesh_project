@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        /* استایل‌های قبلی بدون تغییر باقی می‌مانند */
+
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
         body {
@@ -609,7 +609,7 @@
         document.getElementById('articleForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // مخفی کردن دکمه ارسال و نمایش پیام در حال ارسال
+
             const submitButton = document.getElementById('submitButton');
             const loadingMessage = document.getElementById('loadingMessage');
             submitButton.classList.add('hidden');
@@ -639,7 +639,7 @@
                         }
                     });
                 } else {
-                    // در صورت خطا دکمه ارسال را دوباره نمایش دهید
+
                     submitButton.classList.remove('hidden');
                     loadingMessage.classList.add('hidden');
                     loadingMessage.classList.remove('flex');
@@ -655,7 +655,7 @@
                 }
             })
             .catch(error => {
-                // در صورت خطا دکمه ارسال را دوباره نمایش دهید
+
                 submitButton.classList.remove('hidden');
                 loadingMessage.classList.add('hidden');
                 loadingMessage.classList.remove('flex');

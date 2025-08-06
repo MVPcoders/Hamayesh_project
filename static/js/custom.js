@@ -1,11 +1,11 @@
 // to get current year
-function getYear() {
-    var currentDate = new Date();
-    var currentYear = currentDate.getFullYear();
-    document.querySelector("#displayYear").innerHTML = currentYear;
-}
-
-getYear();
+// function getYear() {
+//     var currentDate = new Date();
+//     var currentYear = currentDate.getFullYear();
+//     document.querySelector("#displayYear").innerHTML = currentYear;
+// }
+//
+// getYear();
 
 
 // آشکار و پنهان کردن رمز عبور
@@ -75,7 +75,56 @@ function updateReceipt() {
 }
 
 
-    // اسکرول خودکار
-    // window.addEventListener('load', () => {
-    // window.scrollTo({top: 500, behavior: 'smooth'});
-    // });
+// // اسکرول خودکار
+// window.addEventListener('load', () => {
+// window.scrollTo({top: 500, behavior: 'smooth'});
+// });
+
+
+
+// اسکرول خودکار بخش ورود به هنگام خطا
+document.addEventListener('DOMContentLoaded', function() {
+    // چک کنیم آیا خطایی وجود دارد (با توجه به ساختار ارورهای شما)
+    const errorMessages = document.querySelectorAll('form p');
+    const hasErrors = Array.from(errorMessages).some(p => p.textContent.trim().startsWith('*'));
+
+    // یا اگر URL شامل هاف باشد
+    const hash = window.location.hash;
+
+    if (hash === '#signin_container1' || hasErrors) {
+        const element = document.getElementById('signin_container1');
+        if (element) {
+            setTimeout(() => {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start' // برای تراز بهتر
+                });
+            }, 100);
+        }
+    }
+});
+
+
+// اسکرول خودکار بخش ثبت نام به هنگام خطا
+document.addEventListener('DOMContentLoaded', function() {
+    // چک کنیم آیا خطایی وجود دارد (با توجه به ساختار ارورهای شما)
+    const errorMessages = document.querySelectorAll('form p');
+    const hasErrors = Array.from(errorMessages).some(p => p.textContent.trim().startsWith('*'));
+
+    // یا اگر URL شامل هاف باشد
+    const hash = window.location.hash;
+
+    if (hash === '#signup_container1' || hasErrors) {
+        const element = document.getElementById('signup_container1');
+        if (element) {
+            setTimeout(() => {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start' // برای تراز بهتر
+                });
+            }, 100);
+        }
+    }
+});
+
+
