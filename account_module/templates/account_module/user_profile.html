@@ -82,11 +82,13 @@
                             {% for article in articles %}
                                 <div class="article-card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 {% if article.is_accepted %}border-green-500{% else %}border-yellow-500{% endif %}">
                                     <div class="p-6 relative">
-                                        <button class="absolute top-4 left-4 delete-article-btn text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors"
+                                        {% if not article.is_paid %}
+                                        	<button class="absolute top-4 left-4 delete-article-btn text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors"
                                                 data-article-id="{{ article.id }}"
                                                 data-article-title="{{ article.persian_subject }}">
                                                 <i class="fas fa-trash-alt"></i>
-                                        </button>
+                                            </button>
+                                        {% endif %}
                                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                             <div class="flex-1">
                                                 <div class="flex justify-between items-start">
@@ -137,57 +139,58 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                          {% if  article.is_paid == False and article.price == hamayesh.price %}
-                                            <div class="discount-container">
-                                                <form method="post" action="{% url 'apply_discount' article.id %}" class="discount-form">
-                                                    {% csrf_token %}
-                                                    <div class="discount-input-wrapper">
-                                                        <input type="text" name="code" placeholder="کد تخفیف" class="discount-input">
-                                                        <button type="submit" class="discount-button">اعمال کد</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        {% endif %}
                                             <div class="flex flex-col sm:flex-row gap-3 article-actions">
-
-                                                {% if article.is_paid == False %}
-{#                                                    <a href="{% url 'request' article.id %}" class="payment-btn px-4 py-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-medium text-sm transition-all duration-300 shadow-md flex items-center justify-center">#}
-{#                                                        <i class="fas fa-credit-card ml-2"></i>#}
-{#                                                        پرداخت هزینه داوری#}
-{#                                                    </a>#}
-                                                    <a href="{% url 'request' article.id %}">
-                                                        <div class="price-container">
-                                                            <div class="price-box animated-bg">
-                                                                <p class="price-label">پراخت هزینه :
-                                                                    <span class="price-value">{{ article.price|three_digits_currency }}</span>
-                                                                    <span class="currency">ریال</span>
-                                                                </p>
-                                                                <p></p>
-
+                                                {% if article.is_coached == True and article.is_accepted == True and  article.is_paid == False %}
+                                                      {% if article.price == hamayesh.price %}
+                                                        <div class="discount-container">
+                                                        <form method="post" action="{% url 'apply_discount' article.id %}" class="discount-form">
+                                                            {% csrf_token %}
+                                                            <div class="discount-input-wrapper">
+                                                                <input type="text" name="code" placeholder="کد تخفیف" class="discount-input">
+                                                                <button type="submit" class="discount-button">اعمال کد</button>
                                                             </div>
-                                                        </div>
-                                                    </a>
-                                                    <button class="px-4 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all flex items-center justify-center edit-article-btn"
-                                                        data-article-id="{{ article.id }}"
-                                                        data-persian-title="{{ article.persian_subject }}"
-                                                        data-english-title="{{ article.english_subject }}"
-                                                        data-language="{{ article.language }}"
-                                                        data-main-goal="{{ article.main_goal }}"
-                                                        data-abstract="{{ article.article_abstract }}"
-                                                        data-file-name="{{ article.file.name|slice:'9:' }}"
-                                                        data-file-url="{{ article.file.url }}">
-                                                        <i class="fas fa-edit ml-2"></i>
-                                                        ویرایش
-                                                    </button>
+                                                        </form>
+                                                    </div>
+                                                      {% endif %}
+                                                      <a href="{% url 'request' article.id %}" style="margin-top: 40px;">
+                                                            <div class="price-container">
+                                                                <div class="price-box animated-bg">
+                                                                    <p class="price-label">پراخت هزینه :
+                                                                        <span class="price-value">{{ article.price|three_digits_currency }}</span>
+                                                                        <span class="currency">ریال</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                      </a>
                                                 {% else %}
-                                                    <button class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium text-sm shadow-inner cursor-default flex items-center justify-center">
-                                                        <i class="fas fa-check-circle ml-2"></i>
-                                                        پرداخت شده
-                                                    </button>
-                                                    {% if article.certificate_file %}
-                                                        <a href="{{ article.certificate_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">دانلود گواهی</a>
+                                                    {% if not article.is_coached %}
+                                                    	<button class="px-4 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all flex items-center justify-center edit-article-btn"
+                                                            data-article-id="{{ article.id }}"
+                                                            data-persian-title="{{ article.persian_subject }}"
+                                                            data-english-title="{{ article.english_subject }}"
+                                                            data-language="{{ article.language }}"
+                                                            data-main-goal="{{ article.main_goal }}"
+                                                            data-abstract="{{ article.article_abstract }}"
+                                                            data-file-name="{{ article.file.name|slice:'9:' }}"
+                                                            data-file-url="{{ article.file.url }}">
+                                                            <i class="fas fa-edit ml-2"></i>
+                                                            ویرایش
+                                                        </button>
                                                     {% endif %}
+                                              {% endif %}
+                                              {% if article.is_paid %}
+                                              	<button class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium text-sm shadow-inner cursor-default flex items-center justify-center">
+                                                    <i class="fas fa-check-circle ml-2"></i>
+                                                    پرداخت شده
+                                                </button>
+                                                {% if article.certificate_file and article.paziresh_file and article.kargah_file %}
+                                                    <a href="{{ article.certificate_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">لوح تقدیر</a>
+                                                    <a href="{{ article.kargah_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">لوح حضور در کارگاه</a>
+                                                    <a href="{{ article.paziresh_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">لوح پذیرش</a>
+                                                {% else %}
+                                                    <p>در انتظار صدور تقدیر نامه</p>
                                                 {% endif %}
+                                              {% endif %}
                                             </div>
                                         </div>
                                     </div>
