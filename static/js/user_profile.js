@@ -312,3 +312,157 @@ document.querySelectorAll('.delete-article-btn').forEach(btn => {
         });
     });
 });
+
+// کنترل ارسال مقاله جدید
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('newFile');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+
+    fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files.length > 0) {
+            const file = this.files[0];
+            const fileName = file.name;
+            const fileSize = file.size;
+            const fileType = file.type;
+
+            // بررسی نوع فایل
+            const allowedTypes = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+            if (!allowedTypes.includes(fileType) && !fileName.endsWith('.doc') && !fileName.endsWith('.docx')) {
+                fileNameDisplay.textContent = 'فرمت فایل نامعتبر است';
+                fileNameDisplay.style.color = 'red';
+                this.value = ''; // پاک کردن فایل انتخاب شده
+                return;
+            }
+
+            // بررسی حجم فایل
+            if (fileSize > maxSize) {
+                fileNameDisplay.textContent = 'حجم فایل بیش از حد مجاز است (حداکثر 5MB)';
+                fileNameDisplay.style.color = 'red';
+                this.value = ''; // پاک کردن فایل انتخاب شده
+                return;
+            }
+
+            // نمایش نام فایل
+            fileNameDisplay.textContent = fileName;
+            fileNameDisplay.style.color = 'green';
+        } else {
+            fileNameDisplay.textContent = 'هیچ فایلی انتخاب نشده';
+            fileNameDisplay.style.color = 'gray';
+        }
+    });
+
+    // بررسی قبل از ارسال فرم
+    const form = fileInput.closest('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (fileInput.files && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileSize = file.size;
+                const fileType = file.type;
+
+                const allowedTypes = ['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+
+                // بررسی نوع فایل
+                if (!allowedTypes.includes(fileType) && !file.name.endsWith('.doc') && !file.name.endsWith('.docx')) {
+                    e.preventDefault();
+                    alert('لطفا یک فایل Word با فرمت .doc یا .docx انتخاب کنید.');
+                    return;
+                }
+
+                // بررسی حجم فایل
+                if (fileSize > maxSize) {
+                    e.preventDefault();
+                    alert('حجم فایل باید کمتر از 5MB باشد.');
+                    return;
+                }
+            }
+        });
+    }
+});
+
+
+// کنترل فایل های پیوست تیکت
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('id_attachment');
+    const fileNameDisplay = document.getElementById('ticketFileName');
+    const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.pdf', '.doc', '.docx'];
+    const allowedTypes = [
+        'image/jpeg',
+        'image/png',
+        'application/pdf',
+        'application/msword',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+    ];
+
+    fileInput.addEventListener('change', function(e) {
+        if (this.files && this.files.length > 0) {
+            const file = this.files[0];
+            const fileName = file.name.toLowerCase();
+            const fileSize = file.size;
+            const fileType = file.type;
+
+            // بررسی پسوند فایل
+            const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+            // بررسی نوع MIME فایل (در برخی مرورگرها ممکن است خالی باشد)
+            const hasValidType = fileType === '' || allowedTypes.includes(fileType);
+
+            if (!hasValidExtension || !hasValidType) {
+                fileNameDisplay.textContent = 'فرمت فایل مجاز نیست';
+                fileNameDisplay.style.color = 'red';
+                this.value = ''; // پاک کردن فایل انتخاب شده
+                return;
+            }
+
+            // بررسی حجم فایل
+            if (fileSize > maxSize) {
+                fileNameDisplay.textContent = 'حجم فایل بیش از حد مجاز است (حداکثر 5MB)';
+                fileNameDisplay.style.color = 'red';
+                this.value = ''; // پاک کردن فایل انتخاب شده
+                return;
+            }
+
+            // نمایش نام فایل
+            fileNameDisplay.textContent = file.name;
+            fileNameDisplay.style.color = 'green';
+        } else {
+            fileNameDisplay.textContent = 'هیچ فایلی انتخاب نشده';
+            fileNameDisplay.style.color = 'gray';
+        }
+    });
+
+    // بررسی قبل از ارسال فرم
+    const form = fileInput.closest('form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            if (fileInput.files && fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileName = file.name.toLowerCase();
+                const fileSize = file.size;
+                const fileType = file.type;
+
+                // بررسی پسوند فایل
+                const hasValidExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+
+                // بررسی نوع MIME فایل
+                const hasValidType = fileType === '' || allowedTypes.includes(fileType);
+
+                if (!hasValidExtension || !hasValidType) {
+                    e.preventDefault();
+                    alert('فرمت فایل مجاز نیست. لطفا فایلی با فرمت jpg, png, pdf, doc یا docx انتخاب کنید.');
+                    return;
+                }
+
+                // بررسی حجم فایل
+                if (fileSize > maxSize) {
+                    e.preventDefault();
+                    alert('حجم فایل باید کمتر از 5MB باشد.');
+                    return;
+                }
+            }
+        });
+    }
+});
