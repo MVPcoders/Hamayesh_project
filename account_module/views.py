@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views import View
 from django.views.generic import CreateView, FormView
@@ -27,7 +27,7 @@ def login_for_ticket(func):
 class SignUpView(CreateView):
     form_class = SignupModelForm
     template_name = 'account_module/login_singnup.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('login')
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -36,8 +36,14 @@ class SignUpView(CreateView):
         user.is_active = True
         user.set_password(user_password)
         user.username = user_code_meli
-        user.save()
-        return super().form_valid(form)
+        try:
+            user.save()
+            messages.success(self.request, 'حساب شما با موفقیت ساخته شد')
+            return super().form_valid(form)
+        except:
+            messages.error(self.request, "حساب ایجاد نشد ، دوباره تلاش کنید")
+            return super().form_invalid(form)
+
 
 
 class LoginView(FormView):
@@ -52,8 +58,13 @@ class LoginView(FormView):
         if user is not None:
             password_validation = user.check_password(password)
             if password_validation:
-                login(self.request, user)
-                return super().form_valid(form)
+                try:
+                    login(self.request, user)
+                    messages.success(self.request, "ورود موفق")
+                    return super().form_valid(form)
+                except:
+                    messages.error(self.request, "مشکلی رخ داده ، دوباره تلاش کنید")
+                    return self.form_invalid(form)
             else:
                 form.add_error('password', 'تلفن همراه یا رمز عبور اشتباه است')
                 return self.form_invalid(form)
@@ -68,6 +79,7 @@ class LoginView(FormView):
 class LogoutView(View):
     def get(self, request):
         logout(request)
+        messages.error(request, "شما از سایت خارج شدید")
         return redirect(reverse('index'))
 
 @login_required(login_url='login')

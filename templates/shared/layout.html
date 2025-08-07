@@ -13,14 +13,15 @@
   <meta name="author" content="" />
     <title>{% block title %}{% endblock %}</title>
     {% include 'shared/site_header_references.html' %}
+ {% block extra_css %}{% endblock %}
 </head>
 
 <body>
     {% render_partial 'index_module.views.site_header_component' %}
     {% block content %}{% endblock %}
     {% render_partial 'index_module.views.site_footer_component' %}
-    {% include 'shared/site_header_references.html' %}
     {% include 'shared/site_footer_references.html' %}
+    {% block extra_js %}{% endblock %}
 </body>
 
 </html>

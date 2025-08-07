@@ -128,3 +128,43 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+// نمایش پیام های  toast
+document.addEventListener('DOMContentLoaded', function() {
+    const toastMessages = document.querySelectorAll('.toast-message');
+
+    toastMessages.forEach(message => {
+        // تعیین نوع Toast بر اساس تگ پیغام
+        let toastType = 'success';
+        if (message.dataset.type === 'error') {
+            toastType = 'error';
+        }
+
+        // ایجاد عنصر Toast
+        const toast = document.createElement('div');
+        toast.className = `toast ${toastType}`;
+
+        // تعیین آیکون بر اساس نوع پیغام
+        const icon = toastType === 'success' ? '✓' : '✗';
+
+        // محتوای Toast
+        toast.innerHTML = `
+            <span class="toast-icon">${icon}</span>
+            <span class="toast-text">${message.textContent}</span>
+        `;
+
+        // اضافه کردن Toast به صفحه
+        document.body.appendChild(toast);
+
+        // نمایش Toast با تأخیر
+        setTimeout(() => toast.classList.add('show'), 100);
+
+
+        // بستن خودکار پس از 3 ثانیه
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 400);
+        }, 3000);
+    });
+});
+
+

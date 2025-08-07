@@ -1,297 +1,339 @@
 {% extends 'shared/layout.html' %}
 
-
 {% block title %}
-	{% if request.path == '/login' %}
-		ورود
-	{% endif %}
+    {% if request.path == '/login' %}
+        ورود
+    {% endif %}
     {% if request.path == '/signup' %}
-		ثبت نام
-	{% endif %}
+        ثبت نام
+    {% endif %}
 {% endblock %}
-
+{% block extra_css %}
+    <link rel="stylesheet" href="/static/css/user_profile.css">
+{% endblock %}
 {% block content %}
     <!-- فرم ثبت نام -->
     {% if request.path == '/signup' %}
-    <div  id="signup_container1" class="signup_container1">
-        <div id="signup_container2" class="signup_container2">
-            <section class="contact_section layout_padding" id="contactLink">
-                  <div class="container">
-                    <div class="heading_container">
-                      <h2>
-                          ثبت نام
-                      </h2>
+        <div id="signup_container1" class="signup_container1">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="toast-message" data-type="{{ message.tags }}" style="display: none;">
+                        {{ message }}
                     </div>
-                  </div>
-                  <div class="container">
-                    <div class="row">
-                      <div class="col-lg-6 col-md-8 mx-auto">
-                        <form method="post" action="{% url 'signup' %}">
-                            {% csrf_token %}
-                            <!-- نام و نام خانوادگی -->
-                          <div class="form-row" >
-                            <div class="form-group col-md-6">
-                              {{ form.first_name }}
-                                {% if form.first_name.errors %}
-                                	{% for error in form.first_name.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="form-group col-md-6">
-                              {{ form.last_name }}
-                                {% if form.last_name.errors %}
-                                	{% for error in form.last_name.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- کد ملی و موبایل -->
-                            <div class="form-row" >
-                            <div class="form-group col-md-6">
-                                <div class="position-relative">
-                                    {{ form.code_meli}}
-                                    <span class="position-absolute icon-style">
+                {% endfor %}
+            {% endif %}
+            <div id="signup_container2" class="signup_container2">
+                <section class="contact_section layout_padding" id="contactLink">
+                    <div class="container">
+                        <div class="heading_container">
+                            <h2>
+                                ثبت نام
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 mx-auto">
+                                <form method="post" action="{% url 'signup' %}">
+                                    {% csrf_token %}
+                                    <!-- نام و نام خانوادگی -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            {{ form.first_name }}
+                                            {% if form.first_name.errors %}
+                                                {% for error in form.first_name.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            {{ form.last_name }}
+                                            {% if form.last_name.errors %}
+                                                {% for error in form.last_name.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- کد ملی و موبایل -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <div class="position-relative">
+                                                {{ form.code_meli }}
+                                                <span class="position-absolute icon-style">
                                         <i class="fas fa-id-card text-muted"></i>
                                     </span>
-                                </div>
-                                {% if form.code_meli.errors %}
-                                	{% for error in form.code_meli.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="form-group col-md-6">
-                                <div class="position-relative">
-                                    {{ form.mobile}}
-                                    <span class="position-absolute icon-style">
+                                            </div>
+                                            {% if form.code_meli.errors %}
+                                                {% for error in form.code_meli.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="position-relative">
+                                                {{ form.mobile }}
+                                                <span class="position-absolute icon-style">
                                         <i class="fas fa-mobile-alt text-muted"></i>
                                     </span>
-                                </div>
-                                {% if form.mobile.errors %}
-                                    {% for error in form.mobile.errors %}
-                                        <p class="text-danger">*{{ error }}</p>
-                                    {% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- ایمیل -->
-                          <div class="form-row">
-                            <div class="form-group col">
-                              <div class="position-relative">
-                                    {{ form.email}}
-                                    <span class="position-absolute icon-style">
+                                            </div>
+                                            {% if form.mobile.errors %}
+                                                {% for error in form.mobile.errors %}
+                                                    <p class="text-danger">*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- ایمیل -->
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <div class="position-relative">
+                                                {{ form.email }}
+                                                <span class="position-absolute icon-style">
                                         <i class="fas fa-envelope text-muted"></i>
                                     </span>
-                                </div>
-                                {% if form.email.errors %}
-                                	{% for error in form.email.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- استان و شهر -->
-                            <div class="form-row" >
-                            <div class="form-group col-md-6">
-                                {{ form.province }}
-                                {% if form.province.errors %}
-                                	{% for error in form.province.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="form-group col-md-6">
-                              {{ form.city }}
-                                {% if form.city.errors %}
-                                	{% for error in form.city.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- آدرس -->
-                          <div class="form-row">
-                            <div class="form-group col">
-                              <div class="position-relative">
-                                    {{ form.address}}
-                                    <span class="position-absolute icon-style">
+                                            </div>
+                                            {% if form.email.errors %}
+                                                {% for error in form.email.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- استان و شهر -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            {{ form.province }}
+                                            {% if form.province.errors %}
+                                                {% for error in form.province.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            {{ form.city }}
+                                            {% if form.city.errors %}
+                                                {% for error in form.city.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- آدرس -->
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <div class="position-relative">
+                                                {{ form.address }}
+                                                <span class="position-absolute icon-style">
                                         <i class="fas fa-map-marker-alt text-muted"></i>
                                     </span>
-                                </div>
-                                {% if form.address.errors %}
-                                	{% for error in form.address.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- تلفن ثابت و کد پستی -->
-                            <div class="form-row" >
-                            <div class="form-group col-md-6">
-                              <div class="position-relative">
-                                    {{ form.land_line}}
-                                    <span class="position-absolute icon-style">
+                                            </div>
+                                            {% if form.address.errors %}
+                                                {% for error in form.address.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- تلفن ثابت و کد پستی -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <div class="position-relative">
+                                                {{ form.land_line }}
+                                                <span class="position-absolute icon-style">
                                         <i class="fas fa-phone-alt text-muted"></i>
                                     </span>
-                                </div>
-                                {% if form.land_line.errors %}
-                                	{% for error in form.land_line.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="form-group col-md-6">
-                              <div class="position-relative">
-                                    {{ form.postal_code}}
-                                    <span class="position-absolute icon-style">
+                                            </div>
+                                            {% if form.land_line.errors %}
+                                                {% for error in form.land_line.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="position-relative">
+                                                {{ form.postal_code }}
+                                                <span class="position-absolute icon-style">
                                         <i class="fas fa-mail-bulk text-muted"></i>
                                     </span>
-                                </div>
-                                {% if form.postal_code.errors %}
-                                	{% for error in form.postal_code.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- مدرک تحصیلی و رشته تحصیلی -->
-                            <div class="form-row" >
-                            <div class="form-group col-md-6">
-                                {{ form.degree }}
-                                {% if form.degree.errors %}
-                                	{% for error in form.degree.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="form-group col-md-6">
-                                {{ form.field_of_study }}
-                                {% if form.field_of_study.errors %}
-                                	{% for error in form.field_of_study.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- نوع ثبت نام و شرکت / سازمان -->
-                            <div class="form-row" >
-                            <div class="form-group col-md-6" >
-                              {{ form.kind_of_signup}}
-                                {% if form.kind_of_signup.errors %}
-                                	{% for error in form.kind_of_signup.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                            <div class="form-group col-md-6">
-                                {{ form.company }}
-                                {% if form.company.errors %}
-                                	{% for error in form.company.errors %}
-                                		<p>*{{ error }}</p>
-                                	{% endfor %}
-                                {% endif %}
-                            </div>
-                          </div>
-                            <!-- رمز عبور و تکرار رمز عبور -->
-                            <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <div class="password-wrapper">
-                                        {{ form.password }}
-                                        <i class="fas fa-eye toggle-password"></i>
+                                            </div>
+                                            {% if form.postal_code.errors %}
+                                                {% for error in form.postal_code.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    {% if form.password.errors %}
-                                        {% for error in form.password.errors %}
-                                            <p>*{{ error }}</p>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <div class="password-wrapper">
-                                        {{ form.confirm_password }}
-                                        <i class="fas fa-eye toggle-password"></i>
+                                    <!-- مدرک تحصیلی و رشته تحصیلی -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            {{ form.degree }}
+                                            {% if form.degree.errors %}
+                                                {% for error in form.degree.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            {{ form.field_of_study }}
+                                            {% if form.field_of_study.errors %}
+                                                {% for error in form.field_of_study.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                    {% if form.confirm_password.errors %}
-                                        {% for error in form.confirm_password.errors %}
-                                            <p>*{{ error }}</p>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
+                                    <!-- نوع ثبت نام و شرکت / سازمان -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            {{ form.kind_of_signup }}
+                                            {% if form.kind_of_signup.errors %}
+                                                {% for error in form.kind_of_signup.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            {{ form.company }}
+                                            {% if form.company.errors %}
+                                                {% for error in form.company.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <!-- رمز عبور و تکرار رمز عبور -->
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <div class="password-wrapper">
+                                                {{ form.password }}
+                                                <i class="fas fa-eye toggle-password"></i>
+                                            </div>
+                                            {% if form.password.errors %}
+                                                {% for error in form.password.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div class="password-wrapper">
+                                                {{ form.confirm_password }}
+                                                <i class="fas fa-eye toggle-password"></i>
+                                            </div>
+                                            {% if form.confirm_password.errors %}
+                                                {% for error in form.confirm_password.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="">ثبت نام</button>
+                                    </div>
+                                </form>
+                                <p class="login-link_wrapper">قبلاً ثبت نام کرده اید؟ <a
+                                        href="{% url 'login' %}" class="login-link">وارد شوید</a></p>
                             </div>
-                          <div class="d-flex justify-content-center">
-                            <button type="submit" class="">ثبت نام</button>
-                          </div>
-                        </form>
-                          <p class="login-link_wrapper">قبلاً ثبت نام کرده اید؟ <a href="{% url 'login' %}#signin_container1" class="login-link">وارد شوید</a></p>
-                      </div>
+                        </div>
                     </div>
-                  </div>
-            </section>
+                </section>
+            </div>
         </div>
-    </div>
     {% endif %}
 
     <!-- فرم ورود -->
     {% if request.path == '/login' %}
-    <div  id="signin_container1" class="signup_container1">
-        <div id="signin_container2" class="signup_container2">
-            <section class="contact_section layout_padding" id="contactLink">
-                 <div class="container">
-                    <div class="heading_container">
-                      <h2>
-                        ورود
-                      </h2>
+        <div id="signin_container1" class="signup_container1">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="toast-message" data-type="{{ message.tags }}" style="display: none;">
+                        {{ message }}
                     </div>
-                </div>
-                <div class="container">
-                    <div class="row">
-                      <div class="col-lg-6 col-md-8 mx-auto">
-                          <form action="{% url 'login' %}" method="post">
-                              {% csrf_token %}
-                              <!-- تلفن همراه -->
-                                <div class="form-row">
-                                    <div class="form-group col">
-                                       <div class="position-relative">
-                                            {{ form.mobile}}
-                                            <span class="position-absolute icon-style">
+                {% endfor %}
+            {% endif %}
+            <div id="signin_container2" class="signup_container2">
+                <section class="contact_section layout_padding" id="contactLink">
+                    <div class="container">
+                        <div class="heading_container">
+                            <h2>
+                                ورود
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-8 mx-auto">
+                                <form action="{% url 'login' %}" method="post">
+                                    {% csrf_token %}
+                                    <!-- تلفن همراه -->
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <div class="position-relative">
+                                                {{ form.mobile }}
+                                                <span class="position-absolute icon-style">
                                                 <i class="fas fa-mobile-alt text-muted"></i>
                                             </span>
-                                       </div>
-                                        {% if form.mobile.errors %}
-                                            {% for error in form.mobile.errors %}
-                                                <p>*{{ error }}</p>
-                                            {% endfor %}
-                                        {% endif %}
+                                            </div>
+                                            {% if form.mobile.errors %}
+                                                {% for error in form.mobile.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- رمز عبور -->
-                                <div class="form-row">
-                                    <div class="form-group col">
-                                      <div class="password-wrapper">
-                                        {{ form.password }}
-                                        <i class="fas fa-eye toggle-password"></i>
-                                      </div>
-                                        {% if form.password.errors %}
-                                            {% for error in form.password.errors %}
-                                                <p>*{{ error }}</p>
-                                            {% endfor %}
-                                        {% endif %}
+                                    <!-- رمز عبور -->
+                                    <div class="form-row">
+                                        <div class="form-group col">
+                                            <div class="password-wrapper">
+                                                {{ form.password }}
+                                                <i class="fas fa-eye toggle-password"></i>
+                                            </div>
+                                            {% if form.password.errors %}
+                                                {% for error in form.password.errors %}
+                                                    <p>*{{ error }}</p>
+                                                {% endfor %}
+                                            {% endif %}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="d-flex justify-content-center">
-                                    <button type="submit" class="">وارد شوید</button>
-                                  </div>
-                          </form>
-                      <p class="login-link_wrapper"> ثبت نام نکرده اید؟ <a href="{% url 'signup' %}#signup_container1" class="login-link">ثبت نام</a></p>
-                      </div>
+                                    <div class="d-flex justify-content-center">
+                                        <button type="submit" class="">وارد شوید</button>
+                                    </div>
+                                </form>
+                                <p class="login-link_wrapper"> ثبت نام نکرده اید؟ <a
+                                        href="{% url 'signup' %}" class="login-link">ثبت نام</a></p>
+                            </div>
+                        </div>
                     </div>
-                 </div>
-            </section>
+                </section>
+            </div>
         </div>
-    </div>
     {% endif %}
 
 {% endblock %}
+
+{% block extra_js %}
+    <script src="/static/js/user_profile.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // اگر URL حاوی /signup است
+            if (window.location.pathname === '/signup') {
+                const element = document.getElementById('signup_container1');
+                if (element) {
+                    // اسکرول نرم به المنت
+                    element.scrollIntoView({behavior: 'smooth'});
+                }
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            if (window.location.pathname === '/login') {
+                const element = document.getElementById('signin_container1');
+                if (element) {
+                    element.scrollIntoView({behavior: 'smooth'});
+                }
+            }
+        });
+    </script>
+{% endblock %}
+
 
 
