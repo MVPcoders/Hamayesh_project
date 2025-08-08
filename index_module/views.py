@@ -42,6 +42,9 @@ def index(request):
     }
     return render(request, 'index_module/index.html', context)
 
+# 404
+def page_not_found(request):
+    return render(request,'shared/404_page.html')
 
-
-# Create your views here.
+def handler404(request, exception):
+    return render(request, 'shared/404_page.html', status=404)

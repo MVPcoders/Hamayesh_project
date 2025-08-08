@@ -1,5 +1,7 @@
 from logging import raiseExceptions
 import os
+
+from django.contrib.auth import login
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
@@ -17,8 +19,17 @@ def is_login(func):
             return func(request, *args, **kwargs)
         else:
             return redirect(reverse('login'))
-
     return wrapper
+
+# def user_authenticator(func):
+#     def wrapper(request: HttpRequest, *args, **kwargs):
+#         try:
+#             Article.objects.get(user = request.user.id , id = request.GET.get('article_id'))
+#             return func(request, *args, **kwargs)
+#         except:
+#             return redirect(reverse('index'))
+#
+#     return wrapper
 
 
 @method_decorator(is_login, name='dispatch')
@@ -124,22 +135,28 @@ def user_delete_article(request, article_id):
             'message': str(e)
         }, status=500)
 
-
+@is_login
 def send_correction_request(request):
     try:
-        article = Article.objects.get(id = request.GET.get('article_id'))
-        article.need_correction= False
-        article.is_corrected = True
-        article.save()
-        return JsonResponse({
-            'status': 'success',
-            'text':'درخواست با موفقیت ارسال شد',
-            'icon':'success'
-        })
-    except Exception as e:
+        article = Article.objects.get(id = request.GET.get('article_id'),user=request.user)
+        if article.need_correction:
+            article.need_correction= False
+            article.is_corrected = True
+            article.save()
+            return JsonResponse({
+                'status': 'success',
+                'text':'درخواست با موفقیت ارسال شد',
+                'icon':'success'
+            })
         return JsonResponse({
             'status': 'error',
-            'text': str(e),
+            'text': 'درخواست شما معتبر نیست. کد:500',
+            'icon': 'error'
+        })
+    except:
+        return JsonResponse({
+            'status': 'error',
+            'text': 'درخواست شما معتبر نیست. کد: 501',
             'icon': 'error'
         })
 
