@@ -125,3 +125,22 @@ def user_delete_article(request, article_id):
         }, status=500)
 
 
+def send_correction_request(request):
+    try:
+        article = Article.objects.get(id = request.GET.get('article_id'))
+        article.need_correction= False
+        article.is_corrected = True
+        article.save()
+        return JsonResponse({
+            'status': 'success',
+            'text':'درخواست با موفقیت ارسال شد',
+            'icon':'success'
+        })
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'text': str(e),
+            'icon': 'error'
+        })
+
+

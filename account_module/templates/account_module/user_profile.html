@@ -11,371 +11,411 @@
     <link rel="stylesheet" href="/static/css/user_profile.css">
 </head>
 <body class="min-h-screen bg-gray-50">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="toast-message" data-type="{{ message.tags }}" style="display: none;">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
-    <div class="container mx-auto px-4 py-8 max-w-7xl">
-        <!-- هدر پروفایل -->
-        <div class="flex flex-col md:flex-row items-center gap-6 mb-8 rounded-xl p-6 gradient-header text-white shadow-lg">
-            <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg transition-transform hover:scale-105">
-                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d4f2625-c953-4a99-8693-532e0dfc0034.png"
-                     alt="تصویر پروفایل کاربر"
-                     class="w-full h-full object-cover hover:scale-110 transition-transform">
-            </div>
-            <div class="text-center md:text-right flex-1">
-                <h1 class="text-2xl font-bold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
-                <p class="text-blue-100 mt-2 opacity-90">
-                    <i class="fas fa-file-alt ml-1"></i>
-                    تعداد مقالات ارسال شده: {{ articles.count }} مقاله
-                </p>
-                <p class="text-blue-100 mt-1 opacity-90">
-                    <i class="fas fa-envelope ml-1"></i>
-                    {{ request.user.email }}
-                </p>
-            </div>
-            <div class="flex items-center gap-2">
-                <a href="{% url 'index' %}" class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full text-sm font-medium transition-all flex items-center">
-                    <i class="fas fa-home ml-1"></i>
-                    صفحه اصلی
-                </a>
-                <button class="p-2 text-blue-100 hover:text-white transition-colors">
-                    <i class="fas fa-cog"></i>
-                </button>
-            </div>
+{% if messages %}
+    {% for message in messages %}
+        <div class="toast-message" data-type="{{ message.tags }}" style="display: none;">
+            {{ message }}
         </div>
+    {% endfor %}
+{% endif %}
+<div class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- هدر پروفایل -->
+    <div class="flex flex-col md:flex-row items-center gap-6 mb-8 rounded-xl p-6 gradient-header text-white shadow-lg">
+        <div class="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-lg transition-transform hover:scale-105">
+            <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/4d4f2625-c953-4a99-8693-532e0dfc0034.png"
+                 alt="تصویر پروفایل کاربر"
+                 class="w-full h-full object-cover hover:scale-110 transition-transform">
+        </div>
+        <div class="text-center md:text-right flex-1">
+            <h1 class="text-2xl font-bold">{{ request.user.first_name }} {{ request.user.last_name }}</h1>
+            <p class="text-blue-100 mt-2 opacity-90">
+                <i class="fas fa-file-alt ml-1"></i>
+                تعداد مقالات ارسال شده: {{ articles.count }} مقاله
+            </p>
+            <p class="text-blue-100 mt-1 opacity-90">
+                <i class="fas fa-envelope ml-1"></i>
+                {{ request.user.email }}
+            </p>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{% url 'index' %}"
+               class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 text-white rounded-full text-sm font-medium transition-all flex items-center">
+                <i class="fas fa-home ml-1"></i>
+                صفحه اصلی
+            </a>
+            <button class="p-2 text-blue-100 hover:text-white transition-colors">
+                <i class="fas fa-cog"></i>
+            </button>
+        </div>
+    </div>
 
-        <!-- تب‌های اصلی -->
-        <div class="mb-6 border-b border-gray-200">
-            <ul class="flex flex-wrap -mb-px" id="myTab" data-tabs-toggle="#myTabContent">
-                <li class="mr-2">
-                    <button class="tab-button inline-block p-4 text-purple-600 font-medium active"
-                            id="articles-tab" data-tabs-target="#articles">
-                        <i class="fas fa-file-alt ml-2"></i>
-                        مقالات من
-                    </button>
-                </li>
-                <li class="mr-2">
-                    <button class="tab-button inline-block p-4 text-gray-600 hover:text-purple-600 font-medium"
-                            id="tickets-tab" data-tabs-target="#tickets">
-                        <i class="fas fa-ticket-alt ml-2"></i>
-                        پشتیبانی
-                    </button>
-                </li>
-            </ul>
-        </div>
-        <!-- محتوای تب‌ها -->
-        <div id="myTabContent">
-            <!-- تب مقالات -->
-            <div class="p-4 rounded-lg bg-white shadow-sm" id="articles">
-                <!-- لیست مقالات -->
-                <div class="mb-6">
-                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                        <i class="fas fa-file-alt ml-2 text-purple-600"></i>
-                        مقالات ارسال شده
-                    </h2>
-                    {% if articles %}
-                        <div class="space-y-6">
-                            {% for article in articles %}
-                                <div class="article-card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 {% if article.is_accepted %}border-green-500{% else %}border-yellow-500{% endif %}">
-                                    <div class="p-6 relative">
-                                        {% if not article.is_paid %}
-                                        	<button class="absolute top-4 left-4 delete-article-btn text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors"
+    <!-- تب‌های اصلی -->
+    <div class="mb-6 border-b border-gray-200">
+        <ul class="flex flex-wrap -mb-px" id="myTab" data-tabs-toggle="#myTabContent">
+            <li class="mr-2">
+                <button class="tab-button inline-block p-4 text-purple-600 font-medium active"
+                        id="articles-tab" data-tabs-target="#articles">
+                    <i class="fas fa-file-alt ml-2"></i>
+                    مقالات من
+                </button>
+            </li>
+            <li class="mr-2">
+                <button class="tab-button inline-block p-4 text-gray-600 hover:text-purple-600 font-medium"
+                        id="tickets-tab" data-tabs-target="#tickets">
+                    <i class="fas fa-ticket-alt ml-2"></i>
+                    پشتیبانی
+                </button>
+            </li>
+        </ul>
+    </div>
+    <!-- محتوای تب‌ها -->
+    <div id="myTabContent">
+        <!-- تب مقالات -->
+        <div class="p-4 rounded-lg bg-white shadow-sm" id="articles">
+            <!-- لیست مقالات -->
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-file-alt ml-2 text-purple-600"></i>
+                    مقالات ارسال شده
+                </h2>
+                {% if articles %}
+                    <div class="space-y-6">
+                        {% for article in articles %}
+                            <div class="article-card bg-white rounded-xl shadow-sm overflow-hidden border-l-4 {% if article.is_accepted %}border-green-500{% else %}border-yellow-500{% endif %}">
+                                <div class="p-6 relative">
+                                    {% if not article.is_paid %}
+                                        <button class="absolute top-4 left-4 delete-article-btn text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-50 transition-colors"
                                                 data-article-id="{{ article.id }}"
                                                 data-article-title="{{ article.persian_subject }}">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        {% endif %}
-                                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-                                            <div class="flex-1">
-                                                <div class="flex justify-between items-start">
-                                                    <h3 class="text-lg font-bold text-gray-800 mb-2">{{ article.persian_subject }}</h3>
-                                                </div>
-                                                <div class="flex flex-wrap gap-2 mb-4">
-                                                    {% if article.is_accepted == True %}
-                                                        <span class="status-badge px-3 py-1 bg-green-100 text-green-800 rounded-full">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                    {% endif %}
+                                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between items-start">
+                                                <h3 class="text-lg font-bold text-gray-800 mb-2">{{ article.persian_subject }}</h3>
+                                            </div>
+                                            <div class="flex flex-wrap gap-2 mb-4">
+                                                {% if article.is_accepted == True %}
+                                                    <span class="status-badge px-3 py-1 bg-green-100 text-green-800 rounded-full">
                                                             <i class="fas fa-check-circle ml-1"></i>
                                                             تایید اولیه
                                                         </span>
-                                                    {% endif %}
-                                                    {% if article.is_coached == False %}
-                                                        <span class="status-badge px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full">
+                                                {% endif %}
+                                                {% if article.is_coached == False %}
+                                                    <span class="status-badge px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full">
                                                             <i class="fas fa-clock ml-1"></i>
                                                             در انتظار داوری
                                                         </span>
-                                                    {% else %}
-                                                        <span class="status-badge px-3 py-1 bg-purple-100 text-purple-800 rounded-full">
+                                                {% else %}
+                                                    <span class="status-badge px-3 py-1 bg-purple-100 text-purple-800 rounded-full">
                                                             <i class="fas fa-check-double ml-1"></i>
                                                             داوری شده
                                                         </span>
-                                                    {% endif %}
-                                                    {% if article.is_paid %}
-                                                        <span class="status-badge px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
+                                                {% endif %}
+                                                {% if article.is_paid %}
+                                                    <span class="status-badge px-3 py-1 bg-blue-100 text-blue-800 rounded-full">
                                                             <i class="fas fa-receipt ml-1"></i>
                                                             پرداخت شده
                                                         </span>
-                                                    {% endif %}
-                                                </div>
-                                                <p class="text-gray-500 text-sm mb-4 flex items-center">
-                                                    <i class="fas fa-calendar-alt ml-2 text-blue-400"></i>
-                                                    ارسال شده در {{ article.submit_date }}
-                                                </p>
+                                                {% endif %}
+                                            </div>
+                                            <p class="text-gray-500 text-sm mb-4 flex items-center">
+                                                <i class="fas fa-calendar-alt ml-2 text-blue-400"></i>
+                                                ارسال شده در {{ article.submit_date }}
+                                            </p>
 
-                                                <div class="mb-4">
-                                                    <p class="text-gray-600 text-sm mb-1">نویسندگان:</p>
-                                                    <div class="authors-container">
-                                                        {% for key,value in article.authors_info.items %}
-                                                            <span class="author-chip {% if value.main_author %}main{% endif %}">
+                                            <div class="mb-4">
+                                                <p class="text-gray-600 text-sm mb-1">نویسندگان:</p>
+                                                <div class="authors-container">
+                                                    {% for key,value in article.authors_info.items %}
+                                                        <span class="author-chip {% if value.main_author %}main{% endif %}">
                                                                 <i class="fas fa-user{% if value.main_author %}-edit{% endif %} ml-1 text-xs"></i>
                                                                 {{ value.first_name }} {{ value.last_name }}
-                                                                {% if value.main_author %}
-                                                                    <span class="text-xs text-purple-600 mr-1">(مسئول)</span>
-                                                                {% endif %}
+                                                            {% if value.main_author %}
+                                                                <span class="text-xs text-purple-600 mr-1">(مسئول)</span>
+                                                            {% endif %}
                                                             </span>
-                                                        {% endfor %}
-                                                    </div>
+                                                    {% endfor %}
                                                 </div>
                                             </div>
-                                            <div class="flex flex-col sm:flex-row gap-3 article-actions">
-                                                {% if article.is_coached == True and article.is_accepted == True and  article.is_paid == False %}
-                                                      {% if article.price == hamayesh.price %}
-                                                        <div class="discount-container">
-                                                        <form method="post" action="{% url 'apply_discount' article.id %}" class="discount-form">
-                                                            {% csrf_token %}
-                                                            <div class="discount-input-wrapper">
-                                                                <input type="text" name="code" placeholder="کد تخفیف" class="discount-input">
-                                                                <button type="submit" class="discount-button">اعمال کد</button>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                      {% endif %}
-                                                      <a href="{% url 'request' article.id %}" style="margin-top: 40px;">
-                                                            <div class="price-container">
-                                                                <div class="price-box animated-bg">
-                                                                    <p class="price-label">پراخت هزینه :
-                                                                        <span class="price-value">{{ article.price|three_digits_currency }}</span>
-                                                                        <span class="currency">ریال</span>
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                      </a>
-                                                {% else %}
-                                                    {% if not article.is_coached %}
-                                                    	<button class="px-4 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all flex items-center justify-center edit-article-btn"
-                                                            data-article-id="{{ article.id }}"
-                                                            data-persian-title="{{ article.persian_subject }}"
-                                                            data-english-title="{{ article.english_subject }}"
-                                                            data-language="{{ article.language }}"
-                                                            data-main-goal="{{ article.main_goal }}"
-                                                            data-abstract="{{ article.article_abstract }}"
-                                                            data-file-name="{{ article.file.name|slice:'9:' }}"
-                                                            data-file-url="{{ article.file.url }}">
+                                        </div>
+                                        <div class="flex flex-col sm:flex-row gap-3 article-actions">
+                                            {% if article.need_correction %}
+                                                <div class="flex flex-col sm:flex-row items-start gap-3 w-full">
+                                                    <!-- دکمه‌ها -->
+                                                    <div class="flex flex-row gap-3 w-full sm:w-auto">
+                                                        <button onclick="sendCorrectionRequest({{ article.id }})" class="px-4 py-2 border border-green-200 bg-green-50 text-green-600 rounded-lg font-medium text-sm hover:bg-green-100 transition-all flex items-center justify-center">
+                                                            بازبینی مجدد
+                                                        </button>
+                                                        <button class="px-4 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all flex items-center justify-center edit-article-btn"
+                                                                data-article-id="{{ article.id }}"
+                                                                data-persian-title="{{ article.persian_subject }}"
+                                                                data-english-title="{{ article.english_subject }}"
+                                                                data-language="{{ article.language }}"
+                                                                data-main-goal="{{ article.main_goal }}"
+                                                                data-abstract="{{ article.article_abstract }}"
+                                                                data-file-name="{{ article.file.name|slice:'9:' }}"
+                                                                data-file-url="{{ article.file.url }}">
                                                             <i class="fas fa-edit ml-2"></i>
                                                             ویرایش
                                                         </button>
-                                                    {% endif %}
-                                              {% endif %}
-                                              {% if article.is_paid %}
-                                              	<button class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium text-sm shadow-inner cursor-default flex items-center justify-center">
+                                                    </div>
+
+                                                    <!-- کادر متن تصحیح (رسپانسیو برای موبایل و دسکتاپ) -->
+                                                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-3 rounded-lg sm:rounded-r-lg w-full sm:max-w-[300px] sm:max-h-[150px] overflow-auto">
+                                                        <p class="m-0 whitespace-pre-wrap">{{ article.correction_text }}</p>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                            {% if article.is_coached == True and article.is_accepted == True and  article.is_paid == False %}
+                                                {% if article.price == hamayesh.price %}
+                                                    <div class="discount-container">
+                                                        <form method="post"
+                                                              action="{% url 'apply_discount' article.id %}"
+                                                              class="discount-form">
+                                                            {% csrf_token %}
+                                                            <div class="discount-input-wrapper">
+                                                                <input type="text" name="code" placeholder="کد تخفیف"
+                                                                       class="discount-input">
+                                                                <button type="submit" class="discount-button">اعمال کد
+                                                                </button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                {% endif %}
+                                                <a href="{% url 'request' article.id %}" style="margin-top: 40px;">
+                                                    <div class="price-container">
+                                                        <div class="price-box animated-bg">
+                                                            <p class="price-label">پراخت هزینه :
+                                                                <span class="price-value">{{ article.price|three_digits_currency }}</span>
+                                                                <span class="currency">ریال</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </a>
+                                            {% endif %}
+                                            {% if article.is_paid %}
+                                                <button class="px-4 py-2 bg-green-100 text-green-700 rounded-lg font-medium text-sm shadow-inner cursor-default flex items-center justify-center">
                                                     <i class="fas fa-check-circle ml-2"></i>
                                                     پرداخت شده
                                                 </button>
                                                 {% if article.certificate_file and article.paziresh_file and article.kargah_file %}
-                                                    <a href="{{ article.certificate_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">لوح تقدیر</a>
-                                                    <a href="{{ article.kargah_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">لوح حضور در کارگاه</a>
-                                                    <a href="{{ article.paziresh_file.url }}" class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all" download="">لوح پذیرش</a>
+                                                    <a href="{{ article.certificate_file.url }}"
+                                                       class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all"
+                                                       download="">لوح تقدیر</a>
+                                                    <a href="{{ article.kargah_file.url }}"
+                                                       class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all"
+                                                       download="">لوح حضور در کارگاه</a>
+                                                    <a href="{{ article.paziresh_file.url }}"
+                                                       class="px-6 py-2 border border-blue-200 bg-blue-50 text-blue-600 rounded-lg font-medium text-sm hover:bg-blue-100 transition-all"
+                                                       download="">لوح پذیرش</a>
                                                 {% else %}
                                                     <p>در انتظار صدور تقدیر نامه</p>
                                                 {% endif %}
-                                              {% endif %}
-                                            </div>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <div class="text-center py-12 bg-gray-50 rounded-xl">
-                            <i class="fas fa-file-alt text-4xl text-gray-300 mb-4"></i>
-                            <p class="text-gray-500">هنوز مقاله‌ای ارسال نکرده‌اید</p>
-                            <a href="{% url 'new_article' %}" class="mt-4 inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
-                                <i class="fas fa-plus ml-2"></i>
-                                ارسال اولین مقاله
-                            </a>
-                        </div>
-                    {% endif %}
-                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-12 bg-gray-50 rounded-xl">
+                        <i class="fas fa-file-alt text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-500">هنوز مقاله‌ای ارسال نکرده‌اید</p>
+                        <a href="{% url 'new_article' %}"
+                           class="mt-4 inline-flex items-center px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                            <i class="fas fa-plus ml-2"></i>
+                            ارسال اولین مقاله
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
 
-                <!-- پنل ویرایش مقاله -->
-                <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
-                    <div class="modal-content bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
-                        <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center z-10">
-                            <h2 class="text-xl font-bold text-gray-800">ویرایش مقاله</h2>
-                            <button id="closeEditModal" class="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100">
-                                <i class="fas fa-times text-lg"></i>
-                            </button>
-                        </div>
+            <!-- پنل ویرایش مقاله -->
+            <div id="editModal" class="modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4">
+                <div class="modal-content bg-white rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
+                    <div class="sticky top-0 bg-white p-6 border-b flex justify-between items-center z-10">
+                        <h2 class="text-xl font-bold text-gray-800">ویرایش مقاله</h2>
+                        <button id="closeEditModal"
+                                class="text-gray-500 hover:text-gray-700 p-1 rounded-full hover:bg-gray-100">
+                            <i class="fas fa-times text-lg"></i>
+                        </button>
+                    </div>
 
-                        <form id="articleForm" method="post" action="{% url 'edit_article' %}" enctype="multipart/form-data" class="p-6">
-                            {% csrf_token %}
-                            <div class="space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div>
-                                        <label for="editPersianTitle" class="block font-medium text-gray-700 mb-2">عنوان فارسی</label>
-                                        <input type="text" id="editPersianTitle" name="editPersianTitle"
-                                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                                        <input type="hidden" name="articleId" id="articleId">
-                                    </div>
-
-                                    <div>
-                                        <label for="editEnglishTitle" class="block font-medium text-gray-700 mb-2">عنوان انگلیسی</label>
-                                        <input type="text" id="editEnglishTitle" name="editEnglishTitle"
-                                               class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                                    </div>
-
-                                    <div>
-                                        <label for="editLanguage" class="block font-medium text-gray-700 mb-2">زبان مقاله</label>
-                                        <select id="editLanguage" name="editLanguage"
-                                                class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                                            <option value="فارسی">فارسی</option>
-                                            <option value="انگلیسی">انگلیسی</option>
-                                        </select>
-                                    </div>
+                    <form id="articleForm" method="post" action="{% url 'edit_article' %}" enctype="multipart/form-data"
+                          class="p-6">
+                        {% csrf_token %}
+                        <div class="space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="editPersianTitle" class="block font-medium text-gray-700 mb-2">عنوان
+                                        فارسی</label>
+                                    <input type="text" id="editPersianTitle" name="editPersianTitle"
+                                           class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <input type="hidden" name="articleId" id="articleId">
                                 </div>
 
                                 <div>
-                                    <label for="editMainGoal" class="block font-medium text-gray-700 mb-2">محور اصلی مقاله</label>
-                                    <input type="text" id="editMainGoal" name="editMainGoal"
+                                    <label for="editEnglishTitle" class="block font-medium text-gray-700 mb-2">عنوان
+                                        انگلیسی</label>
+                                    <input type="text" id="editEnglishTitle" name="editEnglishTitle"
                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                                 </div>
 
                                 <div>
-                                    <label for="editAbstract" class="block font-medium text-gray-700 mb-2">خلاصه</label>
-                                    <textarea id="editAbstract" name="editAbstract" rows="5"
-                                              class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
-                                </div>
-
-                                <div>
-                                    <label class="block font-medium text-gray-700 mb-2">فایل فعلی مقاله</label>
-                                    <div class="flex items-center gap-4">
-                                        <span id="FileName" class="text-gray-700"></span>
-                                        <a href="#" class="file-download-btn" download="" id="fileUrl">
-                                            <i class="fas fa-download"></i>
-                                            دانلود
-                                        </a>
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label for="newFile" class="block font-medium text-gray-700 mb-2">بارگذاری فایل جدید (اختیاری)</label>
-                                    <div class="flex items-center gap-4">
-                                        <label for="newFile" class="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
-                                            <i class="fas fa-cloud-upload-alt ml-2"></i>
-                                            انتخاب فایل
-                                            <input type="file" id="newFile" name="newFile" class="hidden">
-                                        </label>
-                                        <span id="fileNameDisplay" class="text-sm text-gray-500">هیچ فایلی انتخاب نشده</span>
-                                    </div>
-                                    <p class="text-gray-500 text-sm mt-2">فرمت‌ قابل قبول:  Word (حداکثر 5MB)</p>
-                                </div>
-
-                                <div class="flex justify-end space-x-4 pt-6" style="direction: ltr;">
-                                    <button type="button" id="cancelEdit" class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
-                                        انصراف
-                                    </button>
-                                    <button type="submit" class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
-                                        <span id="submitText">ذخیره تغییرات</span>
-                                        <span id="loadingSpinner" class="hidden ml-2 loading-spinner"></span>
-                                    </button>
+                                    <label for="editLanguage" class="block font-medium text-gray-700 mb-2">زبان
+                                        مقاله</label>
+                                    <select id="editLanguage" name="editLanguage"
+                                            class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                        <option value="فارسی">فارسی</option>
+                                        <option value="انگلیسی">انگلیسی</option>
+                                    </select>
                                 </div>
                             </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
 
-            <!-- تب پشتیبانی -->
-            <div class="hidden p-4 rounded-lg bg-white shadow-sm" id="tickets">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ticket-section">
-                    <!-- بخش ارسال تیکت جدید -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                            <i class="fas fa-ticket-alt ml-2 text-blue-600"></i>
-                            ارسال تیکت جدید
-                        </h2>
-
-                        <form method="post" enctype="multipart/form-data" class="space-y-6">
-                            {% csrf_token %}
                             <div>
-                                <label for="id_subject" class="block font-medium text-gray-700 mb-2">موضوع تیکت</label>
-                                {{ form.subject }}
-                                {% if form.subject.errors %}
-                                    <div class="text-red-500 text-sm mt-1">{{ form.subject.errors }}</div>
-                                {% endif %}
+                                <label for="editMainGoal" class="block font-medium text-gray-700 mb-2">محور اصلی
+                                    مقاله</label>
+                                <input type="text" id="editMainGoal" name="editMainGoal"
+                                       class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                             </div>
 
                             <div>
-                                <label for="id_department" class="block font-medium text-gray-700 mb-2">دپارتمان مربوطه</label>
-                                {{ form.department }}
-                                {% if form.department.errors %}
-                                    <div class="text-red-500 text-sm mt-1">{{ form.department.errors }}</div>
-                                {% endif %}
+                                <label for="editAbstract" class="block font-medium text-gray-700 mb-2">خلاصه</label>
+                                <textarea id="editAbstract" name="editAbstract" rows="5"
+                                          class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"></textarea>
                             </div>
 
                             <div>
-                                <label for="id_priority" class="block font-medium text-gray-700 mb-2">اولویت</label>
-                                {{ form.priority }}
-                                {% if form.priority.errors %}
-                                    <div class="text-red-500 text-sm mt-1">{{ form.priority.errors }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div>
-                                <label for="id_message" class="block font-medium text-gray-700 mb-2">متن پیام</label>
-                                {{ form.message }}
-                                {% if form.message.errors %}
-                                    <div class="text-red-500 text-sm mt-1">{{ form.message.errors }}</div>
-                                {% endif %}
-                            </div>
-
-                            <div>
-                                <label for="id_attachment" class="block font-medium text-gray-700 mb-2">پیوست (اختیاری)</label>
+                                <label class="block font-medium text-gray-700 mb-2">فایل فعلی مقاله</label>
                                 <div class="flex items-center gap-4">
-                                    <label for="id_attachment" class="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
-                                        <i class="fas fa-paperclip ml-2"></i>
-                                        انتخاب فایل
-                                        {{ form.attachment }}
-                                    </label>
-                                    <span id="ticketFileName" class="text-sm text-gray-500">هیچ فایلی انتخاب نشده</span>
+                                    <span id="FileName" class="text-gray-700"></span>
+                                    <a href="#" class="file-download-btn" download="" id="fileUrl">
+                                        <i class="fas fa-download"></i>
+                                        دانلود
+                                    </a>
                                 </div>
-                                <p class="text-gray-500 text-sm mt-2">حداکثر حجم فایل: 5MB (فرمت‌های مجاز: jpg, png, pdf, doc, docx)</p>
-                                {% if form.attachment.errors %}
-                                    <div class="text-red-500 text-sm mt-1">{{ form.attachment.errors }}</div>
-                                {% endif %}
                             </div>
 
-                            <div class="pt-2">
-                                <button type="submit" class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center">
-                                    <i class="fas fa-paper-plane ml-2"></i>
-                                    ارسال تیکت
+                            <div>
+                                <label for="newFile" class="block font-medium text-gray-700 mb-2">بارگذاری فایل جدید
+                                    (اختیاری)</label>
+                                <div class="flex items-center gap-4">
+                                    <label for="newFile"
+                                           class="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
+                                        <i class="fas fa-cloud-upload-alt ml-2"></i>
+                                        انتخاب فایل
+                                        <input type="file" id="newFile" name="newFile" class="hidden">
+                                    </label>
+                                    <span id="fileNameDisplay"
+                                          class="text-sm text-gray-500">هیچ فایلی انتخاب نشده</span>
+                                </div>
+                                <p class="text-gray-500 text-sm mt-2">فرمت‌ قابل قبول: Word (حداکثر 5MB)</p>
+                            </div>
+
+                            <div class="flex justify-end space-x-4 pt-6" style="direction: ltr;">
+                                <button type="button" id="cancelEdit"
+                                        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors">
+                                    انصراف
+                                </button>
+                                <button type="submit"
+                                        class="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center">
+                                    <span id="submitText">ذخیره تغییرات</span>
+                                    <span id="loadingSpinner" class="hidden ml-2 loading-spinner"></span>
                                 </button>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                    <!-- بخش تیکت‌های قبلی -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
-                            <i class="fas fa-history ml-2 text-purple-600"></i>
-                            تیکت‌های قبلی
-                        </h2>
+        <!-- تب پشتیبانی -->
+        <div class="hidden p-4 rounded-lg bg-white shadow-sm" id="tickets">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 ticket-section">
+                <!-- بخش ارسال تیکت جدید -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-ticket-alt ml-2 text-blue-600"></i>
+                        ارسال تیکت جدید
+                    </h2>
 
-                        <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
-                            {% if tickets %}
-                                {% for ticket in tickets %}
+                    <form method="post" enctype="multipart/form-data" class="space-y-6">
+                        {% csrf_token %}
+                        <div>
+                            <label for="id_subject" class="block font-medium text-gray-700 mb-2">موضوع تیکت</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <div class="text-red-500 text-sm mt-1">{{ form.subject.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_department" class="block font-medium text-gray-700 mb-2">دپارتمان
+                                مربوطه</label>
+                            {{ form.department }}
+                            {% if form.department.errors %}
+                                <div class="text-red-500 text-sm mt-1">{{ form.department.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_priority" class="block font-medium text-gray-700 mb-2">اولویت</label>
+                            {{ form.priority }}
+                            {% if form.priority.errors %}
+                                <div class="text-red-500 text-sm mt-1">{{ form.priority.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_message" class="block font-medium text-gray-700 mb-2">متن پیام</label>
+                            {{ form.message }}
+                            {% if form.message.errors %}
+                                <div class="text-red-500 text-sm mt-1">{{ form.message.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            <label for="id_attachment" class="block font-medium text-gray-700 mb-2">پیوست
+                                (اختیاری)</label>
+                            <div class="flex items-center gap-4">
+                                <label for="id_attachment"
+                                       class="cursor-pointer bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors">
+                                    <i class="fas fa-paperclip ml-2"></i>
+                                    انتخاب فایل
+                                    {{ form.attachment }}
+                                </label>
+                                <span id="ticketFileName" class="text-sm text-gray-500">هیچ فایلی انتخاب نشده</span>
+                            </div>
+                            <p class="text-gray-500 text-sm mt-2">حداکثر حجم فایل: 5MB (فرمت‌های مجاز: jpg, png, pdf,
+                                doc, docx)</p>
+                            {% if form.attachment.errors %}
+                                <div class="text-red-500 text-sm mt-1">{{ form.attachment.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit"
+                                    class="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all flex items-center justify-center">
+                                <i class="fas fa-paper-plane ml-2"></i>
+                                ارسال تیکت
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- بخش تیکت‌های قبلی -->
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                        <i class="fas fa-history ml-2 text-purple-600"></i>
+                        تیکت‌های قبلی
+                    </h2>
+
+                    <div class="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+                        {% if tickets %}
+                            {% for ticket in tickets %}
                                 <div class="ticket-item border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-all">
                                     <div class="flex justify-between items-start">
                                         <div>
@@ -421,29 +461,31 @@
                                         </div>
                                     {% endif %}
                                 </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
-                                    <i class="fas fa-inbox text-4xl mb-3 opacity-50"></i>
-                                    <p>هنوز تیکتی ارسال نکرده‌اید</p>
-                                </div>
-                            {% endif %}
-                        </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="text-center py-8 text-gray-500 bg-gray-50 rounded-lg">
+                                <i class="fas fa-inbox text-4xl mb-3 opacity-50"></i>
+                                <p>هنوز تیکتی ارسال نکرده‌اید</p>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- دکمه آپلود مقاله جدید -->
-    <div class="fixed bottom-6 left-6 z-50">
-        <a href="{% url 'new_article' %}" class="floating-btn flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 text-white rounded-full shadow-lg group">
-            <i class="fas fa-plus text-xl group-hover:rotate-90 transition-transform"></i>
-        </a>
-        <span class="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 bg-white px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
+<!-- دکمه آپلود مقاله جدید -->
+<div class="fixed bottom-6 left-6 z-50">
+    <a href="{% url 'new_article' %}"
+       class="floating-btn flex items-center justify-center w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 text-white rounded-full shadow-lg group">
+        <i class="fas fa-plus text-xl group-hover:rotate-90 transition-transform"></i>
+    </a>
+    <span class="absolute right-full top-1/2 transform -translate-y-1/2 mr-2 bg-white px-3 py-1 rounded-full text-xs font-medium text-gray-600 shadow-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">
             مقاله جدید
         </span>
-    </div>
-    <script src="/static/js/user_profile.js"></script>
+</div>
+<script src="/static/js/user_profile.js"></script>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </html>

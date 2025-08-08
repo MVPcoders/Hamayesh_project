@@ -23,6 +23,9 @@ class Article(models.Model):
     is_visited = models.BooleanField(verbose_name='دیده شده توسط ادمین', default=False)
     is_coached = models.BooleanField(verbose_name='داوری شده', default=False)
     is_accepted = models.BooleanField(verbose_name='پذیرفته شده توسط داور', default=False)
+    need_correction = models.BooleanField(verbose_name="نیاز به اصلاح", default=False)
+    correction_text = models.TextField(verbose_name="متن اصلاحیه", null=True, blank=True )
+    is_corrected = models.BooleanField(verbose_name="اصلاح شده توسط کابر", default=False,editable=False, blank=True, null=True)
     is_paid = models.BooleanField(verbose_name='هزینه داوری', default=False)
     send_to_pay = models.CharField(max_length=200, blank=True, null=True)
     price = models.IntegerField(verbose_name='هزینه',max_length=50, blank=True, null=True,default=0)
@@ -34,6 +37,12 @@ class Article(models.Model):
 
     def __str__(self):
         return self.persian_subject
+
+    def save(self, *args, **kwargs):
+        if  self.need_correction :
+            self.is_corrected=False
+        super(Article, self).save(*args, **kwargs)
+
 
 
 

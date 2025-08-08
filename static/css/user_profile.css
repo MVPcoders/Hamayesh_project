@@ -140,7 +140,7 @@ body {
 }
 
 .swal2-confirm {
-    background-color: var(--primary) !important;
+    /*background-color: var(--primary);*/
     transition: all 0.3s ease;
     border-radius: 8px !important;
 }

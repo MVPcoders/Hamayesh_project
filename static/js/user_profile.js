@@ -1,11 +1,10 @@
-
 // فعال کردن تب‌ها
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const tabs = document.querySelectorAll('[data-tabs-toggle] button');
     const tabContents = document.querySelectorAll('#myTabContent > div');
 
     tabs.forEach(tab => {
-        tab.addEventListener('click', function() {
+        tab.addEventListener('click', function () {
             // حذف کلاس active از همه تب‌ها
             tabs.forEach(t => {
                 t.classList.remove('active', 'text-purple-600');
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const ticketFileName = document.querySelector('#ticketFileName');
 
     if (ticketFileInput) {
-        ticketFileInput.addEventListener('change', function() {
+        ticketFileInput.addEventListener('change', function () {
             if (this.files.length > 0) {
                 ticketFileName.textContent = this.files[0].name;
             } else {
@@ -42,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const articleFileName = document.querySelector('#fileNameDisplay');
 
     if (articleFileInput) {
-        articleFileInput.addEventListener('change', function() {
+        articleFileInput.addEventListener('change', function () {
             if (this.files.length > 0) {
                 articleFileName.textContent = this.files[0].name;
             } else {
@@ -126,9 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const formData = new FormData(this);
         fetch(this.action, {
-            method: 'POST',
-            body: formData,
-            headers: {
+            method: 'POST', body: formData, headers: {
                 'X-Requested-With': 'XMLHttpRequest',
             },
         })
@@ -212,7 +209,7 @@ document.querySelectorAll('.article-card').forEach((card, index) => {
 
 
 // نمایش پیام های  toast
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const toastMessages = document.querySelectorAll('.toast-message');
 
     toastMessages.forEach(message => {
@@ -253,7 +250,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // حذف مقاله
 document.querySelectorAll('.delete-article-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
+    btn.addEventListener('click', function (e) {
         e.preventDefault();
         const articleId = this.getAttribute('data-article-id');
         const articleTitle = this.getAttribute('data-article-title');
@@ -272,54 +269,45 @@ document.querySelectorAll('.delete-article-btn').forEach(btn => {
             if (result.isConfirmed) {
                 // ارسال درخواست حذف به سرور با متد GET
                 fetch(`/delete-article/${articleId}/`, {
-                    method: 'GET',
-                    headers: {
+                    method: 'GET', headers: {
                         'Content-Type': 'application/json',
                     }
                 })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('خطا در پاسخ سرور');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        Swal.fire({
-                            title:'حذف شد!',
-                            text:'مقاله با موفقیت حذف شد.',
-                            icon:'success',
-                            confirmButtonText:'باشه'
-                        }).then(() => {
-                            window.location.reload();
-                        });
-                    } else {
-                        Swal.fire(
-                            'خطا!',
-                            data.message || 'خطایی در حذف مقاله رخ داد.',
-                            'error'
-                        );
-                    }
-                })
-                .catch(error => {
-                    Swal.fire(
-                        'خطا!',
-                        'خطایی در ارتباط با سرور رخ داد: ' + error.message,
-                        'error'
-                    );
-                });
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('خطا در پاسخ سرور');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'حذف شد!',
+                                text: 'مقاله با موفقیت حذف شد.',
+                                icon: 'success',
+                                confirmButtonText: 'باشه'
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            Swal.fire('خطا!', data.message || 'خطایی در حذف مقاله رخ داد.', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        Swal.fire('خطا!', 'خطایی در ارتباط با سرور رخ داد: ' + error.message, 'error');
+                    });
             }
         });
     });
 });
 
 // کنترل ارسال مقاله جدید
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('newFile');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
 
-    fileInput.addEventListener('change', function(e) {
+    fileInput.addEventListener('change', function (e) {
         if (this.files && this.files.length > 0) {
             const file = this.files[0];
             const fileName = file.name;
@@ -356,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // بررسی قبل از ارسال فرم
     const form = fileInput.closest('form');
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             if (fileInput.files && fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 const fileSize = file.size;
@@ -384,20 +372,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // کنترل فایل های پیوست تیکت
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const fileInput = document.getElementById('id_attachment');
     const fileNameDisplay = document.getElementById('ticketFileName');
     const maxSize = 5 * 1024 * 1024; // 5MB in bytes
     const allowedExtensions = ['.jpg', '.jpeg', '.png', '.pdf', '.doc', '.docx'];
-    const allowedTypes = [
-        'image/jpeg',
-        'image/png',
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    ];
+    const allowedTypes = ['image/jpeg', 'image/png', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
 
-    fileInput.addEventListener('change', function(e) {
+    fileInput.addEventListener('change', function (e) {
         if (this.files && this.files.length > 0) {
             const file = this.files[0];
             const fileName = file.name.toLowerCase();
@@ -437,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // بررسی قبل از ارسال فرم
     const form = fileInput.closest('form');
     if (form) {
-        form.addEventListener('submit', function(e) {
+        form.addEventListener('submit', function (e) {
             if (fileInput.files && fileInput.files.length > 0) {
                 const file = fileInput.files[0];
                 const fileName = file.name.toLowerCase();
@@ -466,3 +448,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
+
+
+// بخش ارسال درخواست بازبینی
+function sendCorrectionRequest(articleId) {
+    Swal.fire({
+        title: 'اعلان',
+        text: "آیا از ارسال درخواست بازبینی مطمئن هستید؟",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: 'بله',
+        cancelButtonText: 'خیر',
+        confirmButtonColor: "#40f603",
+        cancelButtonColor: "#fb030b",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.get('/correct-article/?article_id=' + articleId).then(request => {
+                if (request.status === 'success') {
+                    Swal.fire({
+                        title: 'اعلان',
+                        text: request.text,
+                        icon: request.icon,
+                        confirmButtonText: 'باشه',
+                        confirmButtonColor: "#4fff02",
+                        timer: 3000,
+                        timerProgressBar: true,
+                        willClose: () => {
+                            window.location.reload();
+                        }
+                    });
+                } else if (request.status === 'error') {
+                    Swal.fire({
+                        title: "اعلان",
+                        text: request.text,
+                        icon: request.icon,
+                        showCancelButton: false,
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "باشه",
+                        timer: 3000,
+                        timerProgressBar: true,
+                        willClose: () => {
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        }
+    });
+}
