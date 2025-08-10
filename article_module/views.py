@@ -2,7 +2,7 @@ from logging import raiseExceptions
 import os
 
 from django.contrib.auth import login
-from django.http import HttpRequest, HttpResponse, JsonResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.decorators import method_decorator
@@ -19,7 +19,9 @@ def is_login(func):
             return func(request, *args, **kwargs)
         else:
             return redirect(reverse('login'))
+
     return wrapper
+
 
 # def user_authenticator(func):
 #     def wrapper(request: HttpRequest, *args, **kwargs):
@@ -66,11 +68,11 @@ class SubmitArticle(View):
                 article_abstract=form['articleAbstract'],
                 file=request.FILES.get('articleFile'),
                 authors_info=authors_info,
-                price= ar_price
+                price=ar_price
             )
             return JsonResponse({
                 'status': 'success',
-                'message': 'مقاله با موقیت ثبت گردید'
+                'message': 'مقاله با موفقیت ثبت گردید'
             })
         except Exception as e:
             return JsonResponse({
@@ -112,41 +114,43 @@ class UserArticleEdit(View):
                 'message': str(e)
             })
 
+
 @is_login
-def user_delete_article(request, article_id):
+def user_delete_article(request):
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        raise Http404()
     try:
+        article_id = request.GET.get('article_id')
         article = Article.objects.get(id=article_id, user=request.user)
         if article.file:
             if os.path.isfile(article.file.path):
                 os.remove(article.file.path)
         article.delete()
         return JsonResponse({
-            'success': True,
+            'status': 'success',
             'message': 'مقاله با موفقیت حذف شد.'
         })
-    except Article.DoesNotExist:
+    except:
         return JsonResponse({
-            'success': False,
-            'message': 'مقاله مورد نظر یافت نشد یا شما دسترسی ندارید.'
-        }, status=404)
-    except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'message': str(e)
-        }, status=500)
+            'status': "error",
+            'message': "خطایی رخ داده"
+        })
+
 
 @is_login
 def send_correction_request(request):
+    if not request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        raise Http404()
     try:
-        article = Article.objects.get(id = request.GET.get('article_id'),user=request.user)
+        article = Article.objects.get(id=request.GET.get('article_id'), user=request.user)
         if article.need_correction:
-            article.need_correction= False
+            article.need_correction = False
             article.is_corrected = True
             article.save()
             return JsonResponse({
                 'status': 'success',
-                'text':'درخواست با موفقیت ارسال شد',
-                'icon':'success'
+                'text': 'درخواست با موفقیت ارسال شد',
+                'icon': 'success'
             })
         return JsonResponse({
             'status': 'error',
@@ -159,5 +163,3 @@ def send_correction_request(request):
             'text': 'درخواست شما معتبر نیست. کد: 501',
             'icon': 'error'
         })
-
-

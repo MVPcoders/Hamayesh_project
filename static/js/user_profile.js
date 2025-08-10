@@ -267,35 +267,20 @@ document.querySelectorAll('.delete-article-btn').forEach(btn => {
             reverseButtons: true
         }).then((result) => {
             if (result.isConfirmed) {
-                // ارسال درخواست حذف به سرور با متد GET
-                fetch(`/delete-article/${articleId}/`, {
-                    method: 'GET', headers: {
-                        'Content-Type': 'application/json',
+                $.get('/delete-article/?article_id=' + articleId).then(data => {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            title: 'حذف شد!',
+                            text: 'مقاله با موفقیت حذف شد.',
+                            icon: 'success',
+                            confirmButtonText: 'باشه'
+                        }).then(() => {
+                            window.location.reload();
+                        });
+                    } else {
+                        Swal.fire('خطا!', data.message || 'خطایی در حذف مقاله رخ داد.', 'error');
                     }
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('خطا در پاسخ سرور');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                title: 'حذف شد!',
-                                text: 'مقاله با موفقیت حذف شد.',
-                                icon: 'success',
-                                confirmButtonText: 'باشه'
-                            }).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                            Swal.fire('خطا!', data.message || 'خطایی در حذف مقاله رخ داد.', 'error');
-                        }
-                    })
-                    .catch(error => {
-                        Swal.fire('خطا!', 'خطایی در ارتباط با سرور رخ داد: ' + error.message, 'error');
-                    });
             }
         });
     });
@@ -497,3 +482,22 @@ function sendCorrectionRequest(articleId) {
         }
     });
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+    // اگر URL حاوی /signup است
+    if (window.location.pathname === '/signup') {
+        const element = document.getElementById('signup_container1');
+        if (element) {
+            // اسکرول نرم به المنت
+            element.scrollIntoView({behavior: 'smooth'});
+        }
+    }
+});
+document.addEventListener('DOMContentLoaded', function () {
+    if (window.location.pathname === '/login') {
+        const element = document.getElementById('signin_container1');
+        if (element) {
+            element.scrollIntoView({behavior: 'smooth'});
+        }
+    }
+});

@@ -14,7 +14,7 @@ class Article(models.Model):
     language = models.CharField(max_length=100, verbose_name='زبان مقاله')
     persian_subject = models.TextField(verbose_name='عنوان فارسی مقاله')
     english_subject = models.TextField(verbose_name='عنوان انگلیسی مقاله')
-    article_abstract = models.TextField(max_length=250, verbose_name='چکیده مقاله', blank=True, null=True)
+    article_abstract = models.TextField( verbose_name='چکیده مقاله', blank=True, null=True)
     file = models.FileField(verbose_name='فایل مقاله', upload_to='articles/')
     certificate_file = models.FileField(verbose_name='لوح تقدیر', upload_to='articles/certificate/', blank=True, null=True)
     paziresh_file= models.FileField(verbose_name='لوح پذیرش', upload_to='articles/paziresh/', blank=True, null=True)

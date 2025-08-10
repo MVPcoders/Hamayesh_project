@@ -313,26 +313,6 @@
 
 {% block extra_js %}
     <script src="/static/js/user_profile.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // اگر URL حاوی /signup است
-            if (window.location.pathname === '/signup') {
-                const element = document.getElementById('signup_container1');
-                if (element) {
-                    // اسکرول نرم به المنت
-                    element.scrollIntoView({behavior: 'smooth'});
-                }
-            }
-        });
-        document.addEventListener('DOMContentLoaded', function () {
-            if (window.location.pathname === '/login') {
-                const element = document.getElementById('signin_container1');
-                if (element) {
-                    element.scrollIntoView({behavior: 'smooth'});
-                }
-            }
-        });
-    </script>
 {% endblock %}
 
 
