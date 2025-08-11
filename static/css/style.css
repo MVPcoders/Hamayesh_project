@@ -734,7 +734,10 @@ a:focus {
 }
 
 .contact_section button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 8px 35px;
   background-color: #d8bf36;
   color: #ffffff;
@@ -746,10 +749,17 @@ a:focus {
   outline: none;
   margin-top: 15px;
   font-size: 15px;
+  cursor: pointer;
 }
 
 .contact_section button:hover {
   background-color: #e0cd61;
+}
+
+.contact_section button:disabled {
+  background-color: #e0cd61;
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 .info_section {

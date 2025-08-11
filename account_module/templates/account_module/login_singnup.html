@@ -209,6 +209,9 @@
                                                 {{ form.password }}
                                                 <i class="fas fa-eye toggle-password"></i>
                                             </div>
+                                            <div id="persian-warning" class="persian-keyboard-warning">⚠️ صفحه کلید
+                                                شما فارسی است!
+                                            </div>
                                             {% if form.password.errors %}
                                                 {% for error in form.password.errors %}
                                                     <p>*{{ error }}</p>
@@ -228,7 +231,12 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <button type="submit" class="">ثبت نام</button>
+                                        <button type="submit" class="submit-btn" id="submitButton">
+                                            <span class="button-text">ثبت نام</span>
+                                            <span class="spinner" style="display: none;">
+                                                <i class="fas fa-spinner fa-spin"></i>
+                                            </span>
+                                        </button>
                                     </div>
                                 </form>
                                 <p class="login-link_wrapper">قبلاً ثبت نام کرده اید؟ <a
@@ -288,6 +296,9 @@
                                                 {{ form.password }}
                                                 <i class="fas fa-eye toggle-password"></i>
                                             </div>
+                                            <div id="persian-warning" class="persian-keyboard-warning">⚠️ صفحه کلید
+                                                شما فارسی است!
+                                            </div>
                                             {% if form.password.errors %}
                                                 {% for error in form.password.errors %}
                                                     <p>*{{ error }}</p>
@@ -296,7 +307,12 @@
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center">
-                                        <button type="submit" class="">وارد شوید</button>
+                                        <button type="submit" class="submit-btn" id="submitButton">
+                                            <span class="button-text">وارد شوید</span>
+                                            <span class="spinner" style="display: none;">
+                                                <i class="fas fa-spinner fa-spin"></i>
+                                            </span>
+                                        </button>
                                     </div>
                                 </form>
                                 <p class="login-link_wrapper"> ثبت نام نکرده اید؟ <a
@@ -313,7 +329,22 @@
 
 {% block extra_js %}
     <script src="/static/js/user_profile.js"></script>
-{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordField = document.querySelector('#{{ form.password.id_for_label }}');
+            const persianWarning = document.getElementById('persian-warning');
 
+            passwordField.addEventListener('input', function (e) {
+                const hasPersian = /[\u0600-\u06FF\uFB8A\u067E\u0686\u06AF\u200C\u200F]/.test(e.target.value);
+
+                if (hasPersian) {
+                    persianWarning.style.display = 'block';
+                } else {
+                    persianWarning.style.display = 'none';
+                }
+            });
+        });
+    </script>
+{% endblock %}
 
 

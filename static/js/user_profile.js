@@ -501,3 +501,35 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+
+//لودینگ ورود و ثبت نام
+document.addEventListener('DOMContentLoaded', function () {
+    const signinForm = document.querySelector('#signin_container2 form');
+    if (signinForm) {
+        signinForm.addEventListener('submit', function () {
+            const submitButton = this.querySelector('.submit-btn');
+            const buttonText = submitButton.querySelector('.button-text');
+            const spinner = submitButton.querySelector('.spinner');
+
+            submitButton.disabled = true;
+            buttonText.textContent = 'در حال ورود';
+            spinner.style.display = 'inline-block';
+        });
+    }
+
+    // برای فرم ثبت نام (Sign Up)
+    const signupForm = document.querySelector('#signup_container2 form');
+    if (signupForm) {
+        signupForm.addEventListener('submit', function () {
+            const submitButton = this.querySelector('.submit-btn');
+            const buttonText = submitButton.querySelector('.button-text');
+            const spinner = submitButton.querySelector('.spinner');
+
+            submitButton.disabled = true;
+            buttonText.textContent = 'در حال ثبت نام';
+            spinner.style.display = 'inline-block';
+        });
+    }
+});
+
