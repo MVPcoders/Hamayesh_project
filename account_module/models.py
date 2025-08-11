@@ -31,6 +31,13 @@ class User(AbstractUser):
         else:
             return 'تاکنون وارد نشده'
 
+    def paid_count(self):
+        return self.article_set.filter(is_paid=True).count()
+
+    def not_paid_count(self):
+        return self.article_set.filter(is_paid=False).count()
+
+
     def __str__(self):
         return self.get_full_name()
 
