@@ -708,3 +708,29 @@ details > p {
     margin-left: 10px;
     font-size: 20px;
 }
+
+
+/*new header style***********************************************************************************************/
+
+
+.site-logo {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background-color: #d8bf36;
+    margin-left: 50px;
+    margin-right: 150px;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .site-logo {
+        margin-left: -10px;
+        margin-right: 10px;
+    }
+}
+
+.custom-navbar {
+    border: 4px solid #d8bf36;
+    border-radius: 30% ;
+}
