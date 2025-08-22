@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 from account_module.models import User
 
@@ -29,8 +30,10 @@ class Article(models.Model):
     is_paid = models.BooleanField(verbose_name='هزینه داوری', default=False)
     send_to_pay = models.CharField(max_length=200, blank=True, null=True)
     price = models.IntegerField(verbose_name='هزینه',max_length=50, blank=True, null=True,default=0)
+    qr_code = models.ImageField(upload_to="article_qrcodes/", blank=True, null=True)
 
-
+    def get_absolute_url(self):
+        return reverse("article_detail", args=[str(self.id)])
     class Meta:
         verbose_name = 'مقاله'
         verbose_name_plural = 'مقالات'

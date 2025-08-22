@@ -1,15 +1,23 @@
 from logging import raiseExceptions
 import os
-
+from random import random
 from django.contrib.auth import login
 from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views import View
-
+from django.views.generic.detail import DetailView
 from hamayesh_module.models import Hamayesh_prices
 from .models import Article
+import qrcode
+from django.core.files.base import ContentFile
+from io import BytesIO
+import base64
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+
 
 
 # دکوریتور ها
@@ -34,18 +42,18 @@ def is_login(func):
 #     return wrapper
 
 
+
 @method_decorator(is_login, name='dispatch')
 class SubmitArticle(View):
-
     def get(self, request, *args, **kwargs):
         return render(request, "article_moddule/article.html", context={})
 
     def post(self, request, *args, **kwargs):
         ar_price = int(Hamayesh_prices.objects.get(is_active=True).price)
+
         try:
             form = request.POST
             authors_info = {}
-            # برای تشخیص نویسنده مسئول
             corresponding_author_index = int(form.get('correspondingAuthor', 0))
             author_count = int(form['authorCount'])
             for i in range(author_count):
@@ -58,7 +66,7 @@ class SubmitArticle(View):
                 }
                 authors_info[i] = authour
 
-            Article.objects.create(
+            article = Article.objects.create(
                 user=request.user,
                 authors_numbers=form['authorCount'],
                 main_goal=form['articleMainGoal'],
@@ -70,15 +78,33 @@ class SubmitArticle(View):
                 authors_info=authors_info,
                 price=ar_price
             )
+
+            # ساخت لینک مقاله
+            article_url = request.build_absolute_uri(article.get_absolute_url())
+
+            # ساخت QR Code
+            qr = qrcode.make(article_url)
+            buffer = BytesIO()
+            qr.save(buffer, format="PNG")
+            file_name = f"article_{article.id}_qrcode.png"
+            article.qr_code.save(file_name, ContentFile(buffer.getvalue()), save=True)
+
             return JsonResponse({
                 'status': 'success',
-                'message': 'مقاله با موفقیت ثبت گردید'
+                'message': 'مقاله با موفقیت ثبت گردید',
+                'qr_code_url': article.qr_code.url
             })
         except Exception as e:
             return JsonResponse({
-                'status': 'success',
+                'status': 'error',
                 'message': str(e)
             })
+
+
+class ArticleDetailView(DetailView):
+    model = Article
+    template_name = "article_moddule/article_cer.html"
+    context_object_name = "article"
 
 
 @method_decorator(is_login, name='dispatch')
@@ -163,3 +189,39 @@ def send_correction_request(request):
             'text': 'درخواست شما معتبر نیست. کد: 501',
             'icon': 'error'
         })
+
+
+@is_login
+def generate_certificate(request):
+    articles = Article.objects.filter(is_coached=True)
+    if request.method == "POST":
+        article_id = request.POST.get("article_id")
+        cert_type = request.POST.get("certificate_type")
+        article = get_object_or_404(Article, id=article_id, user=request.user)
+
+    return render(request, "article_moddule/article_cer_maker.html", {"articles": articles})
+
+
+@csrf_exempt
+def save_certificate(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        article_id = data.get("article_id")
+        cert_type = data.get("cert_type")
+        image_data = data.get("image")
+
+        article = Article.objects.get(id=article_id)
+
+        format, imgstr = image_data.split(';base64,')
+        ext = format.split('/')[-1]
+        file_data = ContentFile(base64.b64decode(imgstr), name=f"{cert_type}_{article_id}.{ext}")
+
+        if cert_type == "cert1":
+            article.certificate_file = file_data
+        elif cert_type == "cert2":
+            article.paziresh_file = file_data
+        elif cert_type == "cert3":
+            article.kargah_file = file_data
+
+        article.save()
+        return JsonResponse({"status": "success"})

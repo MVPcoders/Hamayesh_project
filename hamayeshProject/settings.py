@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'jalali_date',
     'article_module',
     'panel_module',
-    'order_module'
+    'order_module',
+    "azbankgateways",
 ]
 
 MIDDLEWARE = [
@@ -158,3 +159,26 @@ JALALI_DATE_DEFAULTS = {
     },
 }
 
+AZ_IRANIAN_BANK_GATEWAYS = {
+    "GATEWAYS": {
+        "ZARINPAL": {
+            "MERCHANT_CODE": "3a681e90-59c0-4511-8101-655b26314ae5",
+            "SANDBOX": 0,  # 0 disable, 1 active
+        },
+        "ZIBAL": {
+            "MERCHANT_CODE": "6878e814a45c72001aa408b7",
+        },
+    },
+    "IS_SAMPLE_FORM_ENABLE": True,  # اختیاری و پیش فرض غیر فعال است
+    "DEFAULT": "ZIBAL",
+    "CURRENCY": "IRR",  # اختیاری
+    "TRACKING_CODE_QUERY_PARAM": "tc",  # اختیاری
+    "TRACKING_CODE_LENGTH": 16,  # اختیاری
+    "SETTING_VALUE_READER_CLASS": "azbankgateways.readers.DefaultReader",  # اختیاری
+    "BANK_PRIORITIES": [
+        "ZIBAL",
+        "ZARINPAL",
+    ],  # اختیاری
+    "IS_SAFE_GET_GATEWAY_PAYMENT": False,  # اختیاری، بهتر است True بزارید.
+    "CUSTOM_APP": None,  # اختیاری
+}

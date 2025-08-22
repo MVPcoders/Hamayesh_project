@@ -69,7 +69,6 @@ class ManagementView(TemplateView):
 
 
 class ChangePasswordView(View):
-
     def get (self, request):
         users = User.objects.all()
         context = {'users': users}
@@ -80,7 +79,7 @@ class ChangePasswordView(View):
             user = User.objects.get(id = request.POST['user_id'])
             user.set_password(request.POST['new_password'])
             user.save()
-            return redirect('management')
+            return redirect('/management/?success=1')
         except Exception as e:
             return JsonResponse({'error': str(e)})
 
