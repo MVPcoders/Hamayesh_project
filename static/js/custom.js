@@ -81,9 +81,8 @@ function updateReceipt() {
 // });
 
 
-
 // اسکرول خودکار بخش ورود به هنگام خطا
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // چک کنیم آیا خطایی وجود دارد (با توجه به ساختار ارورهای شما)
     const errorMessages = document.querySelectorAll('form p');
     const hasErrors = Array.from(errorMessages).some(p => p.textContent.trim().startsWith('*'));
@@ -106,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // اسکرول خودکار بخش ثبت نام به هنگام خطا
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // چک کنیم آیا خطایی وجود دارد (با توجه به ساختار ارورهای شما)
     const errorMessages = document.querySelectorAll('form p');
     const hasErrors = Array.from(errorMessages).some(p => p.textContent.trim().startsWith('*'));
@@ -129,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 // نمایش پیام های  toast
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const toastMessages = document.querySelectorAll('.toast-message');
 
     toastMessages.forEach(message => {
@@ -166,5 +165,46 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     });
 });
+
+/*new header style***********************************************************************************************/
+
+// اسکریپت کنترل منو
+document.addEventListener('DOMContentLoaded', function () {
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    const overlay = document.querySelector('.overlay');
+
+    // باز کردن منو
+    menuToggle.addEventListener('click', function () {
+        sidebar.classList.toggle('active');
+        overlay.classList.toggle('active');
+    });
+
+    // بستن منو با کلیک روی overlay
+    overlay.addEventListener('click', function () {
+        sidebar.classList.remove('active');
+        overlay.classList.remove('active');
+    });
+
+    // بستن منو با اسکرول (اختیاری)
+    window.addEventListener('scroll', function () {
+        if (sidebar.classList.contains('active')) {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+    });
+});
+
+function updateMenuToggle() {
+    document.getElementById("menu-toggle").style.display =
+        window.matchMedia('(max-width: 990px)').matches ? "block" : "none";
+}
+
+// اجرای اولیه
+updateMenuToggle();
+
+// گوش دادن به تغییر سایز
+window.addEventListener('resize', updateMenuToggle);
+
 
 
