@@ -1,7 +1,9 @@
 from audioop import reverse
+from crypt import methods
 
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
 
 from account_module.models import User
@@ -11,6 +13,12 @@ from django.db.models import Sum
 from datetime import datetime, timedelta
 from order_module.models import Payment
 
+def is_admin(func):
+    def wrapper(request, *args, **kwargs):
+        if request.user.is_superuser:
+            return func(request, *args, **kwargs)
+        raise Http404
+    return wrapper
 
 def user_list(request):
     users = User.objects.all()  # تمام کاربران را استخراج کنید
@@ -19,6 +27,7 @@ def user_list(request):
     users = paginator.get_page(page_number)
     return render(request, 'panel_module', {'users': users})
 
+@method_decorator(is_admin, name='dispatch')
 class ManagementView(TemplateView):
     template_name = 'panel_module/management.html'
 
@@ -67,7 +76,7 @@ class ManagementView(TemplateView):
         })
         return context
 
-
+@method_decorator(is_admin, name='dispatch')
 class ChangePasswordView(View):
     def get (self, request):
         users = User.objects.all()

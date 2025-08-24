@@ -31,16 +31,6 @@ def is_login(func):
     return wrapper
 
 
-# def user_authenticator(func):
-#     def wrapper(request: HttpRequest, *args, **kwargs):
-#         try:
-#             Article.objects.get(user = request.user.id , id = request.GET.get('article_id'))
-#             return func(request, *args, **kwargs)
-#         except:
-#             return redirect(reverse('index'))
-#
-#     return wrapper
-
 
 
 @method_decorator(is_login, name='dispatch')
