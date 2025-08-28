@@ -8,47 +8,173 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
             font-family: "Vazir", sans-serif;
+            color: #333;
+            transition: background 0.4s ease;
         }
+
         .certificate-container {
             background: #fff;
             border-radius: 20px;
-            padding: 25px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            padding: 30px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.1);
             margin-top: 40px;
+            animation: fadeInUp 0.6s ease-out;
+            overflow: hidden;
         }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* استایل مدرن برای select */
+        #articleSelect {
+            border: 2px solid #e0e0e0;
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-size: 17px;
+            transition: all 0.3s ease;
+            background-color: #f9f9f9;
+            color: #333;
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        #articleSelect:focus {
+            border-color: #4CAF50;
+            background-color: #fff;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+            transform: translateY(-2px);
+        }
+
+        /* استایل تب‌ها */
+        .nav-tabs .nav-link {
+            border: none;
+            border-radius: 12px;
+            margin: 0 6px;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            background-color: #f1f3f5;
+        }
+
+        .nav-tabs .nav-link:hover {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
+        }
+
+        /* دکمه‌های مدرن با لودینگ */
+        .btn {
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        /* لودینگ داخل دکمه */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .btn.loading::after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid #fff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* --- بخش گواهی‌ها (دست نخورده باقی مانده) --- */
         .certificate-template {
-            width: 1280px;
-            height: 920px;
-            border: 5px solid #333;
+            width: 1368px;
+            height: 1000px;
             border-radius: 20px;
             margin: 20px auto;
-            padding: 30px;
+            padding: 40px;
             text-align: center;
-            display: compact; /* در حالت عادی پنهان */
+            position: relative;
         }
-        /* استایل گواهی‌ها */
+
         #cert1-template {
             background: url("{% static 'cerbg/photo20342472886.jpg' %}") no-repeat center/cover;
-            color: #fff;
         }
         #cert2-template {
             background: url("{% static 'cerbg/photo20342473206.jpg' %}") no-repeat center/cover;
-            color: #222;
         }
         #cert3-template {
             background: url("{% static 'cerbg/photo20342492046.jpg' %}") no-repeat center/cover;
-            color: #000;
         }
+
         .certificate-title {
-            font-size: 28px;
+            font-size: 36px;
             font-weight: bold;
-            margin-top: 50px;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
         }
+
         .certificate-text {
             font-size: 20px;
-            margin-top: 20px;
+            line-height: 1.8;
+            text-align: right;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 0 auto;
+            width: 85%;
+        }
+
+        .certificate-text span {
+            font-weight: bold;
+        }
+
+        .certificate-qr {
+            position: absolute;
+            top: 100px;
+            right: 200px;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        .certificate-qr img {
+            width: 100px;
+            height: 100px;
         }
     </style>
 </head>
@@ -60,9 +186,16 @@
 
         <!-- انتخاب مقاله -->
         <label class="form-label fw-bold">مقاله‌ی تایید شده خود را انتخاب کنید:</label>
-        <select id="articleSelect" class="form-select mb-4" required>
+        <select id="articleSelect" class="form-select mb-4" required onchange="updateCertificates()">
             {% for article in articles %}
-                <option value="{{ article.id }}">{{ article.persian_subject }}</option>
+                <option value="{{ article.id }}"
+                        data-title="{{ article.title }}"
+                        data-authors='{{ article.authors_info|safe }}'
+                        {% if article.qr_code %}
+                            data-qr="{{ article.qr_code }}"
+                        {% endif %}>
+                    {{ article.title }}
+                </option>
             {% empty %}
                 <option disabled>هیچ مقاله‌ای تایید نشده است</option>
             {% endfor %}
@@ -70,17 +203,29 @@
 
         <!-- تب‌ها -->
         <ul class="nav nav-tabs" id="certificateTabs" role="tablist">
-            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cert1" type="button">گواهی تقدیر</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert2" type="button">گواهی مشارکت</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert3" type="button">گواهی پذیرش</button></li>
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cert1" type="button">گواهی تقدیر</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert2" type="button">گواهی مشارکت</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert3" type="button">گواهی پذیرش</button>
+            </li>
         </ul>
 
         <div class="tab-content mt-3">
             <!-- گواهی 1 -->
             <div class="tab-pane fade show active" id="cert1">
                 <div id="cert1-template" class="certificate-template">
-                    <div class="certificate-title">گواهی تقدیر</div>
-                    <div class="certificate-text"> بدینوسیله از مقاله "{{ article.persian_subject }}" تقدیر می‌گردد.</div>
+                    <br><br>
+                    <div class="certificate-title">لوح تقدیر</div>
+                    <br><br><br><br><br>
+                    <div class="certificate-text">
+                        <p>جناب آقای/سرکار خانم :  <span class="cert-authors"></span></p>
+                        <p>با سپاس وقدردانی فراوان از همراهی و مشارکت ارزشمند شما در عرصه پژوهش و تعلیم و تربیت و ارسال مقاله به اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش، برخود لازم میدانیم که صمیمانه ترین تشکرات خود را به جهت زمانی که اختصاص دادید و اطلاعات مفیدی که در اختیار ما قرار دادید، ابراز نماییم، بی شک تحقیق و پژوهش بدون همکاری افراد دلسوز و متعهدی مانند شما به ثمر نمی نشست. از این رو، عمیقا قدردان زحمات و تعامل سازنده تان هستیم. امیدواریم نتایج این مطالعه بتواند گامی موثر در راستای بهبود و توسعه ی حوزه ی آموزش باشد و از اعتماد و همکاری شما بی نهایت سپاسگزاریم و برای شما آرزوی موفقیت و بهروزی داریم.</p>
+                    </div>
+                    <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
                 <button class="btn btn-primary mt-3" onclick="generateCertificate('cert1')">ایجاد گواهی تقدیر</button>
             </div>
@@ -88,8 +233,14 @@
             <!-- گواهی 2 -->
             <div class="tab-pane fade" id="cert2">
                 <div id="cert2-template" class="certificate-template">
-                    <div class="certificate-title">گواهی مشارکت</div>
-                    <div class="certificate-text">بدینوسیله مشارکت شما در مقاله "{{ article.persian_subject }}" تایید می‌شود.</div>
+                    <br><br>
+                    <div class="certificate-title">گواهی حضور در وبینار آموزشی</div>
+                    <span>موسسه فرهنگی هنری بهار اندیشه معلم</span>
+                    <br><br><br><br><br><br>
+                    <div class="certificate-text">
+                        <p>گواهی می شود آقای/خانم <span class="cert-authors"></span> در وبینار بازی و یادگیری در کلاس درس به مدت 8 ساعت که توسط موسسه بهار اندیشه معلم در اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش برگزار گردید حضور داشته است. این گواهی به علت حضور در این وبینار صادر گردیده است و بدون بارکد استعلام فاقد اعتبار می باشد</p>
+                    </div>
+                    <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
                 <button class="btn btn-success mt-3" onclick="generateCertificate('cert2')">ایجاد گواهی مشارکت</button>
             </div>
@@ -97,8 +248,16 @@
             <!-- گواهی 3 -->
             <div class="tab-pane fade" id="cert3">
                 <div id="cert3-template" class="certificate-template">
-                    <div class="certificate-title">گواهی پذیرش</div>
-                    <div class="certificate-text">مقاله "{{ article.persian_subject }}" مورد پذیرش قرار گرفت.</div>
+                    <br>
+                    <div class="certificate-title">گواهی پذیرش مقاله</div>
+                    <br><br><br>
+                    <div class="certificate-text">
+                        <p>مقام معظم رهبری ( حَفِظَهُ اللَّهُ) همواره بر اهمیت تحقیق، پژوهش و تولید علم به عنوان یکی از ارکان اصلی پیشرفت کشور تاکید کرده اند</p>
+                        <p>نویسنده/نویسندگان گرامی : <span class="cert-authors"></span></p>
+                        <p>گواهی می شود مقاله شما با موضوع : <span class="cert-article"></span></p>
+                        <p>پس از طی مراحل داوری علمی و ارزیابی تخصصی، مورد تایید کمیته علمی همایش قرار گرفته و جهت ارائه در <span>"اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش"</span> در تاریخ <span>امروز</span> به صورت <span>سخنرانی</span> پذیرفته شده است. این پذیرش بیانگر انطباق مقاله مذکور با معیارهای علمی، نوآوری پژوهشی و ارتباط موضوعی با محورهای کنفرانس می باشد. مقاله فوق بعد از بارگزاری همایش در مجموعه CIVILICA منتشر خواهد شد.</p>
+                    </div>
+                    <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
                 <button class="btn btn-warning mt-3" onclick="generateCertificate('cert3')">ایجاد گواهی پذیرش</button>
             </div>
@@ -106,40 +265,99 @@
     </div>
 </div>
 
-<!-- js -->
+<!-- JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-function generateCertificate(certType) {
-    const articleId = document.getElementById("articleSelect").value;
-    const certDiv = document.getElementById(certType+"-template");
+    function updateCertificates() {
+        const select = document.getElementById("articleSelect");
+        const selectedOption = select.options[select.selectedIndex];
 
-    // نمایش برای گرفتن عکس
-    certDiv.style.display = "block";
+        let authorsInfo = selectedOption.getAttribute("data-authors");
+        let authorsText = "";
 
-    html2canvas(certDiv).then(canvas => {
-        const imgData = canvas.toDataURL("image/png");
+        try {
+            const authorsDict = JSON.parse(authorsInfo);
+            const authorsArray = Object.values(authorsDict);
+            authorsText = authorsArray.map(a => `${a.first_name} ${a.last_name}`).join("، ");
+        } catch (e) {
+            console.error("JSON parse error:", e);
+            authorsText = authorsInfo;
+        }
 
-        // ارسال به سرور
-        fetch("{% url 'save_certificate' %}", {
-            method: "POST",
-            headers: {
-                "X-CSRFToken": "{{ csrf_token }}",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "article_id": articleId,
-                "cert_type": certType,
-                "image": imgData
+        const data = {
+            title: selectedOption.getAttribute("data-title"),
+            authors: authorsText,
+            qr: selectedOption.getAttribute("data-qr")
+        };
+
+        document.querySelectorAll(".cert-article").forEach(e => e.textContent = data.title);
+        document.querySelectorAll(".cert-authors").forEach(e => e.textContent = data.authors);
+        document.querySelectorAll(".cert-qr").forEach(e => e.src = data.qr);
+    }
+
+    function generateCertificate(certType) {
+        const button = event.target;
+        button.classList.add("loading");
+
+        const articleId = document.getElementById("articleSelect").value;
+        const selectedOption = document.getElementById("articleSelect").options[document.getElementById("articleSelect").selectedIndex];
+        const authorsInfo = selectedOption.getAttribute("data-authors");
+
+        let authors = [];
+        try {
+            const authorsDict = JSON.parse(authorsInfo);
+            authors = Object.values(authorsDict).map(a => `${a.first_name} ${a.last_name}`);
+        } catch (e) {
+            authors = [authorsInfo];
+        }
+
+        const certDiv = document.getElementById(certType + "-template");
+        let formData = new FormData();
+
+        formData.append("article_id", articleId);
+        formData.append("cert_type", certType);
+
+        let targetAuthors = (certType === "cert3") ? [authors.join("، ")] : authors;
+        let index = 0;
+
+        targetAuthors.reduce((p, author) => {
+            return p.then(() => {
+                certDiv.querySelectorAll(".cert-authors").forEach(e => e.textContent = author);
+                return html2canvas(certDiv, { scale: 1 }).then(canvas => {
+                    return new Promise((resolve) => {
+                        canvas.toBlob(blob => {
+                            formData.append("images", blob, `page_${index++}.png`);
+                            resolve();
+                        }, "image/png");
+                    });
+                });
+            });
+        }, Promise.resolve()).then(() => {
+            fetch("{% url 'save_certificate' %}", {
+                method: "POST",
+                headers: { "X-CSRFToken": "{{ csrf_token }}" },
+                body: formData
             })
-        }).then(res => {
-            if(res.ok) alert("گواهی ذخیره شد ✅");
+            .then(res => {
+                if (res.ok) {
+                    alert("PDF ساخته و ذخیره شد ✅");
+                } else {
+                    alert("خطا در ذخیره فایل ❌");
+                }
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                alert("خطایی رخ داده است.");
+            })
+            .finally(() => {
+                button.classList.remove("loading");
+            });
         });
+    }
 
-        // پنهان کردن دوباره
-        certDiv.style.display = "none";
-    });
-}
+    window.onload = updateCertificates;
 </script>
+
 </body>
 </html>

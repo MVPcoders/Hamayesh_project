@@ -18,7 +18,7 @@ class Article(models.Model):
     article_abstract = models.TextField( verbose_name='چکیده مقاله', blank=True, null=True)
     file = models.FileField(verbose_name='فایل مقاله', upload_to='articles/')
     certificate_file = models.FileField(verbose_name='لوح تقدیر', upload_to='articles/certificate/', blank=True, null=True)
-    paziresh_file= models.FileField(verbose_name='لوح پذیرش', upload_to='articles/paziresh/', blank=True, null=True)
+    paziresh_file = models.FileField(verbose_name='لوح پذیرش', upload_to='articles/paziresh/', blank=True, null=True)
     kargah_file = models.FileField(verbose_name='لوح حضور کارگاه', upload_to='articles/kargah/', blank=True, null=True)
     submit_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ ثبت مقاله')
     is_visited = models.BooleanField(verbose_name='دیده شده توسط ادمین', default=False)

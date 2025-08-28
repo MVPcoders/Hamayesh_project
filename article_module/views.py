@@ -6,7 +6,7 @@ from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
-from django.views import View
+from django.views.generic.base import View
 from django.views.generic.detail import DetailView
 from hamayesh_module.models import Hamayesh_prices
 from .models import Article
@@ -16,8 +16,10 @@ from io import BytesIO
 import base64
 from django.views.decorators.csrf import csrf_exempt
 import json
-
-
+import io
+import json
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
 
 
 # دکوریتور ها
@@ -40,7 +42,6 @@ def is_login(func):
 #             return redirect(reverse('index'))
 #
 #     return wrapper
-
 
 
 @method_decorator(is_login, name='dispatch')
@@ -191,30 +192,89 @@ def send_correction_request(request):
         })
 
 
-@is_login
-def generate_certificate(request):
-    articles = Article.objects.filter(is_coached=True)
-    if request.method == "POST":
-        article_id = request.POST.get("article_id")
-        cert_type = request.POST.get("certificate_type")
-        article = get_object_or_404(Article, id=article_id, user=request.user)
+@method_decorator(is_login, name='dispatch')
+class GenerateCertificate(View):
+    def get(self, request):
+        articles = Article.objects.filter(is_coached=True)
 
-    return render(request, "article_moddule/article_cer_maker.html", {"articles": articles})
+        # خروجی نهایی برای فرانت
+        article_list = []
+        for article in articles:
+            article_list.append({
+                "id": article.id,
+                "title": article.persian_subject,
+                'qr_code': article.qr_code.url,
+                # authors_info رو به JSON واقعی تبدیل می‌کنیم
+                "authors_info": json.dumps(article.authors_info, ensure_ascii=False),
+            })
+
+        return render(request, "article_moddule/article_cer_maker.html", {"articles": article_list})
+
+
+# @csrf_exempt
+# def save_certificate(request):
+#     if request.method == "POST":
+#         data = json.loads(request.body)
+#         article_id = data.get("article_id")
+#         cert_type = data.get("cert_type")
+#         image_data = data.get("image")
+#
+#         article = Article.objects.get(id=article_id)
+#
+#         format, imgstr = image_data.split(';base64,')
+#         ext = format.split('/')[-1]
+#         file_data = ContentFile(base64.b64decode(imgstr), name=f"{cert_type}_{article_id}.{ext}")
+#
+#         if cert_type == "cert1":
+#             article.certificate_file = file_data
+#         elif cert_type == "cert2":
+#             article.paziresh_file = file_data
+#         elif cert_type == "cert3":
+#             article.kargah_file = file_data
+#
+#         article.save()
+#         return JsonResponse({"status": "success"})
+
+
+from PIL import Image
+import io
 
 
 @csrf_exempt
 def save_certificate(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        article_id = data.get("article_id")
-        cert_type = data.get("cert_type")
-        image_data = data.get("image")
+        article_id = request.POST.get("article_id")
+        cert_type = request.POST.get("cert_type")
+        files = request.FILES.getlist("images")
 
         article = Article.objects.get(id=article_id)
 
-        format, imgstr = image_data.split(';base64,')
-        ext = format.split('/')[-1]
-        file_data = ContentFile(base64.b64decode(imgstr), name=f"{cert_type}_{article_id}.{ext}")
+        PAGE_WIDTH, PAGE_HEIGHT = 1368, 1000
+        pdf_buffer = io.BytesIO()
+        pdf = canvas.Canvas(pdf_buffer, pagesize=(PAGE_WIDTH, PAGE_HEIGHT))
+
+        for f in files:
+            # تصویر رو با Pillow باز می‌کنیم
+            img = Image.open(f)
+
+            # کاهش کیفیت و اندازه
+            img = img.convert("RGB")  # اطمینان از RGB بودن
+            img.thumbnail((PAGE_WIDTH, PAGE_HEIGHT), Image.LANCZOS)
+
+            # ذخیره در حافظه با کیفیت پایین‌تر
+            img_io = io.BytesIO()
+            img.save(img_io, format="JPEG", quality=60, optimize=True)  # کیفیت بین 40 تا 70 تست کن
+            img_io.seek(0)
+
+            # تبدیل دوباره به ImageReader برای ReportLab
+            image = ImageReader(img_io)
+            pdf.drawImage(image, 0, 0, width=PAGE_WIDTH, height=PAGE_HEIGHT)
+            pdf.showPage()
+
+        pdf.save()
+        pdf_buffer.seek(0)
+
+        file_data = ContentFile(pdf_buffer.read(), name=f"{cert_type}_{article_id}.pdf")
 
         if cert_type == "cert1":
             article.certificate_file = file_data
@@ -225,3 +285,4 @@ def save_certificate(request):
 
         article.save()
         return JsonResponse({"status": "success"})
+
