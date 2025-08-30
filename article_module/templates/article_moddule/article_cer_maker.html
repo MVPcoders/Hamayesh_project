@@ -118,8 +118,12 @@
         }
 
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% {
+                transform: translate(-50%, -50%) rotate(0deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) rotate(360deg);
+            }
         }
 
         /* --- بخش گواهی‌ها (دست نخورده باقی مانده) --- */
@@ -136,9 +140,11 @@
         #cert1-template {
             background: url("{% static 'cerbg/photo20342472886.jpg' %}") no-repeat center/cover;
         }
+
         #cert2-template {
             background: url("{% static 'cerbg/photo20342473206.jpg' %}") no-repeat center/cover;
         }
+
         #cert3-template {
             background: url("{% static 'cerbg/photo20342492046.jpg' %}") no-repeat center/cover;
         }
@@ -147,7 +153,7 @@
             font-size: 36px;
             font-weight: bold;
             margin-bottom: 25px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .certificate-text {
@@ -191,9 +197,7 @@
                 <option value="{{ article.id }}"
                         data-title="{{ article.title }}"
                         data-authors='{{ article.authors_info|safe }}'
-                        {% if article.qr_code %}
-                            data-qr="{{ article.qr_code }}"
-                        {% endif %}>
+                        data-qr="{{ article.qr_code }}">
                     {{ article.title }}
                 </option>
             {% empty %}
@@ -204,10 +208,12 @@
         <!-- تب‌ها -->
         <ul class="nav nav-tabs" id="certificateTabs" role="tablist">
             <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cert1" type="button">گواهی تقدیر</button>
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#cert1" type="button">گواهی تقدیر
+                </button>
             </li>
             <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert2" type="button">گواهی مشارکت</button>
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert2" type="button">گواهی مشارکت
+                </button>
             </li>
             <li class="nav-item">
                 <button class="nav-link" data-bs-toggle="tab" data-bs-target="#cert3" type="button">گواهی پذیرش</button>
@@ -222,8 +228,14 @@
                     <div class="certificate-title">لوح تقدیر</div>
                     <br><br><br><br><br>
                     <div class="certificate-text">
-                        <p>جناب آقای/سرکار خانم :  <span class="cert-authors"></span></p>
-                        <p>با سپاس وقدردانی فراوان از همراهی و مشارکت ارزشمند شما در عرصه پژوهش و تعلیم و تربیت و ارسال مقاله به اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش، برخود لازم میدانیم که صمیمانه ترین تشکرات خود را به جهت زمانی که اختصاص دادید و اطلاعات مفیدی که در اختیار ما قرار دادید، ابراز نماییم، بی شک تحقیق و پژوهش بدون همکاری افراد دلسوز و متعهدی مانند شما به ثمر نمی نشست. از این رو، عمیقا قدردان زحمات و تعامل سازنده تان هستیم. امیدواریم نتایج این مطالعه بتواند گامی موثر در راستای بهبود و توسعه ی حوزه ی آموزش باشد و از اعتماد و همکاری شما بی نهایت سپاسگزاریم و برای شما آرزوی موفقیت و بهروزی داریم.</p>
+                        <p>جناب آقای/سرکار خانم : <span class="cert-authors"></span></p>
+                        <p>با سپاس وقدردانی فراوان از همراهی و مشارکت ارزشمند شما در عرصه پژوهش و تعلیم و تربیت و ارسال
+                            مقاله به اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش، برخود لازم
+                            میدانیم که صمیمانه ترین تشکرات خود را به جهت زمانی که اختصاص دادید و اطلاعات مفیدی که در
+                            اختیار ما قرار دادید، ابراز نماییم، بی شک تحقیق و پژوهش بدون همکاری افراد دلسوز و متعهدی
+                            مانند شما به ثمر نمی نشست. از این رو، عمیقا قدردان زحمات و تعامل سازنده تان هستیم. امیدواریم
+                            نتایج این مطالعه بتواند گامی موثر در راستای بهبود و توسعه ی حوزه ی آموزش باشد و از اعتماد و
+                            همکاری شما بی نهایت سپاسگزاریم و برای شما آرزوی موفقیت و بهروزی داریم.</p>
                     </div>
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
@@ -238,7 +250,10 @@
                     <span>موسسه فرهنگی هنری بهار اندیشه معلم</span>
                     <br><br><br><br><br><br>
                     <div class="certificate-text">
-                        <p>گواهی می شود آقای/خانم <span class="cert-authors"></span> در وبینار بازی و یادگیری در کلاس درس به مدت 8 ساعت که توسط موسسه بهار اندیشه معلم در اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش برگزار گردید حضور داشته است. این گواهی به علت حضور در این وبینار صادر گردیده است و بدون بارکد استعلام فاقد اعتبار می باشد</p>
+                        <p>گواهی می شود آقای/خانم <span class="cert-authors"></span> در وبینار بازی و یادگیری در کلاس
+                            درس به مدت 8 ساعت که توسط موسسه بهار اندیشه معلم در اولین همایش ملی معلمان آینده ساز، رویکرد
+                            های نو در آموزش و پرورش برگزار گردید حضور داشته است. این گواهی به علت حضور در این وبینار
+                            صادر گردیده است و بدون بارکد استعلام فاقد اعتبار می باشد</p>
                     </div>
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
@@ -252,10 +267,15 @@
                     <div class="certificate-title">گواهی پذیرش مقاله</div>
                     <br><br><br>
                     <div class="certificate-text">
-                        <p>مقام معظم رهبری ( حَفِظَهُ اللَّهُ) همواره بر اهمیت تحقیق، پژوهش و تولید علم به عنوان یکی از ارکان اصلی پیشرفت کشور تاکید کرده اند</p>
+                        <p>مقام معظم رهبری ( حَفِظَهُ اللَّهُ) همواره بر اهمیت تحقیق، پژوهش و تولید علم به عنوان یکی از
+                            ارکان اصلی پیشرفت کشور تاکید کرده اند</p>
                         <p>نویسنده/نویسندگان گرامی : <span class="cert-authors"></span></p>
                         <p>گواهی می شود مقاله شما با موضوع : <span class="cert-article"></span></p>
-                        <p>پس از طی مراحل داوری علمی و ارزیابی تخصصی، مورد تایید کمیته علمی همایش قرار گرفته و جهت ارائه در <span>"اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش"</span> در تاریخ <span>امروز</span> به صورت <span>سخنرانی</span> پذیرفته شده است. این پذیرش بیانگر انطباق مقاله مذکور با معیارهای علمی، نوآوری پژوهشی و ارتباط موضوعی با محورهای کنفرانس می باشد. مقاله فوق بعد از بارگزاری همایش در مجموعه CIVILICA منتشر خواهد شد.</p>
+                        <p>پس از طی مراحل داوری علمی و ارزیابی تخصصی، مورد تایید کمیته علمی همایش قرار گرفته و جهت ارائه
+                            در <span>"اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش"</span> در تاریخ
+                            <span>امروز</span> به صورت <span>سخنرانی</span> پذیرفته شده است. این پذیرش بیانگر انطباق
+                            مقاله مذکور با معیارهای علمی، نوآوری پژوهشی و ارتباط موضوعی با محورهای کنفرانس می باشد.
+                            مقاله فوق بعد از بارگزاری همایش در مجموعه CIVILICA منتشر خواهد شد.</p>
                     </div>
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
@@ -324,7 +344,7 @@
         targetAuthors.reduce((p, author) => {
             return p.then(() => {
                 certDiv.querySelectorAll(".cert-authors").forEach(e => e.textContent = author);
-                return html2canvas(certDiv, { scale: 1 }).then(canvas => {
+                return html2canvas(certDiv, {scale: 1}).then(canvas => {
                     return new Promise((resolve) => {
                         canvas.toBlob(blob => {
                             formData.append("images", blob, `page_${index++}.png`);
@@ -336,23 +356,23 @@
         }, Promise.resolve()).then(() => {
             fetch("{% url 'save_certificate' %}", {
                 method: "POST",
-                headers: { "X-CSRFToken": "{{ csrf_token }}" },
+                headers: {"X-CSRFToken": "{{ csrf_token }}"},
                 body: formData
             })
-            .then(res => {
-                if (res.ok) {
-                    alert("PDF ساخته و ذخیره شد ✅");
-                } else {
-                    alert("خطا در ذخیره فایل ❌");
-                }
-            })
-            .catch(err => {
-                console.error("Error:", err);
-                alert("خطایی رخ داده است.");
-            })
-            .finally(() => {
-                button.classList.remove("loading");
-            });
+                .then(res => {
+                    if (res.ok) {
+                        alert("PDF ساخته و ذخیره شد ✅");
+                    } else {
+                        alert("خطا در ذخیره فایل ❌");
+                    }
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    alert("خطایی رخ داده است.");
+                })
+                .finally(() => {
+                    button.classList.remove("loading");
+                });
         });
     }
 

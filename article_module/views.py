@@ -185,18 +185,19 @@ def send_correction_request(request):
 @method_decorator(is_login, name='dispatch')
 class GenerateCertificate(View):
     def get(self, request):
-        articles = Article.objects.filter(is_coached=True)
+        articles = Article.objects.filter(is_paid=True)
 
         # خروجی نهایی برای فرانت
         article_list = []
         for article in articles:
-            article_list.append({
-                "id": article.id,
-                "title": article.persian_subject,
-                'qr_code': article.qr_code.url,
-                # authors_info رو به JSON واقعی تبدیل می‌کنیم
-                "authors_info": json.dumps(article.authors_info, ensure_ascii=False),
-            })
+            if article.qr_code:
+                article_list.append({
+                    "id": article.id,
+                    "title": article.persian_subject,
+                    'qr_code': article.qr_code.url,
+                    # authors_info رو به JSON واقعی تبدیل می‌کنیم
+                    "authors_info": json.dumps(article.authors_info, ensure_ascii=False),
+                })
 
         return render(request, "article_moddule/article_cer_maker.html", {"articles": article_list})
 
