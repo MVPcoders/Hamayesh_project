@@ -1,260 +1,53 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نتیجه پرداخت</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap');
-
-        body {
-            font-family: 'Vazirmatn', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            }
-
-        .payment-card {
-            transition: all 0.5s ease;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            border-radius: 20px;
-            background: white;
-            overflow: hidden;
-        }
-
-        .payment-card.success .card-front {
-            display: none;
-        }
-
-        .card-front {
-            background: linear-gradient(45deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-        }
-
-        .card-back {
-            background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);
-            display: none;
-            color: white;
-        }
-
-        .failure-card {
-            background: linear-gradient(45deg, #f857a6 0%, #ff5858 100%) !important;
-        }
-
-        .confetti {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f0db4f;
-            opacity: 0;
-        }
-
-        .checkmark {
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            animation: draw 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
-        }
-
-        @keyframes draw {
-            100% {
-                stroke-dashoffset: 0;
-            }
-        }
-
-        .pulse {
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-            }
-            70% {
-                transform: scale(1);
-                box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
-            }
-            100% {
-                transform: scale(0.95);
-                box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>نتیجه پرداخت</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+      font-family: Vazirmatn, Tahoma, sans-serif;
+    }
+    .pay-card {
+      max-width: 500px;
+      margin: 80px auto;
+      border-radius: 1.5rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    .pay-card h4 {
+      font-weight: bold;
+    }
+  </style>
 </head>
-<body class="flex items-center justify-center p-4">
-    <div class="w-full max-w-md mx-auto">
-        <div id="paymentCard" class="payment-card relative h-96">
-            <!-- Front of the card - Payment Processing -->
-            <div class="card-front flex flex-col items-center justify-center p-6 text-center">
-                <div class="pulse w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-6">
-                    <svg class="w-12 h-12 text-white animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </div>
-                <h2 class="text-2xl font-bold mb-2">در حال پردازش پرداخت</h2>
-                <p class="text-sm opacity-80">لطفاً منتظر بمانید...</p>
-            </div>
-
-            <!-- Back of the card - Success/Failure -->
-            <div id="resultFace" class="card-face card-back flex flex-col items-center justify-center p-6 text-center">
-                <div id="resultIcon" class="relative mb-6">
-                    <!-- Success Checkmark -->
-                    <svg id="successIcon" class="w-24 h-24 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                        <circle class="fill-current text-green-500" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="checkmark fill-none stroke-white stroke-4" d="M14.1 27.2l7.1 7.2 16.7-16.8" stroke-linecap="round"/>
-                    </svg>
-                    <!-- Failure X -->
-                    <svg id="failureIcon" class="w-24 h-24 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
-                        <circle class="fill-current text-red-500" cx="26" cy="26" r="25" fill="none"/>
-                        <path class="fill-none stroke-white stroke-3" d="M16 16l20 20m0-20L16 36" stroke-linecap="round"/>
-                    </svg>
-                </div>
-
-                <h2 id="resultTitle" class="text-2xl font-bold mb-2"></h2>
-                <p id="resultMessage" class="text-sm opacity-80 mb-6"></p>
-
-                <a href="{% url 'index' %}" id="actionBtn" class="px-6 py-2 rounded-full bg-white bg-opacity-20 hover:bg-opacity-30 transition">
-                    بازگشت به صفحه اصلی
-                </a>
-            </div>
+<body>
+  <div class="container">
+    <div class="card pay-card p-4 text-center">
+      {% if success %}
+        <div class="alert alert-success rounded-3">
+          <h4 class="mb-2">✅ پرداخت موفق</h4>
+          <p class="mb-1">شماره پیگیری: <b>{{ success }}</b></p>
+          <p class="mb-1">مبلغ: {{ amount }} تومان</p>
+          <p class="text-muted">تاریخ: {{ date }}</p>
         </div>
-
-        <!-- Transaction Details (shown after result) -->
-        {% if success %}
-        <div id="detailsCard" class="hidden mt-6 bg-white bg-opacity-80 rounded-2xl p-4 shadow-lg transform -rotate-1">
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-gray-600">شماره تراکنش:</span>
-                <span id="transactionId" class="font-medium">{{ success }}</span>
-            </div>
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-gray-600">تاریخ:</span>
-                <span id="transactionDate" class="font-medium">{{ date }}</span>
-            </div>
-            <div class="flex justify-between items-center mb-2">
-                <span class="text-gray-600">مبلغ:</span>
-                <span id="transactionAmount" class="font-medium">{{ amount }} تومان</span>
-            </div>
-            <div class="flex justify-between items-center">
-                <span class="text-gray-600">وضعیت:</span>
-                <span id="transactionStatus" class="font-medium"></span>
-            </div>
+      {% elif info %}
+        <div class="alert alert-info rounded-3">
+          <h4 class="mb-2">ℹ️ اطلاع</h4>
+          <p>{{ info }}</p>
         </div>
-        {% endif %}
-        {% if info %}
-            <div id="detailsCard" class="hidden mt-6 bg-white bg-opacity-80 rounded-2xl p-4 shadow-lg transform -rotate-1">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-gray-600">وضعیت : </span>
-                    <span id="transactionId" class="font-medium">{{ info }}</span>
-                </div>
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-gray-600">تاریخ:</span>
-                    <span id="transactionDate" class="font-medium">{{ date }}</span>
-                </div>
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-gray-600">مبلغ:</span>
-                    <span id="transactionAmount" class="font-medium">{{ amount }} تومان</span>
-                </div>
-                <div class="flex justify-between items-center">
-                <span class="text-gray-600">وضعیت:</span>
-                <span id="transactionStatus" class="font-medium"></span>
-                </div>
-            </div>
-        {% endif %}
+      {% else %}
+        <div class="alert alert-danger rounded-3">
+          <h4 class="mb-2">❌ پرداخت ناموفق</h4>
+          <p>متاسفانه تراکنش با خطا مواجه شد.</p>
+        </div>
+      {% endif %}
+      <a href="{% url 'profile' %}" class="btn btn-primary mt-3 rounded-pill px-4">
+        بازگشت به پروفایل
+      </a>
     </div>
-
-    <script>
-        // Simulate payment processing
-        // URL parameter to control success/failure
-        const urlParams = new URLSearchParams(window.location.search);
-        const isSuccess = urlParams.get('Status') === 'OK';
-
-        setTimeout(() => {
-            showPaymentResult(isSuccess);
-        }, 3000);
-
-        function showPaymentResult(isSuccess) {
-            const paymentCard = document.getElementById('paymentCard');
-            const resultTitle = document.getElementById('resultTitle');
-            const resultMessage = document.getElementById('resultMessage');
-            const successIcon = document.getElementById('successIcon');
-            const failureIcon = document.getElementById('failureIcon');
-            const transactionStatus = document.getElementById('transactionStatus');
-            const detailsCard = document.getElementById('detailsCard');
-
-            if (isSuccess) {
-                // Success case
-                paymentCard.classList.add('success');
-                document.querySelector('.card-back').style.display = 'flex';
-                successIcon.classList.remove('hidden');
-                resultTitle.textContent = 'پرداخت موفق!';
-                resultMessage.textContent = 'پرداخت شما با موفقیت انجام شد. کد رهگیری به شماره همراه شما ارسال گردید.';
-                transactionStatus.textContent = 'موفق';
-                transactionStatus.classList.add('text-green-600');
-
-                // Create confetti effect
-                createConfetti();
-            } else {
-                // Failure case
-                paymentCard.classList.add('success');
-                document.querySelector('.card-back').style.display = 'flex';
-                paymentCard.querySelector('.card-back').classList.add('failure-card');
-                failureIcon.classList.remove('hidden');
-                resultTitle.textContent = 'پرداخت ناموفق';
-                resultMessage.textContent = 'متاسفانه پرداخت شما انجام نشد. لطفاً مجدداً تلاش کنید.';
-                transactionStatus.textContent = 'ناموفق';
-                transactionStatus.classList.add('text-red-600');
-            }
-
-            // Show details card
-            detailsCard.classList.remove('hidden');
-        }
-
-        function createConfetti() {
-            const container = document.getElementById('resultIcon');
-
-            for (let i = 0; i < 50; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-
-                // Random properties
-                const size = Math.random() * 10 + 5;
-                const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
-
-                confetti.style.width = `${size}px`;
-                confetti.style.height = `${size}px`;
-                confetti.style.backgroundColor = color;
-                confetti.style.left = `${Math.random() * 100}%`;
-                confetti.style.top = `${Math.random() * 100}%`;
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-
-                // Animation
-                const animation = confetti.animate(
-                    [
-                        { transform: 'translateY(0) rotate(0)', opacity: 1 },
-                        { transform: `translateY(${Math.random() * 200 - 100}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
-                    ],
-                    {
-                        duration: Math.random() * 3000 + 2000,
-                        delay: Math.random() * 1000,
-                        easing: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)'
-                    }
-                );
-
-                container.appendChild(confetti);
-
-                animation.onfinish = () => confetti.remove();
-            }
-        }
-
-        function getPaymentStatus() {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('status') === 'success';
-        }
-
-        document.getElementById('actionBtn').addEventListener('click', () => {
-            alert('بازگشت به صفحه اصلی');
-        });
-    </script>
+  </div>
 </body>
 </html>

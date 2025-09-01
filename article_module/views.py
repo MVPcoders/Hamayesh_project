@@ -33,7 +33,6 @@ def is_login(func):
     return wrapper
 
 
-
 @method_decorator(is_login, name='dispatch')
 class SubmitArticle(View):
     def get(self, request, *args, **kwargs):
@@ -276,4 +275,3 @@ def save_certificate(request):
 
         article.save()
         return JsonResponse({"status": "success"})
-

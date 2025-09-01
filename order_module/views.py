@@ -26,7 +26,8 @@ from azbankgateways import (
     default_settings as settings,
 )
 from azbankgateways.exceptions import AZBankGatewaysException
-
+from .zibal_service import zibal_send_request, ZIBAL_STARTPAY
+from .zibal_service import verify_payment
 
 def pay(request):
     return render(request, "order_module/pay.html", context={})
@@ -137,8 +138,6 @@ def verify(request: HttpRequest):
         return render(request, 'order_module/pay.html', )
 
 
-
-
 def go_to_gateway_view(request):
     # خواندن مبلغ از هر جایی که مد نظر است
     amount = 1000000
@@ -199,4 +198,73 @@ def callback_gateway_view(request):
 
 
 
+
+
+CALLBACK_URL = "http://localhost:8000/pay/zibal/verify/"  # آدرس برگشت
+
+@login_required
+def send_request_view(request: HttpRequest, article_id):
+    article = get_object_or_404(Article, id=article_id, user=request.user, is_paid=False)
+    amount = int(article.price)
+
+    success, result = zibal_send_request(
+        amount=amount,
+        callback_url=CALLBACK_URL,
+        description=f"پرداخت هزینه مقاله {article.id}",
+        order_id=article.id,
+        mobile=getattr(request.user, "mobile", None),
+    )
+
+    if success:
+        article.send_to_pay = str(result)  # ذخیره trackId
+        article.save()
+        return redirect(ZIBAL_STARTPAY.format(trackId=result))
+    else:
+        messages.error(request, f"خطا در اتصال به درگاه: {result}")
+        return redirect("profile")
+
+
+
+@login_required
+def verify_view(request: HttpRequest):
+    track_id = request.GET.get("trackId")
+    if not track_id:
+        return HttpResponse("پارامتر trackId وجود ندارد!")
+
+    try:
+        article = Article.objects.get(send_to_pay=track_id, user=request.user)
+    except Article.DoesNotExist:
+        return HttpResponse("مقاله پیدا نشد!")
+
+    amount = int(article.price)
+
+    status, result = verify_payment(track_id=track_id, amount=amount)
+
+    if status is True:
+        # پرداخت موفق
+        article.is_paid = True
+        article.save()
+
+        payment = Payment.objects.create(
+            user=request.user,
+            amount=amount,
+            is_successful=True,
+            transaction_id=result,  # refNumber
+        )
+
+        return render(request, "order_module/pay.html", {
+            "success": f"پرداخت با موفقیت انجام شد. شماره پیگیری: {result}",
+            "amount": amount,
+            "date": datetime.now(),
+        })
+
+    elif status == "duplicate":
+        return render(request, "order_module/pay.html", {
+            "info": f"این تراکنش قبلاً تایید شده است. شماره پیگیری: {result}",
+        })
+
+    else:
+        return render(request, "order_module/pay.html", {
+            "info": f"پرداخت ناموفق: {result}",
+        })
 
