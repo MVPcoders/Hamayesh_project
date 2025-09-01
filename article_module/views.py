@@ -1,6 +1,7 @@
+import string
 from logging import raiseExceptions
 import os
-from random import random
+import random
 from django.contrib.auth import login
 from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
@@ -20,6 +21,7 @@ import io
 import json
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
+from PIL import Image
 
 
 # دکوریتور ها
@@ -56,6 +58,11 @@ class SubmitArticle(View):
                 }
                 authors_info[i] = authour
 
+            def generate_unique_code():
+                return ''.join(random.choices(string.digits, k=10))
+
+            unique_code = generate_unique_code()
+
             article = Article.objects.create(
                 user=request.user,
                 authors_numbers=form['authorCount'],
@@ -66,17 +73,17 @@ class SubmitArticle(View):
                 article_abstract=form['articleAbstract'],
                 file=request.FILES.get('articleFile'),
                 authors_info=authors_info,
-                price=ar_price
+                price=ar_price,
+                unique_code=unique_code
             )
 
-            # ساخت لینک مقاله
             article_url = request.build_absolute_uri(article.get_absolute_url())
 
             # ساخت QR Code
             qr = qrcode.make(article_url)
             buffer = BytesIO()
             qr.save(buffer, format="PNG")
-            file_name = f"article_{article.id}_qrcode.png"
+            file_name = f"article_{article.unique_code}_qrcode.png"
             article.qr_code.save(file_name, ContentFile(buffer.getvalue()), save=True)
 
             return JsonResponse({
@@ -91,10 +98,13 @@ class SubmitArticle(View):
             })
 
 
-class ArticleDetailView(DetailView):
-    model = Article
-    template_name = "article_moddule/article_cer.html"
-    context_object_name = "article"
+
+
+
+class VerifyArticle(View):
+    def get(self, request, code):
+        article = get_object_or_404(Article, unique_code=code)
+        return render(request, "article_moddule/article_cer.html", {"article": article})
 
 
 @method_decorator(is_login, name='dispatch')
@@ -189,11 +199,13 @@ class GenerateCertificate(View):
         # خروجی نهایی برای فرانت
         article_list = []
         for article in articles:
-            if article.qr_code:
+            if article.qr_code and not article.kargah_file:
                 article_list.append({
                     "id": article.id,
                     "title": article.persian_subject,
                     'qr_code': article.qr_code.url,
+                    'unique_code': article.unique_code,
+                    'submit_date': article.submit_date,
                     # authors_info رو به JSON واقعی تبدیل می‌کنیم
                     "authors_info": json.dumps(article.authors_info, ensure_ascii=False),
                 })
@@ -201,33 +213,7 @@ class GenerateCertificate(View):
         return render(request, "article_moddule/article_cer_maker.html", {"articles": article_list})
 
 
-# @csrf_exempt
-# def save_certificate(request):
-#     if request.method == "POST":
-#         data = json.loads(request.body)
-#         article_id = data.get("article_id")
-#         cert_type = data.get("cert_type")
-#         image_data = data.get("image")
-#
-#         article = Article.objects.get(id=article_id)
-#
-#         format, imgstr = image_data.split(';base64,')
-#         ext = format.split('/')[-1]
-#         file_data = ContentFile(base64.b64decode(imgstr), name=f"{cert_type}_{article_id}.{ext}")
-#
-#         if cert_type == "cert1":
-#             article.certificate_file = file_data
-#         elif cert_type == "cert2":
-#             article.paziresh_file = file_data
-#         elif cert_type == "cert3":
-#             article.kargah_file = file_data
-#
-#         article.save()
-#         return JsonResponse({"status": "success"})
 
-
-from PIL import Image
-import io
 
 
 @csrf_exempt

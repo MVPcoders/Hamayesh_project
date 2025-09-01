@@ -182,6 +182,18 @@
             width: 100px;
             height: 100px;
         }
+        .certificate-meta {
+            position: absolute;
+            top: 130px;
+            left: 300px;
+            text-align: left;
+            font-size: 16px;
+            color: #222;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body dir="rtl">
@@ -197,9 +209,12 @@
                 <option value="{{ article.id }}"
                         data-title="{{ article.title }}"
                         data-authors='{{ article.authors_info|safe }}'
-                        data-qr="{{ article.qr_code }}">
+                        data-qr="{{ article.qr_code }}"
+                        data-date="{{ article.submit_date|date:'Y/m/d' }}"
+                        data-unique="{{ article.unique_code }}">
                     {{ article.title }}
                 </option>
+
             {% empty %}
                 <option disabled>هیچ مقاله‌ای تایید نشده است</option>
             {% endfor %}
@@ -224,6 +239,10 @@
             <!-- گواهی 1 -->
             <div class="tab-pane fade show active" id="cert1">
                 <div id="cert1-template" class="certificate-template">
+                    <div class="certificate-meta">
+                        <p>تاریخ: <span class="cert-date"></span></p>
+                        <p>کد مقاله: <span class="cert-unique"></span></p>
+                    </div>
                     <br><br>
                     <div class="certificate-title">لوح تقدیر</div>
                     <br><br><br><br><br>
@@ -238,6 +257,7 @@
                             همکاری شما بی نهایت سپاسگزاریم و برای شما آرزوی موفقیت و بهروزی داریم.</p>
                     </div>
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
+
                 </div>
                 <button class="btn btn-primary mt-3" onclick="generateCertificate('cert1')">ایجاد گواهی تقدیر</button>
             </div>
@@ -245,6 +265,10 @@
             <!-- گواهی 2 -->
             <div class="tab-pane fade" id="cert2">
                 <div id="cert2-template" class="certificate-template">
+                    <div class="certificate-meta">
+                        <p>تاریخ: <span class="cert-date"></span></p>
+                        <p>کد مقاله: <span class="cert-unique"></span></p>
+                    </div>
                     <br><br>
                     <div class="certificate-title">گواهی حضور در وبینار آموزشی</div>
                     <span>موسسه فرهنگی هنری بهار اندیشه معلم</span>
@@ -263,6 +287,10 @@
             <!-- گواهی 3 -->
             <div class="tab-pane fade" id="cert3">
                 <div id="cert3-template" class="certificate-template">
+                    <div class="certificate-meta">
+                        <p>تاریخ: <span class="cert-date"></span></p>
+                        <p>کد مقاله: <span class="cert-unique"></span></p>
+                    </div>
                     <br>
                     <div class="certificate-title">گواهی پذیرش مقاله</div>
                     <br><br><br>
@@ -289,32 +317,49 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script>
-    function updateCertificates() {
-        const select = document.getElementById("articleSelect");
-        const selectedOption = select.options[select.selectedIndex];
+function toPersianNumber(input) {
+    const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+    return input.toString().replace(/\d/g, d => persianDigits[d]);
+}
 
-        let authorsInfo = selectedOption.getAttribute("data-authors");
-        let authorsText = "";
+function toShamsi(dateStr) {
+    const date = new Date(dateStr);
+    return new Intl.DateTimeFormat('fa-IR').format(date);
+}
+function updateCertificates() {
 
-        try {
-            const authorsDict = JSON.parse(authorsInfo);
-            const authorsArray = Object.values(authorsDict);
-            authorsText = authorsArray.map(a => `${a.first_name} ${a.last_name}`).join("، ");
-        } catch (e) {
-            console.error("JSON parse error:", e);
-            authorsText = authorsInfo;
-        }
+    const select = document.getElementById("articleSelect");
+    const selectedOption = select.options[select.selectedIndex];
 
-        const data = {
-            title: selectedOption.getAttribute("data-title"),
-            authors: authorsText,
-            qr: selectedOption.getAttribute("data-qr")
-        };
+    let authorsInfo = selectedOption.getAttribute("data-authors");
+    let authorsText = "";
 
-        document.querySelectorAll(".cert-article").forEach(e => e.textContent = data.title);
-        document.querySelectorAll(".cert-authors").forEach(e => e.textContent = data.authors);
-        document.querySelectorAll(".cert-qr").forEach(e => e.src = data.qr);
+    try {
+        const authorsDict = JSON.parse(authorsInfo);
+        const authorsArray = Object.values(authorsDict);
+        authorsText = authorsArray.map(a => `${a.first_name} ${a.last_name}`).join("، ");
+    } catch (e) {
+        authorsText = authorsInfo;
     }
+
+    const data = {
+        title: selectedOption.getAttribute("data-title"),
+        authors: authorsText,
+        qr: selectedOption.getAttribute("data-qr"),
+        date: selectedOption.getAttribute("data-date"),         // اضافه شد
+        unique: selectedOption.getAttribute("data-unique")      // اضافه شد
+    };
+
+    document.querySelectorAll(".cert-article").forEach(e => e.textContent = data.title);
+    document.querySelectorAll(".cert-authors").forEach(e => e.textContent = data.authors);
+    document.querySelectorAll(".cert-qr").forEach(e => e.src = data.qr);
+    document.querySelectorAll(".cert-date").forEach(e => e.textContent = data.date);
+    document.querySelectorAll(".cert-unique").forEach(e => e.textContent = data.unique);
+    document.querySelectorAll(".cert-date").forEach(e => {e.textContent = toPersianNumber(toShamsi(data.date));});
+    document.querySelectorAll(".cert-unique").forEach(e => {e.textContent = toPersianNumber(data.unique);});
+
+}
+
 
     function generateCertificate(certType) {
         const button = event.target;

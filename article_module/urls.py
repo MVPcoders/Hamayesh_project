@@ -11,7 +11,7 @@
 
 from django.urls import path
 from . import views
-from .views import ArticleDetailView, SubmitArticle, GenerateCertificate
+from .views import  SubmitArticle, GenerateCertificate, VerifyArticle
 
 urlpatterns = [
     path('new-article/', SubmitArticle.as_view(), name='new_article'),
@@ -20,7 +20,7 @@ urlpatterns = [
     path('correct-article/', views.send_correction_request, name='correct_article'),
     path('article-cer-maker/',GenerateCertificate.as_view(), name='generate_certificate'),
     path('save-certificate/', views.save_certificate, name='save_certificate'),
-    path("article/<int:pk>/", ArticleDetailView.as_view(), name="article_detail")
+    path("article/verify/<str:code>/", VerifyArticle.as_view(), name="article_verify")
 
 ]
 

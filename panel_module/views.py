@@ -1,11 +1,7 @@
-from audioop import reverse
-from crypt import methods
-
 from django.http import JsonResponse, Http404
 from django.shortcuts import render, redirect
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, View
-
 from account_module.models import User
 from article_module.models import Article
 from django.core.paginator import Paginator
