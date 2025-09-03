@@ -6,10 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>صدور گواهی مقالات</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* فونت بی‌نازنین */
+        @font-face {
+            font-family: "B Nazanin";
+            src: url("{% static 'fonts/B-NAZANIN.TTF' %}") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
         body {
             background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            font-family: "Vazir", sans-serif;
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
             color: #333;
             transition: background 0.4s ease;
         }
@@ -22,6 +31,7 @@
             margin-top: 40px;
             animation: fadeInUp 0.6s ease-out;
             overflow: hidden;
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
         }
 
         @keyframes fadeInUp {
@@ -35,12 +45,13 @@
             }
         }
 
-        /* استایل مدرن برای select */
+        /* select */
         #articleSelect {
             border: 2px solid #e0e0e0;
             border-radius: 14px;
             padding: 12px 16px;
-            font-size: 17px;
+            font-size: 24px; /* بزرگتر شد */
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
             transition: all 0.3s ease;
             background-color: #f9f9f9;
             color: #333;
@@ -55,12 +66,14 @@
             transform: translateY(-2px);
         }
 
-        /* استایل تب‌ها */
+        /* تب‌ها */
         .nav-tabs .nav-link {
             border: none;
             border-radius: 12px;
             margin: 0 6px;
             font-weight: 600;
+            font-size: 18px;
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
             color: #666;
             transition: all 0.3s ease;
             background-color: #f1f3f5;
@@ -77,11 +90,13 @@
             box-shadow: 0 4px 10px rgba(76, 175, 80, 0.2);
         }
 
-        /* دکمه‌های مدرن با لودینگ */
+        /* دکمه‌ها */
         .btn {
             border-radius: 12px;
             padding: 10px 20px;
             font-weight: 600;
+            font-size: 18px;
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
             transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             position: relative;
@@ -97,36 +112,21 @@
             transform: translateY(0);
         }
 
-        /* لودینگ داخل دکمه */
         .btn.loading {
             pointer-events: none;
             opacity: 0.8;
         }
 
-        .btn.loading::after {
-            content: "";
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 2px solid #fff;
-            border-top: 2px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        .btn.loading .spinner {
+            display: inline-block;
+            margin-right: 8px;
         }
 
-        @keyframes spin {
-            0% {
-                transform: translate(-50%, -50%) rotate(0deg);
-            }
-            100% {
-                transform: translate(-50%, -50%) rotate(360deg);
-            }
+        .btn .spinner {
+            display: none;
         }
 
-        /* --- بخش گواهی‌ها (دست نخورده باقی مانده) --- */
+        /* --- بخش گواهی‌ها --- */
         .certificate-template {
             width: 1368px;
             height: 1000px;
@@ -135,6 +135,7 @@
             padding: 40px;
             text-align: center;
             position: relative;
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
         }
 
         #cert1-template {
@@ -150,16 +151,17 @@
         }
 
         .certificate-title {
-            font-size: 36px;
+            font-size: 42px;  /* بزرگتر شد */
             font-weight: bold;
             margin-bottom: 25px;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .certificate-text {
-            font-size: 20px;
-            line-height: 1.8;
-            text-align: right;
+            font-size: 22px;   /* بزرگتر شد */
+            line-height: 2;
+            text-align: justify;   /* متن justify شد */
+            text-align-last: right;
             border-radius: 15px;
             padding: 20px;
             margin: 0 auto;
@@ -182,18 +184,108 @@
             width: 100px;
             height: 100px;
         }
+
         .certificate-meta {
             position: absolute;
             top: 130px;
             left: 300px;
             text-align: left;
-            font-size: 16px;
+            font-size: 18px; /* کمی بزرگتر */
+            font-family: "B Nazanin", Tahoma, sans-serif !important;
             color: #222;
             padding: 10px 15px;
             border-radius: 10px;
             font-weight: bold;
         }
 
+        /* لودینگ overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+        }
+
+        .loading-spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #4CAF50;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* نوتیفیکیشن */
+        .notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 20px 25px;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            transform: translateX(150%);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background-color: #f44336;
+        }
+
+        .notification i {
+            margin-left: 10px;
+            font-size: 24px;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 18px;
+        }
+
+        .notification-message {
+            font-size: 16px;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body dir="rtl">
@@ -259,7 +351,10 @@
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
 
                 </div>
-                <button class="btn btn-primary mt-3" onclick="generateCertificate('cert1')">ایجاد گواهی تقدیر</button>
+                <button class="btn btn-primary mt-3" onclick="generateCertificate('cert1')">
+                    <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                    ایجاد گواهی تقدیر
+                </button>
             </div>
 
             <!-- گواهی 2 -->
@@ -281,7 +376,10 @@
                     </div>
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
-                <button class="btn btn-success mt-3" onclick="generateCertificate('cert2')">ایجاد گواهی مشارکت</button>
+                <button class="btn btn-success mt-3" onclick="generateCertificate('cert2')">
+                    <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                    ایجاد گواهی مشارکت
+                </button>
             </div>
 
             <!-- گواهی 3 -->
@@ -301,15 +399,34 @@
                         <p>گواهی می شود مقاله شما با موضوع : <span class="cert-article"></span></p>
                         <p>پس از طی مراحل داوری علمی و ارزیابی تخصصی، مورد تایید کمیته علمی همایش قرار گرفته و جهت ارائه
                             در <span>"اولین همایش ملی معلمان آینده ساز، رویکرد های نو در آموزش و پرورش"</span> در تاریخ
-                            <span>امروز</span> به صورت <span>سخنرانی</span> پذیرفته شده است. این پذیرش بیانگر انطباق
+                            <span class="cert-date"></span> به صورت <span>سخنرانی</span> پذیرفته شده است. این پذیرش بیانگر انطباق
                             مقاله مذکور با معیارهای علمی، نوآوری پژوهشی و ارتباط موضوعی با محورهای کنفرانس می باشد.
                             مقاله فوق بعد از بارگزاری همایش در مجموعه CIVILICA منتشر خواهد شد.</p>
                     </div>
                     <div class="certificate-qr"><img class="cert-qr" src=""></div>
                 </div>
-                <button class="btn btn-warning mt-3" onclick="generateCertificate('cert3')">ایجاد گواهی پذیرش</button>
+                <button class="btn btn-warning mt-3" onclick="generateCertificate('cert3')">
+                    <span class="spinner"><i class="fas fa-spinner fa-spin"></i></span>
+                    ایجاد گواهی پذیرش
+                </button>
             </div>
         </div>
+    </div>
+</div>
+
+<!-- لودینگ overlay -->
+<div class="loading-overlay" id="loadingOverlay" style="display: none;">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">در حال ایجاد گواهی، لطفا منتظر بمانید...</div>
+</div>
+
+<!-- نوتیفیکیشن -->
+<div class="notification" id="notification">
+    <button class="notification-close" onclick="hideNotification()">&times;</button>
+    <i class="fas fa-check-circle"></i>
+    <div class="notification-content">
+        <div class="notification-title">موفقیت آمیز</div>
+        <div class="notification-message" id="notificationMessage">عملیات با موفقیت انجام شد</div>
     </div>
 </div>
 
@@ -326,8 +443,8 @@ function toShamsi(dateStr) {
     const date = new Date(dateStr);
     return new Intl.DateTimeFormat('fa-IR').format(date);
 }
-function updateCertificates() {
 
+function updateCertificates() {
     const select = document.getElementById("articleSelect");
     const selectedOption = select.options[select.selectedIndex];
 
@@ -346,8 +463,8 @@ function updateCertificates() {
         title: selectedOption.getAttribute("data-title"),
         authors: authorsText,
         qr: selectedOption.getAttribute("data-qr"),
-        date: selectedOption.getAttribute("data-date"),         // اضافه شد
-        unique: selectedOption.getAttribute("data-unique")      // اضافه شد
+        date: selectedOption.getAttribute("data-date"),
+        unique: selectedOption.getAttribute("data-unique")
     };
 
     document.querySelectorAll(".cert-article").forEach(e => e.textContent = data.title);
@@ -357,71 +474,101 @@ function updateCertificates() {
     document.querySelectorAll(".cert-unique").forEach(e => e.textContent = data.unique);
     document.querySelectorAll(".cert-date").forEach(e => {e.textContent = toPersianNumber(toShamsi(data.date));});
     document.querySelectorAll(".cert-unique").forEach(e => {e.textContent = toPersianNumber(data.unique);});
-
 }
 
+function showNotification(message, isError = false) {
+    const notification = document.getElementById("notification");
+    const messageElement = document.getElementById("notificationMessage");
 
-    function generateCertificate(certType) {
-        const button = event.target;
-        button.classList.add("loading");
+    messageElement.textContent = message;
 
-        const articleId = document.getElementById("articleSelect").value;
-        const selectedOption = document.getElementById("articleSelect").options[document.getElementById("articleSelect").selectedIndex];
-        const authorsInfo = selectedOption.getAttribute("data-authors");
-
-        let authors = [];
-        try {
-            const authorsDict = JSON.parse(authorsInfo);
-            authors = Object.values(authorsDict).map(a => `${a.first_name} ${a.last_name}`);
-        } catch (e) {
-            authors = [authorsInfo];
-        }
-
-        const certDiv = document.getElementById(certType + "-template");
-        let formData = new FormData();
-
-        formData.append("article_id", articleId);
-        formData.append("cert_type", certType);
-
-        let targetAuthors = (certType === "cert3") ? [authors.join("، ")] : authors;
-        let index = 0;
-
-        targetAuthors.reduce((p, author) => {
-            return p.then(() => {
-                certDiv.querySelectorAll(".cert-authors").forEach(e => e.textContent = author);
-                return html2canvas(certDiv, {scale: 1}).then(canvas => {
-                    return new Promise((resolve) => {
-                        canvas.toBlob(blob => {
-                            formData.append("images", blob, `page_${index++}.png`);
-                            resolve();
-                        }, "image/png");
-                    });
-                });
-            });
-        }, Promise.resolve()).then(() => {
-            fetch("{% url 'save_certificate' %}", {
-                method: "POST",
-                headers: {"X-CSRFToken": "{{ csrf_token }}"},
-                body: formData
-            })
-                .then(res => {
-                    if (res.ok) {
-                        alert("PDF ساخته و ذخیره شد ✅");
-                    } else {
-                        alert("خطا در ذخیره فایل ❌");
-                    }
-                })
-                .catch(err => {
-                    console.error("Error:", err);
-                    alert("خطایی رخ داده است.");
-                })
-                .finally(() => {
-                    button.classList.remove("loading");
-                });
-        });
+    if (isError) {
+        notification.classList.add("error");
+        notification.querySelector("i").className = "fas fa-exclamation-circle";
+    } else {
+        notification.classList.remove("error");
+        notification.querySelector("i").className = "fas fa-check-circle";
     }
 
-    window.onload = updateCertificates;
+    notification.classList.add("show");
+
+    // بعد از 5 ثانیه نوتیفیکیشن را پنهان کن
+    setTimeout(hideNotification, 5000);
+}
+
+function hideNotification() {
+    const notification = document.getElementById("notification");
+    notification.classList.remove("show");
+}
+
+function showLoading() {
+    document.getElementById("loadingOverlay").style.display = "flex";
+}
+
+function hideLoading() {
+    document.getElementById("loadingOverlay").style.display = "none";
+}
+
+async function generateCertificate(certType) {
+    const button = event.target;
+    button.classList.add("loading");
+    showLoading();
+
+    const articleId = document.getElementById("articleSelect").value;
+    const selectedOption = document.getElementById("articleSelect").options[document.getElementById("articleSelect").selectedIndex];
+    const authorsInfo = selectedOption.getAttribute("data-authors");
+
+    let authors = [];
+    try {
+        const authorsDict = JSON.parse(authorsInfo);
+        authors = Object.values(authorsDict).map(a => `${a.first_name} ${a.last_name}`);
+    } catch (e) {
+        authors = [authorsInfo];
+    }
+
+    const certDiv = document.getElementById(certType + "-template");
+    let formData = new FormData();
+
+    formData.append("article_id", articleId);
+    formData.append("cert_type", certType);
+
+    let targetAuthors = (certType === "cert3") ? [authors.join("، ")] : authors;
+    let index = 0;
+
+    try {
+        for (const author of targetAuthors) {
+            certDiv.querySelectorAll(".cert-authors").forEach(e => e.textContent = author);
+            const canvas = await html2canvas(certDiv, {scale: 4});
+
+            await new Promise((resolve) => {
+                canvas.toBlob(blob => {
+                    formData.append("images", blob, `page_${index++}.png`);
+                    resolve();
+                }, "image/png");
+            });
+        }
+
+        const response = await fetch("{% url 'save_certificate' %}", {
+            method: "POST",
+            headers: {"X-CSRFToken": "{{ csrf_token }}"},
+            body: formData
+        });
+
+        if (response.ok) {
+            showNotification("PDF ساخته و ذخیره شد ✅");
+        } else {
+            showNotification("خطا در ذخیره فایل ❌", true);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        showNotification("خطایی رخ داده است.", true);
+    } finally {
+        button.classList.remove("loading");
+        hideLoading();
+    }
+}
+
+window.onload = updateCertificates;
 </script>
 
 </body>

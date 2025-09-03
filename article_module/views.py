@@ -235,11 +235,11 @@ def save_certificate(request):
 
             # کاهش کیفیت و اندازه
             img = img.convert("RGB")  # اطمینان از RGB بودن
-            img.thumbnail((PAGE_WIDTH, PAGE_HEIGHT), Image.LANCZOS)
+            # img.thumbnail((PAGE_WIDTH, PAGE_HEIGHT), Image.LANCZOS)
 
             # ذخیره در حافظه با کیفیت پایین‌تر
             img_io = io.BytesIO()
-            img.save(img_io, format="JPEG", quality=60, optimize=True)  # کیفیت بین 40 تا 70 تست کن
+            img.save(img_io, format="JPEG", quality=70, optimize=True)  # کیفیت بین 40 تا 70 تست کن
             img_io.seek(0)
 
             # تبدیل دوباره به ImageReader برای ReportLab
