@@ -59,7 +59,7 @@ class SubmitArticle(View):
 
             unique_code = generate_unique_code()
 
-            article = Article.objects.create(
+            article = Article(
                 user=request.user,
                 authors_numbers=form['authorCount'],
                 main_goal=form['articleMainGoal'],
@@ -72,15 +72,14 @@ class SubmitArticle(View):
                 price=ar_price,
                 unique_code=unique_code
             )
-
-            article_url = request.build_absolute_uri(article.get_absolute_url())
-
             # ساخت QR Code
+            article_url = request.build_absolute_uri(article.get_absolute_url())
             qr = qrcode.make(article_url)
             buffer = BytesIO()
             qr.save(buffer, format="PNG")
             file_name = f"article_{article.unique_code}_qrcode.png"
-            article.qr_code.save(file_name, ContentFile(buffer.getvalue()), save=True)
+            article.qr_code.save(file_name, ContentFile(buffer.getvalue()), save=False)
+            article.save()
 
             return JsonResponse({
                 'status': 'success',
