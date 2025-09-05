@@ -5,8 +5,8 @@ ZIBAL_REQUEST_URL = "https://gateway.zibal.ir/v1/request"
 ZIBAL_VERIFY_URL = "https://gateway.zibal.ir/v1/verify"
 ZIBAL_STARTPAY = "https://gateway.zibal.ir/start/{trackId}"
 
-# MERCHANT = "6878e814a45c72001aa408b7"  # تستی، بعداً مرچنت اصلیت رو بذار
-MERCHANT = "zibal"  # تستی، بعداً مرچنت اصلیت رو بذار
+MERCHANT = "6878e814a45c72001aa408b7"  # تستی، بعداً مرچنت اصلیت رو بذار
+# MERCHANT = "zibal"  # تستی، بعداً مرچنت اصلیت رو بذار
 
 
 def zibal_send_request(amount, callback_url, description="پرداخت هزینه", order_id=None, mobile=None):

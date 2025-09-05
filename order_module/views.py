@@ -5,7 +5,7 @@ from os import times
 from datetime import datetime
 from django.contrib.auth.decorators import login_required
 import requests
-from django.http import HttpRequest, JsonResponse, HttpResponse
+from django.http import HttpRequest, JsonResponse, HttpResponse, Http404
 from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy

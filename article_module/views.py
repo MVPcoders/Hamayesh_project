@@ -1,27 +1,23 @@
 import string
-from logging import raiseExceptions
 import os
 import random
-from django.contrib.auth import login
-from django.http import HttpRequest, HttpResponse, JsonResponse, Http404
+from django.http import HttpRequest, JsonResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils.decorators import method_decorator
 from django.views.generic.base import View
-from django.views.generic.detail import DetailView
 from hamayesh_module.models import Hamayesh_prices
 from .models import Article
 import qrcode
 from django.core.files.base import ContentFile
 from io import BytesIO
-import base64
 from django.views.decorators.csrf import csrf_exempt
-import json
 import io
 import json
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from PIL import Image
+from panel_module.views import is_admin
 
 
 # دکوریتور ها
@@ -96,9 +92,6 @@ class SubmitArticle(View):
                 'status': 'error',
                 'message': str(e)
             })
-
-
-
 
 
 class VerifyArticle(View):
@@ -191,7 +184,7 @@ def send_correction_request(request):
         })
 
 
-@method_decorator(is_login, name='dispatch')
+@method_decorator(is_admin, name='dispatch')
 class GenerateCertificate(View):
     def get(self, request):
         articles = Article.objects.filter(is_paid=True)
@@ -211,9 +204,6 @@ class GenerateCertificate(View):
                 })
 
         return render(request, "article_moddule/article_cer_maker.html", {"articles": article_list})
-
-
-
 
 
 @csrf_exempt
