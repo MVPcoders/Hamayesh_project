@@ -27,9 +27,9 @@ def pay(request):
     return render(request, "order_module/pay.html", context={})
 
 merchant_id = "3a681e90-59c0-4511-8101-655b26314ae5"
-ZP_API_REQUEST = "https://payment.zarinpal.com/pg/v4/payment/request.json"
-ZP_API_VERIFY = "https://payment.zarinpal.com/pg/v4/payment/verify.json"
-ZP_API_STARTPAY = "https://payment.zarinpal.com/pg/StartPay/{authority}"
+ZP_API_REQUEST = "https://sandbox.zarinpal.com/pg/v4/payment/request.json"
+ZP_API_VERIFY = "https://sandbox.zarinpal.com/pg/v4/payment/verify.json"
+ZP_API_STARTPAY = "https://sandbox.zarinpal.com/pg/StartPay/{authority}"
 callback_url = "self.callbackURL"
 description = "نهایی کردن خرید شما از سایت ما"
 mobile = "mobile"  # اختیاری
