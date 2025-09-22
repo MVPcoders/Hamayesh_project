@@ -416,8 +416,12 @@
 
 <!-- لودینگ overlay -->
 <div class="loading-overlay" id="loadingOverlay" style="display: none;">
-    <div class="loading-spinner"></div>
-    <div class="loading-text">در حال ایجاد گواهی، لطفا منتظر بمانید...</div>
+    <div class="progress w-75">
+        <div id="loadingProgressBar" class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+             role="progressbar" style="width: 0%">0%
+        </div>
+    </div>
+    <div class="loading-text mt-3">در حال ایجاد گواهی، لطفا منتظر بمانید...</div>
 </div>
 
 <!-- نوتیفیکیشن -->
@@ -431,8 +435,8 @@
 </div>
 
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="/static/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/html2canvas.min.js"></script>
 <script>
 function toPersianNumber(input) {
     const persianDigits = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
@@ -508,6 +512,12 @@ function showLoading() {
 function hideLoading() {
     document.getElementById("loadingOverlay").style.display = "none";
 }
+function updateProgress(current, total) {
+    const percent = Math.round((current / total) * 100);
+    const bar = document.getElementById("loadingProgressBar");
+    bar.style.width = percent + "%";
+    bar.textContent = percent + "%";
+}
 
 async function generateCertificate(certType) {
     const button = event.target;
@@ -538,7 +548,7 @@ async function generateCertificate(certType) {
     try {
         for (const author of targetAuthors) {
             certDiv.querySelectorAll(".cert-authors").forEach(e => e.textContent = author);
-            const canvas = await html2canvas(certDiv, {scale: 4});
+            const canvas = await html2canvas(certDiv, {scale: 1.5});
 
             await new Promise((resolve) => {
                 canvas.toBlob(blob => {
@@ -546,6 +556,9 @@ async function generateCertificate(certType) {
                     resolve();
                 }, "image/png");
             });
+
+            // ✅ آپدیت درصد بعد از هر نویسنده
+            updateProgress(index, targetAuthors.length);
         }
 
         const response = await fetch("{% url 'save_certificate' %}", {
